@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(757, 277)
+        MainWindow.resize(757, 594)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.start_frame = QtWidgets.QFrame(self.centralwidget)
@@ -72,10 +72,18 @@ class Ui_MainWindow(object):
         self.comboBox.setObjectName("comboBox")
         self.regeons_choseer = QtWidgets.QFrame(self.centralwidget)
         self.regeons_choseer.setEnabled(True)
-        self.regeons_choseer.setGeometry(QtCore.QRect(170, 50, 120, 80))
+        self.regeons_choseer.setGeometry(QtCore.QRect(10, 270, 561, 221))
         self.regeons_choseer.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.regeons_choseer.setFrameShadow(QtWidgets.QFrame.Raised)
         self.regeons_choseer.setObjectName("regeons_choseer")
+        self.comboBox_2 = QtWidgets.QComboBox(self.regeons_choseer)
+        self.comboBox_2.setGeometry(QtCore.QRect(20, 10, 521, 31))
+        self.comboBox_2.setObjectName("comboBox_2")
+        self.comboBox_2.addItem("")
+        self.comboBox_2.addItem("")
+        self.pushButton_5 = QtWidgets.QPushButton(self.regeons_choseer)
+        self.pushButton_5.setGeometry(QtCore.QRect(450, 170, 91, 31))
+        self.pushButton_5.setObjectName("pushButton_5")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 757, 18))
@@ -102,21 +110,32 @@ class Ui_MainWindow(object):
         self.pushButton_4.setText(_translate("MainWindow", "Изменить для регионов"))
         self.label.setText(_translate("MainWindow", "Координаты"))
         self.label_3.setText(_translate("MainWindow", "Х:"))
-        self.lineEdit_2.setText(_translate("MainWindow", "0.0"))
+        self.lineEdit_2.setText(_translate("MainWindow", "0"))
         self.label_4.setText(_translate("MainWindow", "Y:"))
-        self.lineEdit_3.setText(_translate("MainWindow", "0.0"))
+        self.lineEdit_3.setText(_translate("MainWindow", "0"))
         self.pushButton_2.setText(_translate("MainWindow", "Показать на карте"))
         self.pushButton_3.setText(_translate("MainWindow", "Apply"))
+        self.comboBox_2.setItemText(0, _translate("MainWindow", "регеон 1"))
+        self.comboBox_2.setItemText(1, _translate("MainWindow", "регеон2"))
+        self.pushButton_5.setText(_translate("MainWindow", "Apply"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         """Main Code"""
         self.comboBox.addItems(["Бизнес центр","Торговый центр","Склад"])
-        self.pushButton_3.clicked.connect(self.add_point)
-        self.add_center.hide()
         self.pushButton.clicked.connect(self.show_adder)
+        self.pushButton_3.clicked.connect(self.add_point)
+        self.pushButton_4.clicked.connect(self.show_chenger)
+        self.pushButton_5.clicked.connect(self.change_regeon)
+        self.add_center.hide()
+        self.regeons_choseer.hide()
 
     def show_adder(self):
         self.start_frame.hide()
         self.add_center.show()
+
+
+    def show_chenger(self):
+        self.start_frame.hide()
+        self.regeons_choseer.show()
 
 
     def add_point(self):
@@ -130,6 +149,10 @@ class Ui_MainWindow(object):
             self.start_frame.show()
             self.add_center.hide()
             print(self.comboBox.currentText(), float(self.lineEdit_2.text()),float(self.lineEdit_3.text()))
+
+    def change_regeon(self):
+        self.start_frame.show()
+        self.regeons_choseer.hide()
 
 if __name__ == "__main__":
     import sys
