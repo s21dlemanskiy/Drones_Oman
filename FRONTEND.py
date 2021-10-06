@@ -120,6 +120,7 @@ class Ui_MainWindow(object):
         self.pushButton_5.setText(_translate("MainWindow", "Apply"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         """Main Code"""
+#----------------------------------------------------------------
         self.comboBox.addItems(["Бизнес центр","Торговый центр","Склад"])
         self.pushButton.clicked.connect(self.show_adder)
         self.pushButton_3.clicked.connect(self.add_point)
@@ -127,17 +128,23 @@ class Ui_MainWindow(object):
         self.pushButton_5.clicked.connect(self.change_regeon)
         self.add_center.hide()
         self.regeons_choseer.hide()
-
+#-----------------------------------------------------------------
     def show_adder(self):
         self.start_frame.hide()
         self.add_center.show()
-
 
     def show_chenger(self):
         self.start_frame.hide()
         self.regeons_choseer.show()
 
+    def close_adder(self):
+        self.start_frame.show()
+        self.add_center.hide()
 
+    def close_chenger(self):
+        self.start_frame.show()
+        self.regeons_choseer.hide()
+#------------------------------------------------------------------
     def add_point(self):
         a, b = None, None
         try:
@@ -146,14 +153,12 @@ class Ui_MainWindow(object):
         except:
             print("кординаты должны быть float(например 0.002103)")
         if a is not None and b is not None:
-            self.start_frame.show()
-            self.add_center.hide()
+            self.close_adder()
             print(self.comboBox.currentText(), float(self.lineEdit_2.text()),float(self.lineEdit_3.text()))
 
     def change_regeon(self):
         print(self.comboBox_2.currentText())
-        self.start_frame.show()
-        self.regeons_choseer.hide()
+        self.close_chenger()
 
 if __name__ == "__main__":
     import sys
