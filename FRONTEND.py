@@ -151,6 +151,7 @@ class Ui_MainWindow(object):
             print(self.comboBox.currentText(), float(self.lineEdit_2.text()),float(self.lineEdit_3.text()))
 
     def change_regeon(self):
+        print(self.comboBox_2.currentText())
         self.start_frame.show()
         self.regeons_choseer.hide()
 
