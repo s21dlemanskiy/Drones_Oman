@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'untitled.ui'
+# Form implementation generated from reading ui file './untitled.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.0
 #
@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import folium, webbrowser
 
 
 class Ui_MainWindow(object):
@@ -53,13 +54,13 @@ class Ui_MainWindow(object):
         self.label_3.setGeometry(QtCore.QRect(200, 40, 41, 21))
         self.label_3.setObjectName("label_3")
         self.lineEdit_2 = QtWidgets.QLineEdit(self.add_center)
-        self.lineEdit_2.setGeometry(QtCore.QRect(270, 40, 31, 21))
+        self.lineEdit_2.setGeometry(QtCore.QRect(270, 40, 41, 21))
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.label_4 = QtWidgets.QLabel(self.add_center)
         self.label_4.setGeometry(QtCore.QRect(390, 40, 31, 21))
         self.label_4.setObjectName("label_4")
         self.lineEdit_3 = QtWidgets.QLineEdit(self.add_center)
-        self.lineEdit_3.setGeometry(QtCore.QRect(450, 40, 31, 21))
+        self.lineEdit_3.setGeometry(QtCore.QRect(450, 40, 41, 21))
         self.lineEdit_3.setObjectName("lineEdit_3")
         self.pushButton_2 = QtWidgets.QPushButton(self.add_center)
         self.pushButton_2.setGeometry(QtCore.QRect(0, 70, 181, 31))
@@ -77,13 +78,22 @@ class Ui_MainWindow(object):
         self.regeons_choseer.setFrameShadow(QtWidgets.QFrame.Raised)
         self.regeons_choseer.setObjectName("regeons_choseer")
         self.comboBox_2 = QtWidgets.QComboBox(self.regeons_choseer)
-        self.comboBox_2.setGeometry(QtCore.QRect(20, 10, 521, 31))
+        self.comboBox_2.setGeometry(QtCore.QRect(0, 10, 521, 31))
         self.comboBox_2.setObjectName("comboBox_2")
         self.comboBox_2.addItem("")
         self.comboBox_2.addItem("")
         self.pushButton_5 = QtWidgets.QPushButton(self.regeons_choseer)
         self.pushButton_5.setGeometry(QtCore.QRect(450, 170, 91, 31))
         self.pushButton_5.setObjectName("pushButton_5")
+        self.pushButton_6 = QtWidgets.QPushButton(self.regeons_choseer)
+        self.pushButton_6.setGeometry(QtCore.QRect(0, 170, 141, 31))
+        self.pushButton_6.setObjectName("pushButton_6")
+        self.Count_people_region = QtWidgets.QLineEdit(self.regeons_choseer)
+        self.Count_people_region.setGeometry(QtCore.QRect(200, 60, 51, 21))
+        self.Count_people_region.setObjectName("Count_people_region")
+        self.label_7 = QtWidgets.QLabel(self.regeons_choseer)
+        self.label_7.setGeometry(QtCore.QRect(0, 60, 181, 21))
+        self.label_7.setObjectName("label_7")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 757, 18))
@@ -118,6 +128,9 @@ class Ui_MainWindow(object):
         self.comboBox_2.setItemText(0, _translate("MainWindow", "регеон 1"))
         self.comboBox_2.setItemText(1, _translate("MainWindow", "регеон2"))
         self.pushButton_5.setText(_translate("MainWindow", "Apply"))
+        self.pushButton_6.setText(_translate("MainWindow", "Edit as .GeoJson"))
+        self.Count_people_region.setText(_translate("MainWindow", "0"))
+        self.label_7.setText(_translate("MainWindow", "кол-во людей в регионе"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         """Main Code"""
 #----------------------------------------------------------------
@@ -126,8 +139,10 @@ class Ui_MainWindow(object):
         self.pushButton_3.clicked.connect(self.add_point)
         self.pushButton_4.clicked.connect(self.show_chenger)
         self.pushButton_5.clicked.connect(self.change_regeon)
+        self.pushButton_6.clicked.connect(self.show_all_geojson)
         self.add_center.hide()
         self.regeons_choseer.hide()
+
 #-----------------------------------------------------------------
     def show_adder(self):
         self.start_frame.hide()
@@ -159,6 +174,13 @@ class Ui_MainWindow(object):
     def change_regeon(self):
         print(self.comboBox_2.currentText())
         self.close_chenger()
+
+    def show_all_geojson(self):
+        m = folium.Map(location=[23.5, 58.5])
+        folium.GeoJson("./Data/regions.geojson", name="geojson").add_to(m)
+        #data = pd.DataFrame.from_dict({"Code": , "value": })
+        m.save("./Temp/map.html")
+        webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
 
 if __name__ == "__main__":
     import sys
