@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import folium, webbrowser
+import folium, webbrowser #, pandas as pd
 
 
 class Ui_MainWindow(object):
@@ -178,7 +178,7 @@ class Ui_MainWindow(object):
     def show_all_geojson(self):
         m = folium.Map(location=[23.5, 58.5])
         folium.GeoJson("./Data/regions.geojson", name="geojson").add_to(m)
-        #data = pd.DataFrame.from_dict({"Code": , "value": })
+        folium.GeoJson("./Data/market.geojson", name="geojson").add_to(m)
         m.save("./Temp/map.html")
         webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
 
