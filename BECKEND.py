@@ -1,3 +1,26 @@
+import math
+class Point:
+    def __init__(self, x:float, y:float):
+        self.x = x
+        self.y = y
+
+    def lenf(self, other):
+        return math.sqrt((self.x - other.x)** 2 + (self.y - other.y)** 2)
+
+    def equatian(self, other, **printer):
+        x_1, y_1 = self.x, self.y
+        x_2, y_2 = other.x, other.y
+        equatin = f"x * {(y_2 - y_1) / (x_2 - x_1)} - {x_1 * (y_2 - y_1) / (x_2 - x_1) + y_1}"
+        if printer:
+            print(f"y = {equatin}")
+        return equatin
+
+
+def point_right_line(point1:Point, point2:Point, u:Point) -> bool:
+    return (u.x - point1.x) * (point2.y - point1.y) - (u.y - point1.y) * (point2.x - point1.x) > 0
+
+
+
 def read_regeons_geojson(file="./Data/regions.geojson"):
     a = open(file, "r")
     file = a.readline()
@@ -28,7 +51,14 @@ def read_regeons_geojson(file="./Data/regions.geojson"):
     return points, qualities
 
 
-
-print(read_regeons_geojson())
+if __name__ == "__main__":
+    #print(read_regeons_geojson())
+    x_1, y_1 = map(float, input("point1").split(" "))
+    a = Point(x_1, y_1)
+    x_1, y_1 = map(float, input("point2").split(" "))
+    b = Point(x_1, y_1)
+    x_1, y_1 = map(float, input("point3").split(" "))
+    c = Point(x_1, y_1)
+    print(point_right_line(a,b, c))
 
 
