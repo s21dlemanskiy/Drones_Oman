@@ -1,5 +1,6 @@
-import math, itertools
-delta_point = 0.0001
+import math, itertools, folium, webbrowser
+from typing import List
+delta_point = 4
 class Point:
     def __init__(self, x:float, y:float):
         self.x = x
@@ -27,7 +28,7 @@ def point_right_line(point1:Point, point2:Point, u:Point) -> bool:
     return (u.x - point1.x) * (point2.y - point1.y) > (u.y - point1.y) * (point2.x - point1.x)
 
 
-def point_in_normal_figure(pl:List[Point], u:Point) -> List[Point]:
+def point_in_normal_figure(pl:List[Point], u:Point) -> bool:
     if len(pl) < 3: print("errore!!!!! Beckend  line")
     orintation_right = point_right_line(pl[0], pl[1], pl[2])
     point1 = pl[0]
@@ -35,7 +36,7 @@ def point_in_normal_figure(pl:List[Point], u:Point) -> List[Point]:
         if orintation_right != point_right_line(point1, point2, u):
             return False
         point1 = point2
-    if orintation_right != point_right_line(pl[-1], plt[0], u):
+    if orintation_right != point_right_line(pl[-1], pl[0], u):
         return False
     return True
 
@@ -43,7 +44,7 @@ def point_in_normal_figure(pl:List[Point], u:Point) -> List[Point]:
 def normal_figure_to_points(pl:List[Point]) -> List[Point]:
     global delta_point
     x, y = list(map(lambda a: a.x ,pl)),list(map(lambda a: a.y ,pl))
-    x,y = ([i for i in range(min(x), max(x), delta_point)], [i for i in range(min(y), max(y), delta_point)])
+    x,y = ([i / (10 ** delta_point) for i in range(int(min(x) * (10 ** delta_point)), int(max(x) * (10 ** delta_point)))], [i / (10 ** delta_point) for i in range(int(min(y) * (10 ** delta_point)), int(max(y) * (10 ** delta_point)))])
     all_points = list(map(lambda x:Point(x[0], x[1]), itertools.product(x,y)))
     del x, y
     new_all_points = []
@@ -73,7 +74,7 @@ def bad_figure_to_points(main_fig:List[Point]):
     count = 0
     i = 0
     while True:
-        points = [main_fig[i], main_fig[(i + 2)% len(main_fig)], main_fig[(i + 1)% len(main_fig)]]
+        points = [main_fig[i% len(main_fig)], main_fig[(i + 2)% len(main_fig)], main_fig[(i + 1)% len(main_fig)]]
         if (point_right_line(points[0], points[1], points[2]) and (not orintation_right)) or ((not point_right_line(points[0], points[1], points[2])) and orintation_right):
             count += 1
         else:
@@ -141,10 +142,21 @@ def test1():
 def test2():
     print(read_regeons_geojson())
 
+def test3():
+    global delta_point
+    delta_point = 2
+    m = folium.Map(location=[23.5, 58.5])
+    for i in bad_figure_to_points(read_regeons_geojson()[0]["Bawshar"]):
+        folium.Marker((i.y, i.x)).add_to(m)
+        print(i)
+    m.save("./Temp/map.html")
+    webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
+    pass
 
 if __name__ == "__main__":
     #test1()
-    test2()
+    #test2()
+    test3()
 
 
 
