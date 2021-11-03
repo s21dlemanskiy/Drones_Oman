@@ -55,7 +55,7 @@
  	 \hspace*{1cm}Подставим y от U в уравнение получим:$x_3 =\cfrac{(y_U-y_1)(x_2 - x_1)}{y_2 -y_1} + x_1 $ тогда $U_0 = (x_3, y_U)$ тогда если $\cfrac{x_1 - x_2}{y_1 - y_2} > 0$ то U должна лежать правее точки $U_0$ получаем по знаку $x_U - \cfrac{(y_U-y_1)(x_2 - x_1)}{y_2 -y_1} - x_1\equiv x_2 - x_1$ иначе U должна лежать левее точки $U_0$ получаем по знак $x_U - \cfrac{(y_U-y_1)(x_2 - x_1)}{y_2 -y_1} - x_1\equiv -(x_2 - x_1)$ соеденяем получаем $x_U - \cfrac{(y_U-y_1)(x_2 - x_1)}{y_2 -y_1} - x_1\equiv \cfrac{x_1 - x_2}{y_1 - y_2}\cdot(x_2 - x_1)\implies (x_U -x_1) - \cfrac{(y_U-y_1)(x_2 - x_1)}{y_2 -y_1}\equiv \cfrac{(x_2 - x_1)^2}{y_2 - y_1}\implies(x_U -x_1)(y_2-y_1) - (y_U-y_1)(x_2 - x_1)\equiv (x_2 - x_1)^2 \implies(x_U -x_1)(y_2-y_1) - (y_U-y_1)(x_2 - x_1)\equiv1\implies(x_U -x_1)(y_2-y_1) > (y_U-y_1)(x_2 - x_1)$. Случай $U \in \cfrac{x-x_1}{x_2 - x_1} = \cfrac{y-y_1}{y_2 -y_1}$ нужно расмотреть отдельно но пусть в таком счучае будем считать, что принадлежит.
  	 \subsection{Итоговые Входные даные}
  	 Итак мы упрастили ввод до точек каждой из которой принадлежит ярлык ЦА или просто регион и какя то цифра хорактерезующая количество отправок.
- 	 \section{Алгоритм}
+ 	 \section{Преобразование векторный графики в точечную}
  	 \subsection{Точка}
  	 \hspace*{1cm}Для начала хорошо бы создать класс точка с полями x, y. Так же прописать функцию поиска растояния и функции отрезка. Функцию отрезка можно получить вида $y=f(x)$ из ранее уже выведеной.
  	 \begin{verbatim}
@@ -119,4 +119,48 @@
  	     del all_points
  	     return new_all_points
  	 \end{verbatim}
+ 	 \subsection{Разбиение впуклого многоугольника}
+ 	 \hspace*{1cm}Самое сложное определить находится внутряняя часть фигуры справа или слева. Я предлагаю способ, который возможно будет работать не вегда, но в большинстве способов. Просто определить для каждого отрезка сколько точек лежит справа сколько слева. И так для всех и сложить. Получим два числа например r, l(r-спрва l-слева). И тогда если $r>l$ то спарава иначе слева. \par
+ 	 Тогда код будет выглядеть так:
+ 	 \begin{verbatim}
+ 	 def orintation_righ(main_fig:List[Point]):
+ 	     r, l = 0, 0
+     	 temp_ln = len(main_fig)
+ 	     for i in range(temp_ln):
+ 	         for j in range(temp_ln):
+ 	             if j != i and j != (i + 1) % temp_ln:
+ 	                 if point_right_line(main_fig[i], main_fig[(i + 1) % temp_ln], main_fig[j]):
+ 	                 r += 1
+ 	             else:
+ 	                 l += 1
+ 	     return r > l
+ 	 
+ 	 
+ 	 
+ 	 def bad_figure_to_points(main_fig:List[Point]):
+ 	     added_fig = []
+ 	     orintation_right = orintation_righ(main_fig)
+ 	     count = 0
+ 	     i = 0
+ 	     while True:
+ 	         points = [main_fig[i], main_fig[(i + 2)% len(main_fig)], main_fig[(i + 1)% len(main_fig)]]
+ 	         if (point_right_line(points[0], points[1], points[2]) and (not orintation_right)) or ((not point_right_line(points[0], points[1], points[2])) and orintation_right):
+ 	             count += 1
+ 	         else:
+ 	             added_fig += [points]
+ 	             main_fig.remove(main_fig[(i + 1)% len(main_fig)])
+ 	             count = 0
+ 	         i += 1
+ 	         if count + 3 == len(main_fig):      #number 3 is random num for skip mistake
+ 	             break
+ 	     main_poins = normal_figure_to_points(main_fig)
+ 	     added_points = []
+ 	     for i in added_fig:
+ 	         added_points += normal_figure_to_points(i)
+ 	         for i in main_poins:
+ 	             if i in added_points:
+ 	                 main_poins.remove(i)
+ 	     return main_poins
+ 	\end{verbatim}
+ 	\section{Алгоритм}
  \end{document}

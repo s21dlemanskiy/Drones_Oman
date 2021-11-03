@@ -54,6 +54,50 @@ def normal_figure_to_points(pl:List[Point]) -> List[Point]:
     return new_all_points
 
 
+def orintation_righ(main_fig:List[Point]):
+    r, l = 0, 0
+    temp_ln = len(main_fig)
+    for i in range(temp_ln):
+        for j in range(temp_ln):
+            if j != i and j != (i + 1) % temp_ln:
+                if point_right_line(main_fig[i], main_fig[(i + 1) % temp_ln], main_fig[j]):
+                    r += 1
+                else:
+                    l += 1
+    return r > l
+
+
+def bad_figure_to_points(main_fig:List[Point]):
+    added_fig = []
+    orintation_right = orintation_righ(main_fig)
+    count = 0
+    i = 0
+    while True:
+        points = [main_fig[i], main_fig[(i + 2)% len(main_fig)], main_fig[(i + 1)% len(main_fig)]]
+        if (point_right_line(points[0], points[1], points[2]) and (not orintation_right)) or ((not point_right_line(points[0], points[1], points[2])) and orintation_right):
+            count += 1
+        else:
+            added_fig += [points]
+            main_fig.remove(main_fig[(i + 1)% len(main_fig)])
+            count = 0
+        i += 1
+        if count + 3 == len(main_fig):      #number 3 is random num for skip mistake
+            break
+    main_poins = normal_figure_to_points(main_fig)
+    added_points = []
+    for i in added_fig:
+        added_points += normal_figure_to_points(i)
+    for i in main_poins:
+        if i in added_points:
+            main_poins.remove(i)
+    return main_poins
+
+
+
+
+
+
+
 
 def read_regeons_geojson(file="./Data/regions.geojson"):
     a = open(file, "r")
@@ -96,6 +140,7 @@ def test1():
 
 def test2():
     print(read_regeons_geojson())
+
 
 if __name__ == "__main__":
     #test1()

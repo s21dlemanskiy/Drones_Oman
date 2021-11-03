@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2020.2.20)  3 NOV 2021 01:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2020.2.20)  3 NOV 2021 16:07
 entering extended mode
 **./document.tex
 (document.tex
@@ -504,13 +504,13 @@ Overfull \hbox (17.4505pt too wide) in paragraph at lines 121--121
 ], u):[] 
  []
 
-
+[7]
 Overfull \hbox (48.31796pt too wide) in paragraph at lines 121--121
 []       \T2A/cmtt/m/n/12 x, y = list(map(lambda a: a.x ,pl)),list(map(lambda a
 : a.y ,pl))[] 
  []
 
-[7]
+
 Overfull \hbox (295.25766pt too wide) in paragraph at lines 121--121
 []       \T2A/cmtt/m/n/12 x,y = ([i for i in range(min(x), max(x), delta_point)
 ], [i for i in range(min(y), max(y), delta_point)])[] 
@@ -522,7 +522,44 @@ Overfull \hbox (110.05289pt too wide) in paragraph at lines 121--121
 rtools.product(x,y)))[] 
  []
 
-[8] (document.aux) ) 
+
+Overfull \hbox (5.22435pt too wide) in paragraph at lines 123--123
+| \T2A/cmr/m/n/12 —а-мое слож-ное опре-де-лить на-хо-дит-с€ внут-р€-н€€ часть ф
+и-гу-ры спра-
+ []
+
+
+Overfull \hbox (190.30829pt too wide) in paragraph at lines 164--164
+[]                   \T2A/cmtt/m/n/12 if point_right_line(main_fig[i], main_fig
+[(i + 1) % temp_ln], main_fig[j]):[] 
+ []
+
+[8]
+Overfull \hbox (233.52274pt too wide) in paragraph at lines 164--164
+[]           \T2A/cmtt/m/n/12 points = [main_fig[i], main_fig[(i + 2)% len(main
+_fig)], main_fig[(i + 1)% len(main_fig)]][] 
+ []
+
+
+Overfull \hbox (690.36118pt too wide) in paragraph at lines 164--164
+[]           \T2A/cmtt/m/n/12 if (point_right_line(points[0], points[1], points
+[2]) and (not orintation_right)) or ((not point_right_line(points[0], points[1]
+, points[2])) and orintation_right):[] 
+ []
+
+
+Overfull \hbox (5.10352pt too wide) in paragraph at lines 164--164
+[]               \T2A/cmtt/m/n/12 main_fig.remove(main_fig[(i + 1)% len(main_fi
+g)])[] 
+ []
+
+
+Overfull \hbox (147.09384pt too wide) in paragraph at lines 164--164
+[]           \T2A/cmtt/m/n/12 if count + 3 == len(main_fig):      #number 3 is 
+random num for skip mistake[] 
+ []
+
+[9] (document.aux) ) 
 Here is how much of TeX's memory you used:
  3274 strings out of 492942
  43738 string characters out of 3126215
@@ -547,9 +584,9 @@ ppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/cm-super/sfit1200.pfb><C:/U
 sers/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/cm-super/sfrm12
 00.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/cm-
 super/sftt1200.pfb>
-Output written on document.pdf (8 pages, 233666 bytes).
+Output written on document.pdf (9 pages, 239107 bytes).
 PDF statistics:
- 80 PDF objects out of 1000 (max. 8388607)
+ 83 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
