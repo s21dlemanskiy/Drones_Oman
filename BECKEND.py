@@ -229,7 +229,6 @@ def Update():
     global actcenter
     print("[INFO]Update Start")
     actcenter = read_market_geojson()
-    print(actcenter)
     print("[INFO]markets are Up to date")
     regeons = {}
     regeon = read_regeons_geojson()
