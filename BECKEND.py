@@ -1,15 +1,17 @@
 import math, itertools, folium, webbrowser
 from typing import List
-delta_point = 3
+delta_point = 2
 typekof = {
     "TC":12,
     "Market":20,
     "HyperMarket":8
 }
-R1, R2 = 0.0002, 0.0001
-k1, k2, k3, k4 = 1, 2, 3, 4
-regeons = {}
-actcenter = {}
+R = {
+    "regeon":0.04,
+    "market":0.02
+}
+regeons = {}            #{Point:population}
+actcenter = {}          #{Point:Score}
 class Point:
     def __init__(self, x:float, y:float):
         self.x = x
@@ -103,18 +105,53 @@ def bad_figure_to_points(main_fig:List[Point]):
     return main_poins
 
 
-def point_function(x, y):
-    global regeons
-    global actcenter
+def point_function(point:Point)->float:
+    global regeons, actcenter
+    global R
+    score = 0
+    for i in actcenter.keys():
+        if i.lenf(point) < R["market"]:
+            score += actcenter[i] / ((R["market"]/ 10 + i.lenf(point)) ** 3)
+    for i in regeons.keys():
+        if i.lenf(point) < R["regeon"]:
+            score += regeons[i] / ((R["regeon"]/ 10 + i.lenf(point)) ** 2)
+    return score
 
 
+def bruteforce()->Point:
+    global regeons, actcenter
+    maxscore = [Point(0,0), 0]
+    for i in list(regeons.keys())+list(actcenter.keys()):
+        if point_function(i) > maxscore[1]:
+            maxscore = [i, point_function(i)]
+    return maxscore[0]
 
 
+def added_pochtamt(point:Point):
+    global regeons, actcenter
+    global R
+    for i in actcenter.keys():
+        if i.lenf(point) < R["market"]:
+            actcenter[i] = actcenter[i] * (i.lenf(point) / R["market"])
+    for i in regeons.keys():
+        if i.lenf(point) < R["regeon"]:
+            regeons[i] = regeons[i] * (i.lenf(point) / R["regeon"])
+
+
+def make_pochtampt(count:int) -> List[Point]:
+    points = []
+    for _ in range(count):
+        points += [bruteforce()]
+        added_pochtamt(bruteforce())
+    Update()
+    return points
 
 def read_market_geojson(file="./Data/market.geojson"):
     global typekof
+    global delta_point
     a = open(file, "r")
     file = a.readline()
+    types = {i:0 for i in typekof.keys()}
     f = []
     for i in file.split("{"):
         f += list(i.split("}"))
@@ -125,7 +162,6 @@ def read_market_geojson(file="./Data/market.geojson"):
     for i in f:
         if '"properties"' in i:
             boool = True
-            print("fffffffffffff")
             continue
         elif boool:
             boool = False
@@ -134,19 +170,24 @@ def read_market_geojson(file="./Data/market.geojson"):
             k = 0
             for j in i.split(","):
                     j = ("".join(j.split('"'))).split(":")
-                    if j[0] == "Name":
+                    if j[0].lower() == "name":
                         name = j[1]
-                    elif j[0] == "Score":
+                    elif j[0].lower() == "myscore":
                         raiting = int(j[1])
-                    elif j[0] == "Type":
+                    elif j[0].lower() == "type":
                         k = typekof[j[1]]
-            print(name)
+                        types[j[1]] += 1
+            if k == 0:
+                print(f'[WARNING]There is no type>>{name}')
             qualities.update({name:k*raiting})
         elif'"coordinates"' in i and name not in ponts.keys():
-            ponts.update({name:i[i.find("["):i.find("]")]})
+            tmp = list(map(float, i[i.find("[") + 1:i.rfind("]")].split(",")))
+            ponts.update({name:Point(round(tmp[0], delta_point), round(tmp[1], delta_point))})
     tmp = {}
     for i in ponts.keys():
         tmp.update({ponts[i]:qualities[i]})
+    types = str(types).replace(' ', '').replace('{', '').replace('}', '').replace("'", '')
+    print(f"[+]Count points with any types>> {types}")
     return tmp
 
 
@@ -188,6 +229,8 @@ def Update():
     global actcenter
     print("[INFO]Update Start")
     actcenter = read_market_geojson()
+    print(actcenter)
+    print("[INFO]markets are Up to date")
     regeons = {}
     regeon = read_regeons_geojson()
     for i in regeon["qualities"].keys():
@@ -222,6 +265,16 @@ def test3():
     m.save("./Temp/map.html")
     webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
 
+def test5():
+    Update()
+    points = make_pochtampt(7)
+    m = folium.Map(location=[23.5, 58.5])
+    for i in points:
+        folium.Marker((i.y, i.x)).add_to(m)
+    m.save("./Temp/map.html")
+    webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
+
+
 def test4():
     Update()
 
@@ -229,7 +282,8 @@ if __name__ == "__main__":
     #test1()
     #test2()
     #test3()
-    test4()
+    #test4()
+    test5()
 
 
 

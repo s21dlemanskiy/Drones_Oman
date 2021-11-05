@@ -169,8 +169,25 @@
  	\[+\bigg( \sum_{-R_2<i<R_2}\sum_{-R_2<j<R_2}\cfrac{k_2}{\sqrt{i^2 + j^2}^3} \cdot Bcentr(i,j) \bigg)+ \]
  	\[+\bigg( \sum_{-R_2<i<R_2}\sum_{-R_2<j<R_2}\cfrac{k_3}{\sqrt{i^2 + j^2}^3} \cdot Tcenter(i,j) \bigg) +\]
  	\[+ \bigg( \sum_{-R_2<i<R_2}\sum_{-R_2<j<R_2}\cfrac{k_4}{\sqrt{i^2 + j^2}^3} \cdot storegge(i,j) \bigg)\] 
- 	\par $R_1, R_2$ мы договорились взять 1 km и 500m, а $k_1, k_2, k_3,k_4$ зависят от входных данных, они будут определны дополнительными расчетами. Получаем:
+ 	\par $R_1, R_2$ мы договорились взять 1 km и 500m, а $k_1, k_2, k_3,k_4$ зависят от входных данных, они будут определны дополнительными расчетами и R определим позже. Получаем:
     \begin{verbatim}
-    
+    R = {
+    "regeon":0.04,
+    "market":0.02
+    }
+    def point_function(point:Point):
+        global regeons, actcenter
+        global R
+        score = 0
+        for i in actcenter.keys():
+            if lenf(i, point) < R["market"]:
+                score += actcenter[i] / ((R["market"]/ 10 + lenf(i, point)) ** 3)
+        for i in regeons.keys():
+            if lenf(i, point) < R["regeon"]:
+                score += regeons[i] / ((R["regeon"]/ 10 + lenf(i, point)) ** 2)
+        return score
     \end{verbatim}
+    \hspace*{1cm}Теперь осталось дописать систему поиска точки с наибольшем значением функции и не забыть про влияние поставленных почтаматов на ставящийся.
+    \subsection{Расчет коофициентов}
+    \hspace*{1cm}pass
  \end{document}
