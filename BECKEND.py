@@ -1,6 +1,15 @@
 import math, itertools, folium, webbrowser
 from typing import List
-delta_point = 4
+delta_point = 3
+typekof = {
+    "TC":12,
+    "Market":20,
+    "HyperMarket":8
+}
+R1, R2 = 0.0002, 0.0001
+k1, k2, k3, k4 = 1, 2, 3, 4
+regeons = {}
+actcenter = {}
 class Point:
     def __init__(self, x:float, y:float):
         self.x = x
@@ -94,9 +103,51 @@ def bad_figure_to_points(main_fig:List[Point]):
     return main_poins
 
 
+def point_function(x, y):
+    global regeons
+    global actcenter
 
 
 
+
+
+def read_market_geojson(file="./Data/market.geojson"):
+    global typekof
+    a = open(file, "r")
+    file = a.readline()
+    f = []
+    for i in file.split("{"):
+        f += list(i.split("}"))
+    boool = False
+    qualities = {}
+    ponts = {}
+    name = 'default'
+    for i in f:
+        if '"properties"' in i:
+            boool = True
+            print("fffffffffffff")
+            continue
+        elif boool:
+            boool = False
+            namee = None
+            raiting = ""
+            k = 0
+            for j in i.split(","):
+                    j = ("".join(j.split('"'))).split(":")
+                    if j[0] == "Name":
+                        name = j[1]
+                    elif j[0] == "Score":
+                        raiting = int(j[1])
+                    elif j[0] == "Type":
+                        k = typekof[j[1]]
+            print(name)
+            qualities.update({name:k*raiting})
+        elif'"coordinates"' in i and name not in ponts.keys():
+            ponts.update({name:i[i.find("["):i.find("]")]})
+    tmp = {}
+    for i in ponts.keys():
+        tmp.update({ponts[i]:qualities[i]})
+    return tmp
 
 
 
@@ -123,11 +174,30 @@ def read_regeons_geojson(file="./Data/regions.geojson"):
             name = i[i.find("Name") +   7:i[i.find("Name") + 7:].find('"') + i.find("Name") + 7]
             qualities.update({name: {}})
             if "population" in i:
-                qualities[name].update({"population":i[i.find("population") + 12:i[i.find("population") + 12:].find(',') + i.find("population") + 12]})
+                populat = i[i.find("population") + 12:i[i.find("population") + 12:].find(',') + i.find("population") + 12]
+                if populat != '""':
+                    qualities[name].update({"population":populat})
             if "area" in i:
                 qualities[name].update({"area": i[i.find("area") + 6:i[i.find("area") + 6:].find(',') + i.find("area") + 6]})
             boool = True
-    return points, qualities
+    return {"points":points, "qualities":qualities}
+
+
+def Update():
+    global regeons
+    global actcenter
+    print("[INFO]Update Start")
+    actcenter = read_market_geojson()
+    regeons = {}
+    regeon = read_regeons_geojson()
+    for i in regeon["qualities"].keys():
+        if "population" in regeon["qualities"][i].keys() and i in regeon["points"].keys():
+            ponts = bad_figure_to_points(regeon["points"][i])
+            populatn =  int("".join(regeon["qualities"][i]["population"].split("."))) / len(ponts)
+            print(f"[+]{i}:людей на точку{populatn}, точек{len(ponts)}")
+            regeons.update({j:populatn for j in ponts})
+    print("[INFO]regeons are Up to date")
+
 
 def test1():
     x_1, y_1 = map(float, input("point1").split(" "))
@@ -151,12 +221,15 @@ def test3():
         print(i)
     m.save("./Temp/map.html")
     webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
-    pass
+
+def test4():
+    Update()
 
 if __name__ == "__main__":
     #test1()
     #test2()
-    test3()
+    #test3()
+    test4()
 
 
 

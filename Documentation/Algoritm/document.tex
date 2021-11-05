@@ -163,4 +163,14 @@
  	     return main_poins
  	\end{verbatim}
  	\section{Алгоритм}
+ 	\subsection{Функция точки}
+ 	\hspace*{1cm}Опредлим эту функцию из логики того, что на нее влияет. Итак она будет зависить от населености района, где она стоит и от ближайших ЦА. Пусть $peple(x,y)$ это население в точки x, y, $Bcentr(x,y)$ вернет роходимость Бизнес центра в точке x, y, если там нет бизнес центра вернет 0, $Tcenter(x, y), storegge(x,y)$ аналогично для торогого цента и склада. Получаем что то типо:
+ 	\[f(x, y)= \bigg(\sum_{-R_1<i<R_1}\sum_{-R_1<j<R_1}\cfrac{k_1}{\sqrt{i^2 + j^2}^2}\cdot peple(i,j)\bigg) +\]
+ 	\[+\bigg( \sum_{-R_2<i<R_2}\sum_{-R_2<j<R_2}\cfrac{k_2}{\sqrt{i^2 + j^2}^3} \cdot Bcentr(i,j) \bigg)+ \]
+ 	\[+\bigg( \sum_{-R_2<i<R_2}\sum_{-R_2<j<R_2}\cfrac{k_3}{\sqrt{i^2 + j^2}^3} \cdot Tcenter(i,j) \bigg) +\]
+ 	\[+ \bigg( \sum_{-R_2<i<R_2}\sum_{-R_2<j<R_2}\cfrac{k_4}{\sqrt{i^2 + j^2}^3} \cdot storegge(i,j) \bigg)\] 
+ 	\par $R_1, R_2$ мы договорились взять 1 km и 500m, а $k_1, k_2, k_3,k_4$ зависят от входных данных, они будут определны дополнительными расчетами. Получаем:
+    \begin{verbatim}
+    
+    \end{verbatim}
  \end{document}
