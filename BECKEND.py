@@ -1,14 +1,18 @@
 import math, itertools, folium, webbrowser
 from typing import List
-delta_point = 2
+from dataclasses import dataclass
+delta_point = 3
+other_delta_point = 10 ** delta_point
+list_func = {}
+#SOME DIGITALS 111,1348 km in 1
 typekof = {
     "TC":12,
     "Market":20,
     "HyperMarket":8
 }
 R = {
-    "regeon":0.04,
-    "market":0.02
+    "regeon":0.009,
+    "market":0.005
 }
 regeons = {}            #{Point:population}
 actcenter = {}          #{Point:Score}
@@ -16,6 +20,7 @@ class Point:
     def __init__(self, x:float, y:float):
         self.x = x
         self.y = y
+
 
     def lenf(self, other):
         return math.sqrt((self.x - other.x)** 2 + (self.y - other.y)** 2)
@@ -54,8 +59,9 @@ def point_in_normal_figure(pl:List[Point], u:Point) -> bool:
 
 def normal_figure_to_points(pl:List[Point]) -> List[Point]:
     global delta_point
+    global other_delta_point
     x, y = list(map(lambda a: a.x ,pl)),list(map(lambda a: a.y ,pl))
-    x,y = ([i / (10 ** delta_point) for i in range(int(min(x) * (10 ** delta_point)), int(max(x) * (10 ** delta_point)))], [i / (10 ** delta_point) for i in range(int(min(y) * (10 ** delta_point)), int(max(y) * (10 ** delta_point)))])
+    x,y = ([i / (other_delta_point) for i in range(int(min(x) * (other_delta_point)), int(max(x) * (other_delta_point)))], [i / (other_delta_point) for i in range(int(min(y) * (10 ** delta_point)), int(max(y) * (10 ** delta_point)))])
     all_points = list(map(lambda x:Point(x[0], x[1]), itertools.product(x,y)))
     del x, y
     new_all_points = []
@@ -119,31 +125,54 @@ def point_function(point:Point)->float:
 
 
 def bruteforce()->Point:
-    global regeons, actcenter
+    global list_func
     maxscore = [Point(0,0), 0]
-    for i in list(regeons.keys())+list(actcenter.keys()):
-        if point_function(i) > maxscore[1]:
-            maxscore = [i, point_function(i)]
+    for i in list_func.keys():
+        if list_func[i] > maxscore[1]:
+            maxscore = [i, list_func[i]]
     return maxscore[0]
 
 
 def added_pochtamt(point:Point):
+    global delta_point
     global regeons, actcenter
     global R
+    global list_func
     for i in actcenter.keys():
         if i.lenf(point) < R["market"]:
             actcenter[i] = actcenter[i] * (i.lenf(point) / R["market"])
+    points = []
     for i in regeons.keys():
-        if i.lenf(point) < R["regeon"]:
-            regeons[i] = regeons[i] * (i.lenf(point) / R["regeon"])
+        if (point.x - 2 * R["regeon"]) < i.x < (point.x + 2 * R["regeon"]):
+            if (point.y - 2 * R["regeon"]) < i.y < (point.y + 2 * R["regeon"]):
+                points += [i]
+    for tmppoint in points:
+        if tmppoint.lenf(point) < R["regeon"] :
+            regeons[tmppoint] = regeons[tmppoint] * (tmppoint.lenf(point) / R["regeon"])
+    for tmppoint in points:
+        list_func[tmppoint] = point_function(tmppoint)
+
+
+def list_func_update():
+    global list_func
+    global regeons, actcenter
+    for i in regeons.keys():
+        list_func.update({i:point_function(i)})
+    print("[+]list functions are ready")
+
 
 
 def make_pochtampt(count:int) -> List[Point]:
-    points = []
-    for _ in range(count):
-        points += [bruteforce()]
-        added_pochtamt(bruteforce())
     Update()
+    points = []
+    planted = 0
+    list_func_update()
+    for _ in range(count):
+        point = bruteforce()
+        points += [point]
+        added_pochtamt(point)
+        planted += 1
+        print(f"[+]{planted} pochtamt planted")
     return points
 
 def read_market_geojson(file="./Data/market.geojson"):
@@ -227,6 +256,8 @@ def read_regeons_geojson(file="./Data/regions.geojson"):
 def Update():
     global regeons
     global actcenter
+    global other_delta_point, delta_point
+    other_delta_point = 10 ** delta_point
     print("[INFO]Update Start")
     actcenter = read_market_geojson()
     print("[INFO]markets are Up to date")
@@ -256,17 +287,26 @@ def test2():
 
 def test3():
     global delta_point
+    global regeons
     delta_point = 2
+    Update()
     m = folium.Map(location=[23.5, 58.5])
-    for i in bad_figure_to_points(read_regeons_geojson()[0]["Bawshar"]):
+    for i in bad_figure_to_points(regeons.keys()):
+        i = regeons[i]
         folium.Marker((i.y, i.x)).add_to(m)
-        print(i)
     m.save("./Temp/map.html")
     webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
 
 def test5():
+    global regeons, list_func, delta_point
     Update()
-    points = make_pochtampt(7)
+    a, b = [], []
+    for i in regeons.keys():
+        a += [i.x]
+        b += [i.y]
+    print(f"[+]dispertion X>> {round(abs(min(a) - max(a))*111.1348, delta_point)}km")
+    print(f"[+]dispertion Y>> {round(abs(min(b)- max(b)) *111.1348, delta_point)}km")
+    points = make_pochtampt(30)
     m = folium.Map(location=[23.5, 58.5])
     for i in points:
         folium.Marker((i.y, i.x)).add_to(m)
