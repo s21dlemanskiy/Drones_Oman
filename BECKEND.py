@@ -1,6 +1,7 @@
 import math, itertools, folium, webbrowser
 from typing import List
-from dataclasses import dataclass
+import threading
+import datetime
 delta_point = 3
 other_delta_point = 10 ** delta_point
 list_func = {}
@@ -133,6 +134,13 @@ def bruteforce()->Point:
     return maxscore[0]
 
 
+def added_pochtamt2(tmppoint:Point, point:Point):
+    global R
+    if tmppoint.lenf(point) < R["regeon"]:
+        regeons[tmppoint] = regeons[tmppoint] * (tmppoint.lenf(point) / R["regeon"])
+    list_func[tmppoint] = point_function(tmppoint)
+
+
 def added_pochtamt(point:Point):
     global delta_point
     global regeons, actcenter
@@ -147,26 +155,41 @@ def added_pochtamt(point:Point):
             if (point.y - 2 * R["regeon"]) < i.y < (point.y + 2 * R["regeon"]):
                 points += [i]
     for tmppoint in points:
-        if tmppoint.lenf(point) < R["regeon"] :
-            regeons[tmppoint] = regeons[tmppoint] * (tmppoint.lenf(point) / R["regeon"])
-    for tmppoint in points:
-        list_func[tmppoint] = point_function(tmppoint)
+        added_pochtamt2(tmppoint, point)
 
-
-def list_func_update():
+def list_func_update(**file):
     global list_func
     global regeons, actcenter
-    for i in regeons.keys():
-        list_func.update({i:point_function(i)})
+    if not file:
+        for i in regeons.keys():
+            list_func.update({i:point_function(i)})
+        f = open(r"./Temp/functions_list.txt", "w")
+        for i in list_func.keys():
+            f.write(f"{i.x};{i.y}:{list_func[i]}\n")
+        print("[+]functions are ready in file")
+    else:
+        f = open(r"./Temp/functions_list.txt", "r")
+        tmp = {}
+        for i in f.readlines():
+            temp = list(i.split(":"))
+            tmp.update({tuple(map(float, temp[0].split(";"))): float(temp[1])})
+        for i in regeons.keys():
+            if (i.x, i.y) in tmp.keys():
+                    list_func.update({i: tmp[(i.x, i.y)]})
+        print("[+]functions are update from file")
+    f.close()
     print("[+]list functions are ready")
 
 
 
-def make_pochtampt(count:int) -> List[Point]:
+def make_pochtampt(count:int, **updated) -> List[Point]:
     Update()
     points = []
     planted = 0
-    list_func_update()
+    if updated:
+        list_func_update()
+    else:
+        list_func_update(file=True)
     for _ in range(count):
         point = bruteforce()
         points += [point]
