@@ -7,7 +7,7 @@ other_delta_point = 10 ** delta_point
 list_func = {}
 #SOME DIGITALS 111,1348 km in 1
 typekof = {
-    "TC":12,
+    "SHOPPINGCENTER":12,
     "Market":20,
     "HyperMarket":8
 }
@@ -240,7 +240,7 @@ def read_market_geojson(file="./Data/market.geojson"):
         tmp.update({ponts[i]:qualities[i]})
     types = str(types).replace(' ', '').replace('{', '').replace('}', '').replace("'", '')
     print(f"[+]Count points with any types>> {types}")
-    return tmp
+    return (tmp, (ponts, qualities))
 
 
 
@@ -282,7 +282,7 @@ def Update():
     global other_delta_point, delta_point
     other_delta_point = 10 ** delta_point
     print("[INFO]Update Start")
-    actcenter = read_market_geojson()
+    actcenter, tmpmarket = read_market_geojson()
     print("[INFO]markets are Up to date")
     regeons = {}
     regeon = read_regeons_geojson()
@@ -293,7 +293,47 @@ def Update():
             print(f"[+]{i}:людей на точку{populatn}, точек{len(ponts)}")
             regeons.update({j:populatn for j in ponts})
     print("[INFO]regeons are Up to date")
+    #--------output-formating--------------
+    regen = {}
+    for i in regeon["points"].keys():
+        count = ''
+        while (i + count) in regeon.keys():
+            count += "1"
+        if "population" in regeon["qualities"][i].keys():
+            regen.update({i: (regeon["points"][i], regeon["qualities"][i]["population"])})
+    market = {}
+    for i in tmpmarket[0].keys():
+        market.update({i:(tmpmarket[0][i], tmpmarket[1][i])})
+    return (regen, market) # name:[Point, population]      name:[Point, raiting]
 
+
+
+def Update_region_population(name, population, file="./Data/regions.geojson"):
+    a = open(file, "r")
+    faile = a.readline()
+    f = []
+    for i in faile.split("{"):
+        f += list(i.split("}"))
+    count = 1
+    strpopulation = ""
+    a = open(file, "w")
+    for i in str(population)[::-1]:
+        strpopulation = i + strpopulation
+        if count % 3 == 0 and count != 0:
+            strpopulation = "," + strpopulation
+        count += 1
+    if strpopulation[0] == ",":
+        strpopulation = strpopulation[1:]
+    faile.find(f'"Name":"{name}"')
+    start, end = -1, -1
+    for i in f:
+        if "Name" in i and "marker-color" not in i:
+            nam = i[i.find("Name") +   7:i[i.find("Name") + 7:].find('"') + i.find("Name") + 7]
+            if nam == name and "population" in i:
+                n = i.find("population") + 12
+                faile.replace(i, i[:n] + f'"{strpopulation}"' + i[i[n+1:].find('"') + 1 + n:])
+    a.write(faile)
+    a.close()
 
 def test1():
     x_1, y_1 = map(float, input("point1").split(" "))
