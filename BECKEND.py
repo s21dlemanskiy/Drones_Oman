@@ -300,7 +300,7 @@ def Update():
         while (i + count) in regeon.keys():
             count += "1"
         if "population" in regeon["qualities"][i].keys():
-            regen.update({i: (regeon["points"][i], regeon["qualities"][i]["population"])})
+            regen.update({i: (regeon["points"][i], "".join(regeon["qualities"][i]["population"].split(".")))})
     market = {}
     for i in tmpmarket[0].keys():
         market.update({i:(tmpmarket[0][i], tmpmarket[1][i])})
@@ -334,6 +334,13 @@ def Update_region_population(name, population, file="./Data/regions.geojson"):
                 faile.replace(i, i[:n] + f'"{strpopulation}"' + i[i[n+1:].find('"') + 1 + n:])
     a.write(faile)
     a.close()
+
+def add_center_activity(name, score, x, y, type,file="./Data/regions.geojson"):
+    a = open(file, 'r')
+    faile = a.readline()
+    point = '{"type": "Feature","properties": {"marker-color": "#7e7e7e","marker-size": "medium","marker-symbol": "","Type ": '+f'"{type}",'+f'"Name": "{name}","MyScore": {score}'+'},"geometry": {"type": "Point","coordinates": '+ f'[{x},{y}]}},'
+    a = open(file, 'w')
+    a.write(faile[:-2]+point+"]}")
 
 def test1():
     x_1, y_1 = map(float, input("point1").split(" "))

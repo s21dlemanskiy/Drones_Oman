@@ -9,12 +9,20 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QMessageBox
 import folium, webbrowser #, pandas as pd
 import BECKEND
 regeon = {}
 market = {}
 
+def Errore_dialog(TEXT="Unexpected Errore"):
+    window = QMessageBox()
+    window.setWindowTitle("ERRORE")
+    window.setText(TEXT)
+    window.setIcon(QMessageBox.Warning)
+    window.setStandardButtons(QMessageBox.Ok)
 
+    window.exec_()
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -41,13 +49,14 @@ class Ui_MainWindow(object):
         self.label_5.setObjectName("label_5")
         self.label_6 = QtWidgets.QLabel(self.start_frame)
         self.label_6.setGeometry(QtCore.QRect(230, 50, 121, 31))
+        self.label_6.setText("")
         self.label_6.setObjectName("label_6")
         self.pushButton_4 = QtWidgets.QPushButton(self.start_frame)
         self.pushButton_4.setGeometry(QtCore.QRect(350, 50, 291, 31))
         self.pushButton_4.setObjectName("pushButton_4")
         self.add_center = QtWidgets.QFrame(self.centralwidget)
         self.add_center.setEnabled(True)
-        self.add_center.setGeometry(QtCore.QRect(10, 130, 641, 101))
+        self.add_center.setGeometry(QtCore.QRect(10, 100, 721, 151))
         self.add_center.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.add_center.setFrameShadow(QtWidgets.QFrame.Raised)
         self.add_center.setObjectName("add_center")
@@ -70,11 +79,23 @@ class Ui_MainWindow(object):
         self.pushButton_2.setGeometry(QtCore.QRect(0, 70, 181, 31))
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_3 = QtWidgets.QPushButton(self.add_center)
-        self.pushButton_3.setGeometry(QtCore.QRect(440, 70, 91, 31))
+        self.pushButton_3.setGeometry(QtCore.QRect(600, 110, 121, 41))
         self.pushButton_3.setObjectName("pushButton_3")
         self.comboBox = QtWidgets.QComboBox(self.add_center)
-        self.comboBox.setGeometry(QtCore.QRect(0, 0, 291, 31))
+        self.comboBox.setGeometry(QtCore.QRect(80, 0, 291, 31))
         self.comboBox.setObjectName("comboBox")
+        self.lineEdit_4 = QtWidgets.QLineEdit(self.add_center)
+        self.lineEdit_4.setGeometry(QtCore.QRect(470, 0, 251, 31))
+        self.lineEdit_4.setObjectName("lineEdit_4")
+        self.label_8 = QtWidgets.QLabel(self.add_center)
+        self.label_8.setGeometry(QtCore.QRect(380, 0, 81, 31))
+        self.label_8.setObjectName("label_8")
+        self.pushButton_8 = QtWidgets.QPushButton(self.add_center)
+        self.pushButton_8.setGeometry(QtCore.QRect(0, 110, 111, 41))
+        self.pushButton_8.setObjectName("pushButton_8")
+        self.label_9 = QtWidgets.QLabel(self.add_center)
+        self.label_9.setGeometry(QtCore.QRect(0, 0, 81, 31))
+        self.label_9.setObjectName("label_9")
         self.regeons_choseer = QtWidgets.QFrame(self.centralwidget)
         self.regeons_choseer.setEnabled(True)
         self.regeons_choseer.setGeometry(QtCore.QRect(10, 270, 561, 221))
@@ -121,15 +142,18 @@ class Ui_MainWindow(object):
         self.lineEdit.setText(_translate("MainWindow", "10"))
         self.pushButton.setText(_translate("MainWindow", "Добавить ЦА"))
         self.label_5.setText(_translate("MainWindow", "Населенность(общая)"))
-        self.label_6.setText(_translate("MainWindow", "20000"))
         self.pushButton_4.setText(_translate("MainWindow", "Изменить для регионов"))
         self.label.setText(_translate("MainWindow", "Координаты"))
         self.label_3.setText(_translate("MainWindow", "Х:"))
         self.lineEdit_2.setText(_translate("MainWindow", "0"))
         self.label_4.setText(_translate("MainWindow", "Y:"))
         self.lineEdit_3.setText(_translate("MainWindow", "0"))
-        self.pushButton_2.setText(_translate("MainWindow", "Показать на карте"))
+        self.pushButton_2.setText(_translate("MainWindow", "Edit as .GeoJson"))
         self.pushButton_3.setText(_translate("MainWindow", "Apply"))
+        self.lineEdit_4.setText(_translate("MainWindow", "Name"))
+        self.label_8.setText(_translate("MainWindow", "Name"))
+        self.pushButton_8.setText(_translate("MainWindow", "Close"))
+        self.label_9.setText(_translate("MainWindow", "Type"))
         self.pushButton_5.setText(_translate("MainWindow", "Apply"))
         self.pushButton_6.setText(_translate("MainWindow", "Edit as .GeoJson"))
         self.Count_people_region.setText(_translate("MainWindow", "0"))
@@ -139,12 +163,14 @@ class Ui_MainWindow(object):
         """Main Code"""
 #----------------------------------------------------------------
         """BECKENDSTART"""
-        global regeon, market
+        global regeon, market       # name:[Point, population]      name:[Point, raiting]
         regeon, market = BECKEND.Update()
 
 #----------------------------------------------------------------
+        self.label_6.setText(str(sum(list(int(regeon[i][1]) for i in regeon.keys()))))
         self.comboBox.addItems(list(BECKEND.typekof.keys()))
         self.comboBox_2.addItems(list(regeon.keys()))
+        self.pushButton_8.clicked.connect(self.close_adder)
         self.pushButton_7.clicked.connect(self.close_chenger)
         self.comboBox_2.activated[str].connect(self.update_peoaple_per_region)
         self.pushButton.clicked.connect(self.show_adder)
@@ -158,7 +184,7 @@ class Ui_MainWindow(object):
 #-----------------------------------------------------------------
     def update_peoaple_per_region(self, text):
         global regeon
-        self.Count_people_region.setText("".join(regeon[text][1].split(".")))
+        self.Count_people_region.setText(regeon[text][1])
 
     def show_adder(self):
         self.start_frame.hide()
@@ -178,14 +204,18 @@ class Ui_MainWindow(object):
 #------------------------------------------------------------------
     def add_point(self):
         a, b = None, None
+        global market
         try:
             a = float(self.lineEdit_2.text())
             b = float(self.lineEdit_3.text())
+            if a is not None and b is not None:
+                self.close_adder()
+                BECKEND.add_center_activity(self.lineEdit_4.text(), a, b, self.comboBox.currentText())
+                market =  BECKEND.Update()[1]
+            else:
+                Errore_dialog("No values of coordinats")
         except:
-            print("кординаты должны быть float(например 0.002103)")
-        if a is not None and b is not None:
-            self.close_adder()
-            print(self.comboBox.currentText(), float(self.lineEdit_2.text()),float(self.lineEdit_3.text()))
+            Errore_dialog("кординаты должны быть float(например 0.002103)")
 
     def change_regeon_population(self):
         global regeon
