@@ -41,6 +41,7 @@ class Ui_MainWindow(object):
         self.label_5.setObjectName("label_5")
         self.label_6 = QtWidgets.QLabel(self.start_frame)
         self.label_6.setGeometry(QtCore.QRect(230, 50, 121, 31))
+        self.label_6.setText("")
         self.label_6.setObjectName("label_6")
         self.pushButton_4 = QtWidgets.QPushButton(self.start_frame)
         self.pushButton_4.setGeometry(QtCore.QRect(350, 50, 291, 31))
@@ -121,7 +122,6 @@ class Ui_MainWindow(object):
         self.lineEdit.setText(_translate("MainWindow", "10"))
         self.pushButton.setText(_translate("MainWindow", "Добавить ЦА"))
         self.label_5.setText(_translate("MainWindow", "Населенность(общая)"))
-        self.label_6.setText(_translate("MainWindow", "20000"))
         self.pushButton_4.setText(_translate("MainWindow", "Изменить для регионов"))
         self.label.setText(_translate("MainWindow", "Координаты"))
         self.label_3.setText(_translate("MainWindow", "Х:"))
@@ -139,10 +139,11 @@ class Ui_MainWindow(object):
         """Main Code"""
 #----------------------------------------------------------------
         """BECKENDSTART"""
-        global regeon, market
+        global regeon, market       # name:[Point, population]      name:[Point, raiting]
         regeon, market = BECKEND.Update()
 
 #----------------------------------------------------------------
+        self.label_6.setText(_translate("MainWindow", str(sum(list(int("".join(regeon[i][1].split("."))) for i in regeon.keys())))))
         self.comboBox.addItems(list(BECKEND.typekof.keys()))
         self.comboBox_2.addItems(list(regeon.keys()))
         self.pushButton_7.clicked.connect(self.close_chenger)
