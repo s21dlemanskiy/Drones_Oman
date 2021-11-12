@@ -1,4 +1,4 @@
-import math, itertools, folium, webbrowser
+import math, itertools, folium, webbrowser, os
 from typing import List
 delta_point = 3
 other_delta_point = 10 ** delta_point
@@ -462,6 +462,10 @@ def see_result(count:int, updated=None):
         folium.Marker((i.y, i.x)).add_to(m)
     m.save("./Temp/map.html")
     webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
+
+
+def work_files():
+    return os.listdir("./Data")
 
 
 def test5():

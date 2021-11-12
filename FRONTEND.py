@@ -16,9 +16,9 @@ import time
 regeon = {}
 market = {}
 
-file_market = None
-file_regions = None
-file_NFZ = None
+file_market = r"./Data/market.geojson"
+file_regions = r"./Data/regions.geojson"
+file_NFZ = r"./Data/NFZ.geojson"
 
 def Errore_dialog(TEXT="Unexpected Errore"):
     window = QMessageBox()
@@ -33,7 +33,7 @@ def Errore_dialog(TEXT="Unexpected Errore"):
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(757, 717)
+        MainWindow.resize(757, 811)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.start_frame = QtWidgets.QFrame(self.centralwidget)
@@ -209,6 +209,44 @@ class Ui_MainWindow(object):
         self.Score2 = QtWidgets.QComboBox(self.change_center)
         self.Score2.setGeometry(QtCore.QRect(630, 100, 91, 31))
         self.Score2.setObjectName("Score2")
+        self.file_changer = QtWidgets.QFrame(self.centralwidget)
+        self.file_changer.setGeometry(QtCore.QRect(10, 650, 721, 111))
+        self.file_changer.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.file_changer.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.file_changer.setObjectName("file_changer")
+        self.label_20 = QtWidgets.QLabel(self.file_changer)
+        self.label_20.setGeometry(QtCore.QRect(0, 40, 81, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label_20.setFont(font)
+        self.label_20.setObjectName("label_20")
+        self.comboBox_5 = QtWidgets.QComboBox(self.file_changer)
+        self.comboBox_5.setGeometry(QtCore.QRect(100, 0, 291, 31))
+        self.comboBox_5.setObjectName("comboBox_5")
+        self.label_21 = QtWidgets.QLabel(self.file_changer)
+        self.label_21.setGeometry(QtCore.QRect(0, 0, 81, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.label_21.setFont(font)
+        self.label_21.setObjectName("label_21")
+        self.label_22 = QtWidgets.QLabel(self.file_changer)
+        self.label_22.setGeometry(QtCore.QRect(0, 80, 81, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label_22.setFont(font)
+        self.label_22.setObjectName("label_22")
+        self.comboBox_6 = QtWidgets.QComboBox(self.file_changer)
+        self.comboBox_6.setGeometry(QtCore.QRect(100, 40, 291, 31))
+        self.comboBox_6.setObjectName("comboBox_6")
+        self.comboBox_7 = QtWidgets.QComboBox(self.file_changer)
+        self.comboBox_7.setGeometry(QtCore.QRect(100, 80, 291, 31))
+        self.comboBox_7.setObjectName("comboBox_7")
+        self.pushButton_15 = QtWidgets.QPushButton(self.file_changer)
+        self.pushButton_15.setGeometry(QtCore.QRect(450, 10, 241, 91))
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        self.pushButton_15.setFont(font)
+        self.pushButton_15.setObjectName("pushButton_15")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 757, 18))
@@ -266,13 +304,18 @@ class Ui_MainWindow(object):
         self.pushButton_12.setText(_translate("MainWindow", "Close"))
         self.label_15.setText(_translate("MainWindow", "Type"))
         self.label_17.setText(_translate("MainWindow", "Score"))
+        self.label_20.setText(_translate("MainWindow", "ЦА"))
+        self.label_21.setText(_translate("MainWindow", "регионы"))
+        self.label_22.setText(_translate("MainWindow", "NFZ"))
+        self.pushButton_15.setText(_translate("MainWindow", "APPLY"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         """Main Code"""
 #----------------------------------------------------------------
         """BECKENDSTART"""
 
         global regeon, market       # name:[Point, population]      name:[Point, type ,raiting]
-        regeon, market = BECKEND.Update()
+        global file_market, file_regions, file_NFZ
+        regeon, market = BECKEND.Update(file_market, file_regions, file_NFZ)
 
 #----------------------------------------------------------------
         self.label_6.setText(str(sum(list(int(regeon[i][1]) for i in regeon.keys()))))
@@ -282,6 +325,11 @@ class Ui_MainWindow(object):
         self.Score2.addItems(list(str(i) for i in range(0, 11)))
 
 #-------------------------------------------------
+        self.comboBox_5.addItems(BECKEND.work_files())
+        self.comboBox_6.addItems(BECKEND.work_files())
+        self.comboBox_7.addItems(BECKEND.work_files())
+        self.pushButton_13.clicked.connect(self.open_files_changer)
+        self.pushButton_15.clicked.connect(self.change_inputfile)
         self.comboBox.addItems(list(BECKEND.typekof.keys()))
         self.comboBox_3.addItems(list(BECKEND.typekof.keys()))
         self.comboBox_2.addItems(list(regeon.keys()))
@@ -298,11 +346,23 @@ class Ui_MainWindow(object):
         self.pushButton_9.clicked.connect(self.show_chenger_center)
         self.pushButton_12.clicked.connect(self.close_changer_center)
         self.pushButton_11.clicked.connect(self.change_market)
+        self.file_changer.hide()
         self.add_center.hide()
         self.change_center.hide()
         self.regeons_choseer.hide()
 
 #-----------------------------------------------------------------
+    def open_files_changer(self):
+        global file_market, file_NFZ, file_regions
+        a, b, c = file_market, file_NFZ, file_regions
+        a, b, c = a.replace("./Data/", ""), b.replace("./Data/", ""), c.replace("./Data/", "")
+        print(a, b, c)
+        self.comboBox_5.setCurrentText(c)
+        self.comboBox_6.setCurrentText(a)
+        self.comboBox_7.setCurrentText(b)
+        self.start_frame.hide()
+        self.file_changer.show()
+
     def update_market_info(self, text):
         self.comboBox_3.setCurrentText(market[text][1])
         self.Score2.setCurrentText(str(market[text][2]))
@@ -343,6 +403,7 @@ class Ui_MainWindow(object):
 
 
     def add_point(self):
+        global file_market, file_regions, file_NFZ
         a, b = None, None
         global market
         try:
@@ -351,7 +412,7 @@ class Ui_MainWindow(object):
             if a is not None and b is not None:
                 self.close_adder()
                 BECKEND.add_center_activity(self.lineEdit_4.text(),self.Score1.currentText(), a, b, self.comboBox.currentText())
-                market =  BECKEND.Update()[1]
+                market = BECKEND.Update(file_market, file_regions, file_NFZ)[1]
             else:
                 Errore_dialog("No values of coordinats")
         except:
@@ -359,8 +420,9 @@ class Ui_MainWindow(object):
 
     def change_regeon_population(self):
         global regeon
+        global file_market, file_regions, file_NFZ
         BECKEND.Update_region_population(self.comboBox_2.currentText(), self.Count_people_region.text())
-        regeon = BECKEND.Update()[0]
+        regeon = BECKEND.Update(file_market, file_regions, file_NFZ)[0]
         self.close_chenger()
 
     def show_all_geojson(self):
@@ -369,6 +431,17 @@ class Ui_MainWindow(object):
         folium.GeoJson("./Data/market.geojson", name="geojson").add_to(m)
         m.save("./Temp/map.html")
         webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
+
+    def change_inputfile(self):
+        self.start_frame.show()
+        self.file_changer.hide()
+        global file_market, file_regions, file_NFZ
+        global regeon, market
+        file_regions = f"./Data/{self.comboBox_5.currentText()}"
+        file_market = f"./Data/{self.comboBox_6.currentText()}"
+        file_NFZ = f"./Data/{self.comboBox_7.currentText()}"
+        regeon, market = BECKEND.Update(file_market, file_regions, file_NFZ)
+
 
     def Start(self):
         try:
