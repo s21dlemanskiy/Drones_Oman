@@ -376,9 +376,10 @@ class Ui_MainWindow(object):
         except:
             Errore_dialog("pochtampt count mast be int")
             return
-        print(self.checkBox.isTristate())
-        a = 1
-        BECKEND.make_pochtampt(count, self.checkBox.isTristate())
+        if count == 0:
+            Errore_dialog("pochtampt count is 0. Maybe it's mistake")
+            return
+        BECKEND.see_result(count, self.checkBox.isTristate())
         # self.progressBar.setVisible(True)
         # self.pushButton_14.setVisible(False)
         # self.progressBar.setRange(1, count)

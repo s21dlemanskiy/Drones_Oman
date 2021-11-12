@@ -157,10 +157,10 @@ def added_pochtamt(point:Point):
     for tmppoint in points:
         added_pochtamt2(tmppoint, point)
 
-def list_func_update(file=None):
+def list_func_update(upd=None):
     global list_func
     global regeons, actcenter
-    if not file:
+    if not upd:
         for i in regeons.keys():
             list_func.update({i:point_function(i)})
         f = open(r"./Temp/functions_list.txt", "w")
@@ -185,10 +185,7 @@ def list_func_update(file=None):
 def make_pochtampt(count:int, updated=None) -> List[Point]:
     points = []
     planted = 0
-    if updated:
-        list_func_update()
-    else:
-        list_func_update(file=True)
+    list_func_update(upd=updated)
     for _ in range(count):
         point = bruteforce()
         points += [point]
@@ -421,8 +418,9 @@ def change_actceter(name, score, x, y, type,file="./Data/market.geojson"):
     a.write(faile)
     a.close()
 
-    def Open_geojason():
-        webbrowser.open(r"https://geojson.io/#map=2/20.0/0.0")
+
+def Open_geojason():
+    webbrowser.open(r"https://geojson.io/#map=2/20.0/0.0")
 
 
 def test1():
@@ -450,16 +448,31 @@ def test3():
     m.save("./Temp/map.html")
     webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
 
-def test5():
+def see_result(count:int, updated=None):
     global regeons, list_func, delta_point
-    Update()
     a, b = [], []
     for i in regeons.keys():
         a += [i.x]
         b += [i.y]
     print(f"[+]dispertion X>> {round(abs(min(a) - max(a))*111.1348, delta_point)}km")
     print(f"[+]dispertion Y>> {round(abs(min(b)- max(b)) *111.1348, delta_point)}km")
-    points = make_pochtampt(30)
+    points = make_pochtampt(count, updated)
+    m = folium.Map(location=[23.5, 58.5])
+    for i in points:
+        folium.Marker((i.y, i.x)).add_to(m)
+    m.save("./Temp/map.html")
+    webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
+
+
+def test5():
+    global regeons, list_func, delta_point
+    a, b = [], []
+    for i in regeons.keys():
+        a += [i.x]
+        b += [i.y]
+    print(f"[+]dispertion X>> {round(abs(min(a) - max(a)) * 111.1348, delta_point)}km")
+    print(f"[+]dispertion Y>> {round(abs(min(b) - max(b)) * 111.1348, delta_point)}km")
+    points = make_pochtampt(10)
     m = folium.Map(location=[23.5, 58.5])
     for i in points:
         folium.Marker((i.y, i.x)).add_to(m)
