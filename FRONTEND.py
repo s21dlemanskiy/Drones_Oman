@@ -12,8 +12,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 import folium, webbrowser #, pandas as pd
 import BECKEND
+import time
 regeon = {}
 market = {}
+
+file_market = None
+file_regions = None
+file_NFZ = None
 
 def Errore_dialog(TEXT="Unexpected Errore"):
     window = QMessageBox()
@@ -24,14 +29,15 @@ def Errore_dialog(TEXT="Unexpected Errore"):
 
     window.exec_()
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(757, 872)
+        MainWindow.resize(757, 717)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.start_frame = QtWidgets.QFrame(self.centralwidget)
-        self.start_frame.setGeometry(QtCore.QRect(10, 0, 721, 81))
+        self.start_frame.setGeometry(QtCore.QRect(10, 0, 721, 151))
         self.start_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.start_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.start_frame.setObjectName("start_frame")
@@ -58,9 +64,34 @@ class Ui_MainWindow(object):
         self.pushButton_9 = QtWidgets.QPushButton(self.start_frame)
         self.pushButton_9.setGeometry(QtCore.QRect(540, 10, 171, 31))
         self.pushButton_9.setObjectName("pushButton_9")
+        self.lineEdit_7 = QtWidgets.QLineEdit(self.start_frame)
+        self.lineEdit_7.setGeometry(QtCore.QRect(100, 90, 51, 31))
+        self.lineEdit_7.setObjectName("lineEdit_7")
+        self.label_18 = QtWidgets.QLabel(self.start_frame)
+        self.label_18.setGeometry(QtCore.QRect(0, 90, 81, 31))
+        self.label_18.setObjectName("label_18")
+        self.pushButton_13 = QtWidgets.QPushButton(self.start_frame)
+        self.pushButton_13.setGeometry(QtCore.QRect(170, 90, 171, 31))
+        self.pushButton_13.setObjectName("pushButton_13")
+        self.pushButton_14 = QtWidgets.QPushButton(self.start_frame)
+        self.pushButton_14.setGeometry(QtCore.QRect(490, 90, 221, 51))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.pushButton_14.setFont(font)
+        self.pushButton_14.setObjectName("pushButton_14")
+        self.checkBox = QtWidgets.QCheckBox(self.start_frame)
+        self.checkBox.setGeometry(QtCore.QRect(370, 90, 111, 16))
+        self.checkBox.setObjectName("checkBox")
+        self.label_19 = QtWidgets.QLabel(self.start_frame)
+        self.label_19.setGeometry(QtCore.QRect(350, 110, 141, 41))
+        font = QtGui.QFont()
+        font.setPointSize(6)
+        self.label_19.setFont(font)
+        self.label_19.setWordWrap(True)
+        self.label_19.setObjectName("label_19")
         self.add_center = QtWidgets.QFrame(self.centralwidget)
         self.add_center.setEnabled(True)
-        self.add_center.setGeometry(QtCore.QRect(10, 100, 721, 151))
+        self.add_center.setGeometry(QtCore.QRect(10, 130, 721, 151))
         self.add_center.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.add_center.setFrameShadow(QtWidgets.QFrame.Raised)
         self.add_center.setObjectName("add_center")
@@ -108,7 +139,7 @@ class Ui_MainWindow(object):
         self.Score1.setObjectName("Score1")
         self.regeons_choseer = QtWidgets.QFrame(self.centralwidget)
         self.regeons_choseer.setEnabled(True)
-        self.regeons_choseer.setGeometry(QtCore.QRect(10, 270, 561, 221))
+        self.regeons_choseer.setGeometry(QtCore.QRect(10, 280, 561, 221))
         self.regeons_choseer.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.regeons_choseer.setFrameShadow(QtWidgets.QFrame.Raised)
         self.regeons_choseer.setObjectName("regeons_choseer")
@@ -132,7 +163,7 @@ class Ui_MainWindow(object):
         self.pushButton_7.setObjectName("pushButton_7")
         self.change_center = QtWidgets.QFrame(self.centralwidget)
         self.change_center.setEnabled(True)
-        self.change_center.setGeometry(QtCore.QRect(10, 500, 721, 211))
+        self.change_center.setGeometry(QtCore.QRect(10, 440, 721, 211))
         self.change_center.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.change_center.setFrameShadow(QtWidgets.QFrame.Raised)
         self.change_center.setObjectName("change_center")
@@ -201,6 +232,12 @@ class Ui_MainWindow(object):
         self.label_5.setText(_translate("MainWindow", "Населенность(общая)"))
         self.pushButton_4.setText(_translate("MainWindow", "Изменить для регионов"))
         self.pushButton_9.setText(_translate("MainWindow", "Изменить ЦА"))
+        self.lineEdit_7.setText(_translate("MainWindow", "0"))
+        self.label_18.setText(_translate("MainWindow", "Кол-во пачтамтов"))
+        self.pushButton_13.setText(_translate("MainWindow", "Select input files"))
+        self.pushButton_14.setText(_translate("MainWindow", "Start"))
+        self.checkBox.setText(_translate("MainWindow", "Not Update"))
+        self.label_19.setText(_translate("MainWindow", "if you alredy start your programm with the same input"))
         self.label.setText(_translate("MainWindow", "Координаты"))
         self.label_3.setText(_translate("MainWindow", "Х:"))
         self.lineEdit_2.setText(_translate("MainWindow", "0"))
@@ -230,7 +267,6 @@ class Ui_MainWindow(object):
         self.label_15.setText(_translate("MainWindow", "Type"))
         self.label_17.setText(_translate("MainWindow", "Score"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
-
         """Main Code"""
 #----------------------------------------------------------------
         """BECKENDSTART"""
@@ -254,6 +290,7 @@ class Ui_MainWindow(object):
         self.comboBox_2.activated[str].connect(self.update_peoaple_per_region)
         self.comboBox_4.activated[str].connect(self.update_market_info)
         self.pushButton.clicked.connect(self.show_adder)
+        self.pushButton_14.clicked.connect(self.Start)
         self.pushButton_3.clicked.connect(self.add_point)
         self.pushButton_4.clicked.connect(self.show_chenger)
         self.pushButton_5.clicked.connect(self.change_regeon_population)
@@ -332,6 +369,28 @@ class Ui_MainWindow(object):
         folium.GeoJson("./Data/market.geojson", name="geojson").add_to(m)
         m.save("./Temp/map.html")
         webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
+
+    def Start(self):
+        try:
+            count = int(self.lineEdit_7.text())
+        except:
+            Errore_dialog("pochtampt count mast be int")
+            return
+        print(self.checkBox.isTristate())
+        a = 1
+        BECKEND.make_pochtampt(count, self.checkBox.isTristate())
+        # self.progressBar.setVisible(True)
+        # self.pushButton_14.setVisible(False)
+        # self.progressBar.setRange(1, count)
+        #self.progressBar.setValue(0)
+
+    # def upd_progressBar(self, progress):
+    #     if self.progressBar.maximum() == progress:
+    #         self.progressBar.setVisible(False)
+    #         self.pushButton_14.setVisible(True)
+    #         return
+    #     self.progressBar.setValue(progress)
+
 
 if __name__ == "__main__":
     import sys

@@ -1,7 +1,5 @@
 import math, itertools, folium, webbrowser
 from typing import List
-import threading
-import datetime
 delta_point = 3
 other_delta_point = 10 ** delta_point
 list_func = {}
@@ -159,7 +157,7 @@ def added_pochtamt(point:Point):
     for tmppoint in points:
         added_pochtamt2(tmppoint, point)
 
-def list_func_update(**file):
+def list_func_update(file=None):
     global list_func
     global regeons, actcenter
     if not file:
@@ -184,8 +182,7 @@ def list_func_update(**file):
 
 
 
-def make_pochtampt(count:int, **updated) -> List[Point]:
-    Update()
+def make_pochtampt(count:int, updated=None) -> List[Point]:
     points = []
     planted = 0
     if updated:
@@ -205,6 +202,7 @@ def read_market_geojson(file="./Data/market.geojson"):
     global delta_point
     a = open(file, "r")
     file = a.readline()
+    a.close()
     types = {i:0 for i in typekof.keys()}
     f = []
     for i in file.split("{"):
@@ -245,10 +243,34 @@ def read_market_geojson(file="./Data/market.geojson"):
     return (tmp, (ponts, qualities))
 
 
+def read_NFZ_geojson(file="./Data/NFZ.geojson"):
+    a = open(file, "r")
+    file = a.readline()
+    f = []
+    for i in file.split("{"):
+        f += list(i.split("}"))
+    points = {}
+    point = []
+    counter = 0
+    for i in f:
+        if '"coordinates"' in i:
+            i = i[i.find("[[") + 2:i.rfind("]]")]
+            points.update({counter: []})
+            while i != "":
+                tmp = list(map(float, i[i.find("[") + 1:i.find("]")].split(",")))
+                points[counter] += [Point(float(tmp[0]), float(tmp[1]))]
+                i = i[i.find("]") + 1:]
+            counter += 1
+    for i in points.keys():
+        for j in bad_figure_to_points(points[i]):
+            point += [[j.x, j.y]]
+    return point        #somenum : Points
+
 
 def read_regeons_geojson(file="./Data/regions.geojson"):
     a = open(file, "r")
     file = a.readline()
+    a.close()
     f = []
     for i in file.split("{"):
         f += list(i.split("}"))
@@ -278,23 +300,38 @@ def read_regeons_geojson(file="./Data/regions.geojson"):
     return {"points":points, "qualities":qualities}
 
 
-def Update():
+def Update(file_market=None, file_regions=None, file_NFZ=None):
     global regeons
     global actcenter
     global other_delta_point, delta_point
     other_delta_point = 10 ** delta_point
     print("[INFO]Update Start")
-    actcenter, tmpmarket = read_market_geojson()
+    if file_market:
+        actcenter, tmpmarket = read_market_geojson(file_market)
+    else:
+        actcenter, tmpmarket = read_market_geojson()
     print("[INFO]markets are Up to date")
     regeons = {}
-    regeon = read_regeons_geojson()
+    NFZ = []
+    if file_regions:
+        regeon = read_regeons_geojson(file_regions)
+    else:
+        regeon = read_regeons_geojson()
+    if file_NFZ:
+        NFZ = read_NFZ_geojson(file_NFZ)
+    else:
+        NFZ = read_NFZ_geojson()
     for i in regeon["qualities"].keys():
         if "population" in regeon["qualities"][i].keys() and i in regeon["points"].keys():
             ponts = bad_figure_to_points(regeon["points"][i])
-            populatn =  int("".join(regeon["qualities"][i]["population"].split("."))) / len(ponts)
+            for j in ponts:
+                if [j.x, j.y] in NFZ:
+                    ponts.remove(j)
+            populatn = int("".join(regeon["qualities"][i]["population"].split("."))) / len(ponts)
             print(f"[+]{i}:людей на точку{populatn}, точек{len(ponts)}")
             regeons.update({j:populatn for j in ponts})
     print("[INFO]regeons are Up to date")
+
     #--------output-formating--------------
     regen = {}
     for i in regeon["points"].keys():
@@ -383,6 +420,9 @@ def change_actceter(name, score, x, y, type,file="./Data/market.geojson"):
     print(f"[+] Change point{old} =====>>> {new}")
     a.write(faile)
     a.close()
+
+    def Open_geojason():
+        webbrowser.open(r"https://geojson.io/#map=2/20.0/0.0")
 
 
 def test1():
