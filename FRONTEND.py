@@ -234,6 +234,7 @@ class Ui_MainWindow(object):
         """Main Code"""
 #----------------------------------------------------------------
         """BECKENDSTART"""
+
         global regeon, market       # name:[Point, population]      name:[Point, type ,raiting]
         regeon, market = BECKEND.Update()
 
@@ -243,6 +244,8 @@ class Ui_MainWindow(object):
         self.comboBox_4.addItems(list(i for i in market.keys()))
         self.Score1.addItems(list(str(i) for i in range(0, 11)))
         self.Score2.addItems(list(str(i) for i in range(0, 11)))
+
+#-------------------------------------------------
         self.comboBox.addItems(list(BECKEND.typekof.keys()))
         self.comboBox_3.addItems(list(BECKEND.typekof.keys()))
         self.comboBox_2.addItems(list(regeon.keys()))

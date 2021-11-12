@@ -10,7 +10,8 @@ typekof = {
     "Default":0,
     "SHOPPINGCENTER":12,
     "Market":20,
-    "HyperMarket":8
+    "HyperMarket":8,
+    "Businesscenter":10
 }
 R = {
     "regeon":0.009,
