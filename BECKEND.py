@@ -7,6 +7,7 @@ other_delta_point = 10 ** delta_point
 list_func = {}
 #SOME DIGITALS 111,1348 km in 1
 typekof = {
+    "Default":0,
     "SHOPPINGCENTER":12,
     "Market":20,
     "HyperMarket":8
@@ -219,7 +220,7 @@ def read_market_geojson(file="./Data/market.geojson"):
             boool = False
             namee = None
             raiting = ""
-            k = 0
+            k = 'Default'
             for j in i.split(","):
                     j = ("".join(j.split('"'))).split(":")
                     if j[0].lower() == "name":
@@ -227,17 +228,17 @@ def read_market_geojson(file="./Data/market.geojson"):
                     elif j[0].lower() == "myscore":
                         raiting = int(j[1])
                     elif j[0].lower() == "type":
-                        k = typekof[j[1]]
+                        k = j[1]
                         types[j[1]] += 1
-            if k == 0:
+            if k == 'Default':
                 print(f'[WARNING]There is no type>>{name}')
-            qualities.update({name:k*raiting})
+            qualities.update({name:[k, raiting]})
         elif'"coordinates"' in i and name not in ponts.keys():
             tmp = list(map(float, i[i.find("[") + 1:i.rfind("]")].split(",")))
             ponts.update({name:Point(round(tmp[0], delta_point), round(tmp[1], delta_point))})
     tmp = {}
     for i in ponts.keys():
-        tmp.update({ponts[i]:qualities[i]})
+        tmp.update({ponts[i]:typekof[qualities[i][0]] * qualities[i][1]})
     types = str(types).replace(' ', '').replace('{', '').replace('}', '').replace("'", '')
     print(f"[+]Count points with any types>> {types}")
     return (tmp, (ponts, qualities))
@@ -264,7 +265,7 @@ def read_regeons_geojson(file="./Data/regions.geojson"):
                 points[name] += [Point(float(tmp[0]), float(tmp[1]))]
                 i = i[i.find("]") + 1:]
         if "Name" in i and "marker-color" not in i:
-            name = i[i.find("Name") +   7:i[i.find("Name") + 7:].find('"') + i.find("Name") + 7]
+            name = i[i.find("Name") + 7:i[i.find("Name") + 7:].find('"') + i.find("Name") + 7]
             qualities.update({name: {}})
             if "population" in i:
                 populat = i[i.find("population") + 12:i[i.find("population") + 12:].find(',') + i.find("population") + 12]
@@ -303,8 +304,8 @@ def Update():
             regen.update({i: (regeon["points"][i], "".join(regeon["qualities"][i]["population"].split(".")))})
     market = {}
     for i in tmpmarket[0].keys():
-        market.update({i:(tmpmarket[0][i], tmpmarket[1][i])})
-    return (regen, market) # name:[Point, population]      name:[Point, raiting]
+        market.update({i:(tmpmarket[0][i], tmpmarket[1][i][0], tmpmarket[1][i][1])})
+    return (regen, market) # name:[Point, population]      name:[Point, type ,raiting]
 
 
 
@@ -325,22 +326,63 @@ def Update_region_population(name, population, file="./Data/regions.geojson"):
     if strpopulation[0] == ",":
         strpopulation = strpopulation[1:]
     faile.find(f'"Name":"{name}"')
-    start, end = -1, -1
+    old = 0
     for i in f:
         if "Name" in i and "marker-color" not in i:
-            nam = i[i.find("Name") +   7:i[i.find("Name") + 7:].find('"') + i.find("Name") + 7]
+            nam = i[i.find("Name") + 7:i[i.find("Name") + 7:].find('"') + i.find("Name") + 7]
             if nam == name and "population" in i:
                 n = i.find("population") + 12
                 faile.replace(i, i[:n] + f'"{strpopulation}"' + i[i[n+1:].find('"') + 1 + n:])
+                old = i[n:i[n+1:].find('"') + 1 + n]
+    print(f'[+] changed population {name}   {old}  ====>>> {strpopulation}')
     a.write(faile)
     a.close()
 
-def add_center_activity(name, score, x, y, type,file="./Data/regions.geojson"):
+def add_center_activity(name, score, x, y, type,file="./Data/market.geojson"):
     a = open(file, 'r')
     faile = a.readline()
-    point = '{"type": "Feature","properties": {"marker-color": "#7e7e7e","marker-size": "medium","marker-symbol": "","Type ": '+f'"{type}",'+f'"Name": "{name}","MyScore": {score}'+'},"geometry": {"type": "Point","coordinates": '+ f'[{x},{y}]}},'
+    point = ',{"type": "Feature","properties": {"marker-color": "#7e7e7e","marker-size": "medium","marker-symbol": "","Type":'+f'"{type}",'+f'"Name": "{name}","MyScore":{score}'+'},"geometry":{"type":"Point","coordinates": '+ f'[{x},{y}]}}'
     a = open(file, 'w')
     a.write(faile[:-2]+point+"]}")
+    a.close()
+
+def change_actceter(name, score, x, y, type,file="./Data/market.geojson"):
+    a = open(file, 'r')
+    faile = a.readline()
+    f = []
+    for i in faile.split("{"):
+        f += list(i.split("}"))
+    a = open(file, "w")
+    faile.find(f'"Name":"{name}"')
+    boool = False
+    old, new = [], []
+    for i in f:
+        if "Name" in i and "Type" in i:
+            nam = i[i.find("Name") + 7:i[i.find("Name") + 7:].find('"') + i.find("Name") + 7]
+            if nam == name:
+                string = i
+                for j in i.split(","):
+                    if "MyScore" in j:
+                        old += [j]
+                        new += [f'"MyScore":{score}']
+                        string.replace(j, f'"MyScore":{score}')
+                    elif "Type" in j:
+                        string.replace(j, f'"Type":"{type}"')
+                        old += [j]
+                        new += [f'"Type":"{type}"']
+                faile.replace(i, string)
+                boool = True
+        if boool and '"coordinates"' in i:
+            boool = False
+            string = i
+            string.replace(i[i.find("[") + 1:i.find("]")], f"{x},{y}")
+            faile.replace(i, string)
+            old += [i[i.find("[") + 1:i.find("]")]]
+            new += [f"{x},{y}"]
+    print(f"[+] Change point{old} =====>>> {new}")
+    a.write(faile)
+    a.close()
+
 
 def test1():
     x_1, y_1 = map(float, input("point1").split(" "))
