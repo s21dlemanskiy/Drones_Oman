@@ -10,6 +10,10 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import folium, webbrowser #, pandas as pd
+import BECKEND
+regeon = {}
+market = {}
+
 
 
 class Ui_MainWindow(object):
@@ -37,6 +41,7 @@ class Ui_MainWindow(object):
         self.label_5.setObjectName("label_5")
         self.label_6 = QtWidgets.QLabel(self.start_frame)
         self.label_6.setGeometry(QtCore.QRect(230, 50, 121, 31))
+        self.label_6.setText("")
         self.label_6.setObjectName("label_6")
         self.pushButton_4 = QtWidgets.QPushButton(self.start_frame)
         self.pushButton_4.setGeometry(QtCore.QRect(350, 50, 291, 31))
@@ -78,22 +83,23 @@ class Ui_MainWindow(object):
         self.regeons_choseer.setFrameShadow(QtWidgets.QFrame.Raised)
         self.regeons_choseer.setObjectName("regeons_choseer")
         self.comboBox_2 = QtWidgets.QComboBox(self.regeons_choseer)
-        self.comboBox_2.setGeometry(QtCore.QRect(0, 10, 521, 31))
+        self.comboBox_2.setGeometry(QtCore.QRect(0, 10, 541, 31))
         self.comboBox_2.setObjectName("comboBox_2")
-        self.comboBox_2.addItem("")
-        self.comboBox_2.addItem("")
         self.pushButton_5 = QtWidgets.QPushButton(self.regeons_choseer)
         self.pushButton_5.setGeometry(QtCore.QRect(450, 170, 91, 31))
         self.pushButton_5.setObjectName("pushButton_5")
         self.pushButton_6 = QtWidgets.QPushButton(self.regeons_choseer)
-        self.pushButton_6.setGeometry(QtCore.QRect(0, 170, 141, 31))
+        self.pushButton_6.setGeometry(QtCore.QRect(10, 100, 151, 31))
         self.pushButton_6.setObjectName("pushButton_6")
         self.Count_people_region = QtWidgets.QLineEdit(self.regeons_choseer)
-        self.Count_people_region.setGeometry(QtCore.QRect(200, 60, 51, 21))
+        self.Count_people_region.setGeometry(QtCore.QRect(230, 60, 201, 21))
         self.Count_people_region.setObjectName("Count_people_region")
         self.label_7 = QtWidgets.QLabel(self.regeons_choseer)
         self.label_7.setGeometry(QtCore.QRect(0, 60, 181, 21))
         self.label_7.setObjectName("label_7")
+        self.pushButton_7 = QtWidgets.QPushButton(self.regeons_choseer)
+        self.pushButton_7.setGeometry(QtCore.QRect(10, 170, 91, 31))
+        self.pushButton_7.setObjectName("pushButton_7")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 757, 18))
@@ -116,7 +122,6 @@ class Ui_MainWindow(object):
         self.lineEdit.setText(_translate("MainWindow", "10"))
         self.pushButton.setText(_translate("MainWindow", "Добавить ЦА"))
         self.label_5.setText(_translate("MainWindow", "Населенность(общая)"))
-        self.label_6.setText(_translate("MainWindow", "20000"))
         self.pushButton_4.setText(_translate("MainWindow", "Изменить для регионов"))
         self.label.setText(_translate("MainWindow", "Координаты"))
         self.label_3.setText(_translate("MainWindow", "Х:"))
@@ -125,25 +130,37 @@ class Ui_MainWindow(object):
         self.lineEdit_3.setText(_translate("MainWindow", "0"))
         self.pushButton_2.setText(_translate("MainWindow", "Показать на карте"))
         self.pushButton_3.setText(_translate("MainWindow", "Apply"))
-        self.comboBox_2.setItemText(0, _translate("MainWindow", "регеон 1"))
-        self.comboBox_2.setItemText(1, _translate("MainWindow", "регеон2"))
         self.pushButton_5.setText(_translate("MainWindow", "Apply"))
         self.pushButton_6.setText(_translate("MainWindow", "Edit as .GeoJson"))
         self.Count_people_region.setText(_translate("MainWindow", "0"))
         self.label_7.setText(_translate("MainWindow", "кол-во людей в регионе"))
+        self.pushButton_7.setText(_translate("MainWindow", "Close"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         """Main Code"""
 #----------------------------------------------------------------
-        self.comboBox.addItems(["Бизнес центр","Торговый центр","Склад"])
+        """BECKENDSTART"""
+        global regeon, market       # name:[Point, population]      name:[Point, raiting]
+        regeon, market = BECKEND.Update()
+
+#----------------------------------------------------------------
+        self.label_6.setText(_translate("MainWindow", str(sum(list(int("".join(regeon[i][1].split("."))) for i in regeon.keys())))))
+        self.comboBox.addItems(list(BECKEND.typekof.keys()))
+        self.comboBox_2.addItems(list(regeon.keys()))
+        self.pushButton_7.clicked.connect(self.close_chenger)
+        self.comboBox_2.activated[str].connect(self.update_peoaple_per_region)
         self.pushButton.clicked.connect(self.show_adder)
         self.pushButton_3.clicked.connect(self.add_point)
         self.pushButton_4.clicked.connect(self.show_chenger)
-        self.pushButton_5.clicked.connect(self.change_regeon)
+        self.pushButton_5.clicked.connect(self.change_regeon_population)
         self.pushButton_6.clicked.connect(self.show_all_geojson)
         self.add_center.hide()
         self.regeons_choseer.hide()
 
 #-----------------------------------------------------------------
+    def update_peoaple_per_region(self, text):
+        global regeon
+        self.Count_people_region.setText("".join(regeon[text][1].split(".")))
+
     def show_adder(self):
         self.start_frame.hide()
         self.add_center.show()
@@ -171,8 +188,10 @@ class Ui_MainWindow(object):
             self.close_adder()
             print(self.comboBox.currentText(), float(self.lineEdit_2.text()),float(self.lineEdit_3.text()))
 
-    def change_regeon(self):
-        print(self.comboBox_2.currentText())
+    def change_regeon_population(self):
+        global regeon
+        BECKEND.Update_region_population(self.comboBox_2.currentText(), self.Count_people_region.text())
+        regeon = BECKEND.Update()[0]
         self.close_chenger()
 
     def show_all_geojson(self):
