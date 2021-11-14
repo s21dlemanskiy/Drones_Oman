@@ -1,11 +1,15 @@
 import math, itertools, folium, webbrowser, os, datetime
 from typing import List
 from numba import njit
+from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning
+import warnings
 from numba.core import types   # import the types
 from numba.experimental import jitclass
-from numba.typed import Dict
+from numba.typed import Dict, List
 from numba import typeof
 import numpy as mp
+warnings.simplefilter('ignore', category=NumbaDeprecationWarning)
+warnings.simplefilter('ignore', category=NumbaPendingDeprecationWarning)
 delta_point = 3
 other_delta_point = 10 ** delta_point
 #list_func = {}
@@ -23,10 +27,11 @@ R = {
 }
 regeons = {}            #{Point:population}
 actcenter = {}          #{Point:Score}
+NFZ = []
 
 
 
-list_func = Dict.empty(key_type=typeof((1.1, 2.2)), value_type=types.float64,)
+list_func = {}#Dict.empty(key_type=typeof((1.1, 2.2)), value_type=types.float64,)
 
 
 def point_right_line(point1, point2, u) -> bool:
@@ -105,23 +110,24 @@ def lenof(a, b):
 
 
 @njit()
-def point_function(point, R_market, R_regeon, regeon1, regeon2, actcenter1, actcenter2)->float:
+def point_function2(point, R_market1, R_regeon1, regeon11, regeon22, actcenter11, actcenter22)->float:
     score = 0
-    for i in range(len(actcenter1)):
-        if lenof(actcenter1[i], point) < R_market:
-            score += actcenter2[i] / (R_market/ 10 + lenof(actcenter1[i], point) ** 3)
-    for i in range(len(regeon1)):
-        if lenof(regeon1[i], point) < R_regeon:
-            score += regeon2[i] / (R_regeon/ 10 + lenof(regeon1[i], point) ** 2)
+    for i in range(len(actcenter11)):
+        if lenof(actcenter11[i], point) < R_market1:
+            score += actcenter22[i] / (R_market1/ 10 + lenof(actcenter11[i], point) ** 3)
+    for i in range(len(regeon11)):
+        if lenof(regeon11[i], point) < R_regeon1:
+            score += regeon22[i] / (R_regeon1/ 10 + lenof(regeon11[i], point) ** 2)
     return score
 
-@njit()
-def bruteforce(list_func)->tuple:
-    maxscore = [(0,0), 0]
+
+def bruteforce()->tuple:
+    global list_func, NFZ
+    maxscore = [0,0, 0]
     for i in list_func.keys():
-        if list_func[i] > maxscore[1]:
-            maxscore = [i, list_func[i]]
-    return maxscore[0]
+        if list_func[i] > maxscore[2] and i not in NFZ:
+            maxscore = [i[0],i[1], list_func[i]]
+    return (maxscore[0], maxscore[1])
 
 @njit()
 def added_pochtamt(point, delta_point,R_market, R_regeon, regeon1, regeon2, actcenter1, actcenter2):
@@ -139,34 +145,27 @@ def added_pochtamt(point, delta_point,R_market, R_regeon, regeon1, regeon2, actc
                 regeon2[i] = regeon2[i] * (lenof(regeon1[i], point) / R_regeon)
                 regg1.append(regeon1[i])
             points.append(regeon1[i])
-            points2.append(point_function(regeon1[i], R_market, R_regeon, regeon1, regeon2, actcenter1, actcenter2))
+            points2.append(point_function2(regeon1[i], R_market, R_regeon, regeon1, regeon2, actcenter1, actcenter2))
     return regg1 ,regeon2, actg1,actcenter2, points, points2
 
-# def point_function2(point):
-#     global regeons, actcenter
-#     global R
-#     score = 0
-#     for i in actcenter.keys():
-#         if lenof(i, point) < R["market"]:
-#             score += actcenter[i] / ((R["market"] / 10 + lenof(i,point)) ** 3)
-#     for i in regeons.keys():
-#         if lenof(i, point) < R["regeon"]:
-#             score += regeons[i] / ((R["regeon"] / 10 + lenof(i, point)) ** 2)
-#     return score
+def point_function(point):
+    global regeons, actcenter
+    global R
+    score = 0
+    for i in actcenter.keys():
+        if lenof(i, point) < R["market"]:
+            score += actcenter[i] / ((R["market"] / 10 + lenof(i,point)) ** 3)
+    for i in regeons.keys():
+        if lenof(i, point) < R["regeon"]:
+            score += regeons[i] / ((R["regeon"] / 10 + lenof(i, point)) ** 2)
+    return score
 
 def list_func_update(upd=None):
     global list_func
     global regeons, actcenter, R
     if not upd:
-        reg1, reg2, act1, act2, = [], [], [], []
         for i in regeons.keys():
-            reg1 += [i]
-            reg2 += [regeons[i]]
-        for i in actcenter.keys():
-            act1 += [i]
-            act2 += [actcenter[i]]
-        for i in regeons.keys():
-            list_func.update({i:point_function(i, R["market"], R["regeon"], reg1, reg2, act1, act2)})
+            list_func.update({i: point_function(i)})
         f = open(r"./Temp/functions_list.txt", "w")
         for i in list_func.keys():
             f.write(f"{i[0]};{i[1]}:{list_func[i]}\n")
@@ -193,9 +192,11 @@ def make_pochtampt(count:int, updated=None) -> List[tuple]:
     region1, region2 = [], []
     market1, market2 = [], []
     list_func1, list_func2 = [], []
+    start = datetime.datetime.now()
     list_func_update(upd=updated)
+    print("\n\n\n", (datetime.datetime.now() - start).seconds, "\n\n\n")
     for _ in range(count):
-        point = bruteforce(list_func)
+        point = bruteforce()
         points += [point]
         reg1, reg2, act1, act2, fun1, fun2 = [], [], [], [], [], []
         for i in regeons.keys():
@@ -321,6 +322,7 @@ def read_regeons_geojson(file="./Data/regions.geojson"):
 def Update(file_market=None, file_regions=None, file_NFZ=None):
     global regeons
     global actcenter
+    global  NFZ
     global other_delta_point, delta_point
     other_delta_point = 10 ** delta_point
     print("[INFO]Update Start")
@@ -342,9 +344,6 @@ def Update(file_market=None, file_regions=None, file_NFZ=None):
     for i in regeon["qualities"].keys():
         if "population" in regeon["qualities"][i].keys() and i in regeon["points"].keys():
             ponts = bad_figure_to_points(regeon["points"][i])
-            for j in ponts:
-                if j in NFZ:
-                    ponts.remove(j)
             populatn = int("".join(regeon["qualities"][i]["population"].split("."))) / len(ponts)
             print(f"[+]{i}:людей на точку{populatn}, точек{len(ponts)}")
             regeons.update({j:populatn for j in ponts})
@@ -491,15 +490,17 @@ def work_files():
 
 def test5():
     global regeons, list_func, delta_point
-    delta_point = 4
+    delta_point = 3
+    start = datetime.datetime.now()
     Update()
+    print("\n\n\n", (datetime.datetime.now() - start).seconds, "\n\n\n")
     a, b = [], []
     for i in regeons.keys():
         a += [i[0]]
         b += [i[1]]
     print(f"[+]dispertion X>> {round(abs(min(a) - max(a)) * 111.1348, delta_point)}km")
     print(f"[+]dispertion Y>> {round(abs(min(b) - max(b)) * 111.1348, delta_point)}km")
-    points = make_pochtampt(10)
+    points = make_pochtampt(10, True)
     m = folium.Map(location=[23.5, 58.5])
     for i in points:
         folium.Marker((i[1], i[0])).add_to(m)
