@@ -3,17 +3,15 @@ from typing import List
 from numba import njit
 from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning
 import warnings
-from numba.core import types   # import the types
-from numba.experimental import jitclass
 from numba.typed import Dict, List
-from numba import typeof
-import numpy as mp
+# start = datetime.datetime.now()
+# print("\n\n\n", (datetime.datetime.now() - start).seconds, "\n\n\n")
+#SOME DIGITALS 111,1348 km in 1
+
 warnings.simplefilter('ignore', category=NumbaDeprecationWarning)
 warnings.simplefilter('ignore', category=NumbaPendingDeprecationWarning)
 delta_point = 3
 other_delta_point = 10 ** delta_point
-#list_func = {}
-#SOME DIGITALS 111,1348 km in 1
 typekof = {
     "Default":0,
     "SHOPPINGCENTER":12,
@@ -28,10 +26,7 @@ R = {
 regeons = {}            #{Point:population}
 actcenter = {}          #{Point:Score}
 NFZ = []
-
-
-
-list_func = {}#Dict.empty(key_type=typeof((1.1, 2.2)), value_type=types.float64,)
+list_func = {}              #Dict.empty(key_type=typeof((1.1, 2.2)), value_type=types.float64,)
 
 
 def point_right_line(point1, point2, u) -> bool:
@@ -164,8 +159,13 @@ def list_func_update(upd=None):
     global list_func
     global regeons, actcenter, R
     if not upd:
+        stepcount = [i for i in range(0, len(list(regeons.keys())), len(list(regeons.keys())) // 10)]
+        count = 0
         for i in regeons.keys():
             list_func.update({i: point_function(i)})
+            count += 1
+            if count in stepcount:
+                print(f"{int((100 * count) / max(stepcount))}% done")
         f = open(r"./Temp/functions_list.txt", "w")
         for i in list_func.keys():
             f.write(f"{i[0]};{i[1]}:{list_func[i]}\n")
@@ -189,12 +189,7 @@ def make_pochtampt(count:int, updated=None) -> List[tuple]:
     global list_func, regeons, actcenter, R, delta_point
     points = []
     planted = 0
-    region1, region2 = [], []
-    market1, market2 = [], []
-    list_func1, list_func2 = [], []
-    start = datetime.datetime.now()
     list_func_update(upd=updated)
-    print("\n\n\n", (datetime.datetime.now() - start).seconds, "\n\n\n")
     for _ in range(count):
         point = bruteforce()
         points += [point]
@@ -322,7 +317,7 @@ def read_regeons_geojson(file="./Data/regions.geojson"):
 def Update(file_market=None, file_regions=None, file_NFZ=None):
     global regeons
     global actcenter
-    global  NFZ
+    global NFZ
     global other_delta_point, delta_point
     other_delta_point = 10 ** delta_point
     print("[INFO]Update Start")
@@ -442,6 +437,46 @@ def change_actceter(name, score, x, y, type,file="./Data/market.geojson"):
 def Open_geojason():
     webbrowser.open(r"https://geojson.io/#map=2/20.0/0.0")
 
+def see_result(count:int, updated=None):
+    global regeons, list_func, delta_point
+    a, b = [], []
+    for i in regeons.keys():
+        a += [i.x]
+        b += [i.y]
+    print(f"[+]dispertion X>> {round(abs(min(a) - max(a))*111.1348, delta_point)}km")
+    print(f"[+]dispertion Y>> {round(abs(min(b)- max(b)) *111.1348, delta_point)}km")
+    points = make_pochtampt(count, updated)
+    m = folium.Map(location=[23.5, 58.5])
+    for i in points:
+        folium.Marker((i.y, i.x)).add_to(m)
+    m.save("./Temp/map.html")
+    webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
+
+
+def work_files():
+    return os.listdir("./Data")
+
+
+def test5():
+    global regeons, list_func, delta_point
+    delta_point = 3
+    Update()
+    a, b = [], []
+    for i in regeons.keys():
+        a += [i[0]]
+        b += [i[1]]
+    print(f"[+]dispertion X>> {round(abs(min(a) - max(a)) * 111.1348, delta_point)}km")
+    print(f"[+]dispertion Y>> {round(abs(min(b) - max(b)) * 111.1348, delta_point)}km")
+    points = make_pochtampt(10, False)
+    m = folium.Map(location=[23.5, 58.5])
+    for i in points:
+        folium.Marker((i[1], i[0])).add_to(m)
+    m.save("./Temp/map.html")
+    webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
+
+
+def test4():
+    Update()
 
 def test1():
     x_1, y_1 = map(float, input("point1").split(" "))
@@ -467,49 +502,6 @@ def test3():
         folium.Marker((i.y, i.x)).add_to(m)
     m.save("./Temp/map.html")
     webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
-
-def see_result(count:int, updated=None):
-    global regeons, list_func, delta_point
-    a, b = [], []
-    for i in regeons.keys():
-        a += [i.x]
-        b += [i.y]
-    print(f"[+]dispertion X>> {round(abs(min(a) - max(a))*111.1348, delta_point)}km")
-    print(f"[+]dispertion Y>> {round(abs(min(b)- max(b)) *111.1348, delta_point)}km")
-    points = make_pochtampt(count, updated)
-    m = folium.Map(location=[23.5, 58.5])
-    for i in points:
-        folium.Marker((i.y, i.x)).add_to(m)
-    m.save("./Temp/map.html")
-    webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
-
-
-def work_files():
-    return os.listdir("./Data")
-
-
-def test5():
-    global regeons, list_func, delta_point
-    delta_point = 3
-    start = datetime.datetime.now()
-    Update()
-    print("\n\n\n", (datetime.datetime.now() - start).seconds, "\n\n\n")
-    a, b = [], []
-    for i in regeons.keys():
-        a += [i[0]]
-        b += [i[1]]
-    print(f"[+]dispertion X>> {round(abs(min(a) - max(a)) * 111.1348, delta_point)}km")
-    print(f"[+]dispertion Y>> {round(abs(min(b) - max(b)) * 111.1348, delta_point)}km")
-    points = make_pochtampt(10, True)
-    m = folium.Map(location=[23.5, 58.5])
-    for i in points:
-        folium.Marker((i[1], i[0])).add_to(m)
-    m.save("./Temp/map.html")
-    webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
-
-
-def test4():
-    Update()
 
 if __name__ == "__main__":
     #test1()
