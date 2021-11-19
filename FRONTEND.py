@@ -313,7 +313,7 @@ class Ui_MainWindow(object):
 #----------------------------------------------------------------
         """BECKENDSTART"""
 
-        global regeon, market       # name:[Point, population]      name:[Point, type ,raiting]
+        global regeon, market       # name:[(x, y), population]      name:[(x, y), type ,raiting]
         global file_market, file_regions, file_NFZ
         regeon, market = BECKEND.Update(file_market, file_regions, file_NFZ)
 
