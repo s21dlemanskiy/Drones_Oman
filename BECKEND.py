@@ -1,4 +1,4 @@
-import math, itertools, folium, webbrowser, os, datetime
+import math, itertools, folium, webbrowser, os, datetime, pyperclip, time, pyautogui
 from typing import List
 from numba import njit
 from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning
@@ -434,8 +434,14 @@ def change_actceter(name, score, x, y, type,file="./Data/market.geojson"):
     a.close()
 
 
-def Open_geojason():
+def Open_geojason(file):
+    f = open(file, 'r')
+    pyperclip.copy("\n".join(f.readlines()))
     webbrowser.open(r"https://geojson.io/#map=2/20.0/0.0")
+    time.sleep(1)
+    pyautogui.press(["del"] * 51)
+    time.sleep(1)
+    pyautogui.hotkey('ctrl', 'v')
 
 def see_result(count:int, updated=None, delta_point_new=3):
     global regeons, list_func, delta_point
@@ -497,7 +503,7 @@ if __name__ == "__main__":
     #test2()
     #test3()
     #test4()
-    test5()
-
+    # test5()
+    Open_geojason(r".\Data\regions.geojson")
 
 
