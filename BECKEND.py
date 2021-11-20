@@ -436,11 +436,14 @@ def change_actceter(name, score, x, y, type,file="./Data/market.geojson"):
 
 def Open_geojason(file):
     f = open(file, 'r')
-    pyperclip.copy("\n".join(f.readlines()))
-    webbrowser.open(r"https://geojson.io/#map=2/20.0/0.0")
-    time.sleep(1)
+    data = "\n".join(f.readlines())
+    data = data[data.find("{"):]
+    pyperclip.copy(data)
+    f.close()
+    webbrowser.open(r"https://geojson.io/#map=9/23.2790/58.6432")
+    time.sleep(4)
     pyautogui.press(["del"] * 51)
-    time.sleep(1)
+    #time.sleep(1)
     pyautogui.hotkey('ctrl', 'v')
 
 def see_result(count:int, updated=None, delta_point_new=3):
@@ -504,6 +507,6 @@ if __name__ == "__main__":
     #test3()
     #test4()
     # test5()
-    Open_geojason(r".\Data\regions.geojson")
+    Open_geojason(r".\Data\market.geojson")
 
 

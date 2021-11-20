@@ -33,11 +33,11 @@ def Errore_dialog(TEXT="Unexpected Errore"):
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(757, 811)
+        MainWindow.resize(757, 912)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.start_frame = QtWidgets.QFrame(self.centralwidget)
-        self.start_frame.setGeometry(QtCore.QRect(10, 0, 721, 151))
+        self.start_frame.setGeometry(QtCore.QRect(10, 0, 721, 211))
         self.start_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.start_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.start_frame.setObjectName("start_frame")
@@ -80,18 +80,20 @@ class Ui_MainWindow(object):
         self.pushButton_14.setFont(font)
         self.pushButton_14.setObjectName("pushButton_14")
         self.checkBox = QtWidgets.QCheckBox(self.start_frame)
-        self.checkBox.setGeometry(QtCore.QRect(370, 90, 111, 16))
+        self.checkBox.setGeometry(QtCore.QRect(370, 90, 111, 31))
         self.checkBox.setObjectName("checkBox")
-        self.label_19 = QtWidgets.QLabel(self.start_frame)
-        self.label_19.setGeometry(QtCore.QRect(350, 110, 141, 41))
-        font = QtGui.QFont()
-        font.setPointSize(6)
-        self.label_19.setFont(font)
-        self.label_19.setWordWrap(True)
-        self.label_19.setObjectName("label_19")
+        self.label_23 = QtWidgets.QLabel(self.start_frame)
+        self.label_23.setGeometry(QtCore.QRect(0, 160, 221, 31))
+        self.label_23.setObjectName("label_23")
+        self.lineEdit_8 = QtWidgets.QLineEdit(self.start_frame)
+        self.lineEdit_8.setGeometry(QtCore.QRect(220, 160, 51, 31))
+        self.lineEdit_8.setObjectName("lineEdit_8")
+        self.pushButton_16 = QtWidgets.QPushButton(self.start_frame)
+        self.pushButton_16.setGeometry(QtCore.QRect(540, 160, 181, 31))
+        self.pushButton_16.setObjectName("pushButton_16")
         self.add_center = QtWidgets.QFrame(self.centralwidget)
         self.add_center.setEnabled(True)
-        self.add_center.setGeometry(QtCore.QRect(10, 130, 721, 151))
+        self.add_center.setGeometry(QtCore.QRect(10, 210, 721, 151))
         self.add_center.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.add_center.setFrameShadow(QtWidgets.QFrame.Raised)
         self.add_center.setObjectName("add_center")
@@ -139,7 +141,7 @@ class Ui_MainWindow(object):
         self.Score1.setObjectName("Score1")
         self.regeons_choseer = QtWidgets.QFrame(self.centralwidget)
         self.regeons_choseer.setEnabled(True)
-        self.regeons_choseer.setGeometry(QtCore.QRect(10, 280, 561, 221))
+        self.regeons_choseer.setGeometry(QtCore.QRect(10, 360, 561, 221))
         self.regeons_choseer.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.regeons_choseer.setFrameShadow(QtWidgets.QFrame.Raised)
         self.regeons_choseer.setObjectName("regeons_choseer")
@@ -163,7 +165,7 @@ class Ui_MainWindow(object):
         self.pushButton_7.setObjectName("pushButton_7")
         self.change_center = QtWidgets.QFrame(self.centralwidget)
         self.change_center.setEnabled(True)
-        self.change_center.setGeometry(QtCore.QRect(10, 440, 721, 211))
+        self.change_center.setGeometry(QtCore.QRect(10, 530, 721, 211))
         self.change_center.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.change_center.setFrameShadow(QtWidgets.QFrame.Raised)
         self.change_center.setObjectName("change_center")
@@ -210,7 +212,7 @@ class Ui_MainWindow(object):
         self.Score2.setGeometry(QtCore.QRect(630, 100, 91, 31))
         self.Score2.setObjectName("Score2")
         self.file_changer = QtWidgets.QFrame(self.centralwidget)
-        self.file_changer.setGeometry(QtCore.QRect(10, 650, 721, 111))
+        self.file_changer.setGeometry(QtCore.QRect(10, 740, 721, 111))
         self.file_changer.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.file_changer.setFrameShadow(QtWidgets.QFrame.Raised)
         self.file_changer.setObjectName("file_changer")
@@ -275,7 +277,9 @@ class Ui_MainWindow(object):
         self.pushButton_13.setText(_translate("MainWindow", "Select input files"))
         self.pushButton_14.setText(_translate("MainWindow", "Start"))
         self.checkBox.setText(_translate("MainWindow", "Not Update"))
-        self.label_19.setText(_translate("MainWindow", "if you alredy start your programm with the same input"))
+        self.label_23.setText(_translate("MainWindow", "Кол-во значемых цифр"))
+        self.lineEdit_8.setText(_translate("MainWindow", "3"))
+        self.pushButton_16.setText(_translate("MainWindow", "Edit NFZ as .GeoJson"))
         self.label.setText(_translate("MainWindow", "Координаты"))
         self.label_3.setText(_translate("MainWindow", "Х:"))
         self.lineEdit_2.setText(_translate("MainWindow", "0"))
@@ -325,9 +329,15 @@ class Ui_MainWindow(object):
         self.Score2.addItems(list(str(i) for i in range(0, 11)))
 
 #-------------------------------------------------
+        self.lineEdit_8.setToolTip("on 4 programm work wery slow")
+        self.checkBox.setToolTip("if you alredy start your programm with the same input")
         self.comboBox_5.addItems(BECKEND.work_files())
         self.comboBox_6.addItems(BECKEND.work_files())
         self.comboBox_7.addItems(BECKEND.work_files())
+        self.pushButton_10.clicked.connect(self.open_CA_geojason)
+        self.pushButton_6.clicked.connect(self.open_regions_geojason)
+        self.pushButton_2.clicked.connect(self.open_CA_geojason)
+        self.pushButton_16.clicked.connect(self.open_NFZ_geojason)
         self.pushButton_13.clicked.connect(self.open_files_changer)
         self.pushButton_15.clicked.connect(self.change_inputfile)
         self.comboBox.addItems(list(BECKEND.typekof.keys()))
@@ -342,7 +352,6 @@ class Ui_MainWindow(object):
         self.pushButton_3.clicked.connect(self.add_point)
         self.pushButton_4.clicked.connect(self.show_chenger)
         self.pushButton_5.clicked.connect(self.change_regeon_population)
-        self.pushButton_6.clicked.connect(self.show_all_geojson)
         self.pushButton_9.clicked.connect(self.show_chenger_center)
         self.pushButton_12.clicked.connect(self.close_changer_center)
         self.pushButton_11.clicked.connect(self.change_market)
@@ -425,12 +434,17 @@ class Ui_MainWindow(object):
         regeon = BECKEND.Update(file_market, file_regions, file_NFZ)[0]
         self.close_chenger()
 
-    def show_all_geojson(self):
-        m = folium.Map(location=[23.5, 58.5])
-        folium.GeoJson("./Data/regions.geojson", name="geojson").add_to(m)
-        folium.GeoJson("./Data/market.geojson", name="geojson").add_to(m)
-        m.save("./Temp/map.html")
-        webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
+    def open_CA_geojason(self):
+        global file_market
+        BECKEND.Open_geojason(file_market)
+
+    def open_regions_geojason(self):
+        global file_regions
+        BECKEND.Open_geojason(file_regions)
+
+    def open_NFZ_geojason(self):
+        global file_NFZ
+        BECKEND.Open_geojason(file_NFZ)
 
     def change_inputfile(self):
         self.start_frame.show()
@@ -446,13 +460,14 @@ class Ui_MainWindow(object):
     def Start(self):
         try:
             count = int(self.lineEdit_7.text())
+            delta = int(self.lineEdit_8.text())
         except:
-            Errore_dialog("pochtampt count mast be int")
+            Errore_dialog("pochtampt count and digital mast be int")
             return
         if count == 0:
             Errore_dialog("pochtampt count is 0. Maybe it's mistake")
             return
-        BECKEND.see_result(count, self.checkBox.isTristate())
+        BECKEND.see_result(count, self.checkBox.isTristate(), delta)
         # self.progressBar.setVisible(True)
         # self.pushButton_14.setVisible(False)
         # self.progressBar.setRange(1, count)

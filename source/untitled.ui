@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>757</width>
-    <height>811</height>
+    <height>912</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>10</x>
       <y>0</y>
       <width>721</width>
-      <height>151</height>
+      <height>211</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -183,32 +183,50 @@
        <x>370</x>
        <y>90</y>
        <width>111</width>
-       <height>16</height>
+       <height>31</height>
       </rect>
      </property>
      <property name="text">
       <string>Not Update</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_19">
+    <widget class="QLabel" name="label_23">
      <property name="geometry">
       <rect>
-       <x>350</x>
-       <y>110</y>
-       <width>141</width>
-       <height>41</height>
+       <x>0</x>
+       <y>160</y>
+       <width>221</width>
+       <height>31</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <pointsize>6</pointsize>
-      </font>
+     <property name="text">
+      <string>Кол-во значемых цифр</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_8">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>160</y>
+       <width>51</width>
+       <height>31</height>
+      </rect>
      </property>
      <property name="text">
-      <string>if you alredy start your programm with the same input</string>
+      <string>3</string>
      </property>
-     <property name="wordWrap">
-      <bool>true</bool>
+    </widget>
+    <widget class="QPushButton" name="pushButton_16">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>160</y>
+       <width>181</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Edit NFZ as .GeoJson</string>
      </property>
     </widget>
    </widget>
@@ -219,7 +237,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>130</y>
+      <y>210</y>
       <width>721</width>
       <height>151</height>
      </rect>
@@ -414,7 +432,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>280</y>
+      <y>360</y>
       <width>561</width>
       <height>221</height>
      </rect>
@@ -508,7 +526,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>440</y>
+      <y>530</y>
       <width>721</width>
       <height>211</height>
      </rect>
@@ -697,7 +715,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>650</y>
+      <y>740</y>
       <width>721</width>
       <height>111</height>
      </rect>
