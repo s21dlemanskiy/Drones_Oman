@@ -9,32 +9,43 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QMessageBox
 import folium, webbrowser #, pandas as pd
 import BECKEND
+import time
 regeon = {}
 market = {}
 
+file_market = r"./Data/market.geojson"
+file_regions = r"./Data/regions.geojson"
+file_NFZ = r"./Data/NFZ.geojson"
+
+def Errore_dialog(TEXT="Unexpected Errore"):
+    window = QMessageBox()
+    window.setWindowTitle("ERRORE")
+    window.setText(TEXT)
+    window.setIcon(QMessageBox.Warning)
+    window.setStandardButtons(QMessageBox.Ok)
+
+    window.exec_()
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(757, 594)
+        MainWindow.resize(757, 912)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.start_frame = QtWidgets.QFrame(self.centralwidget)
-        self.start_frame.setGeometry(QtCore.QRect(10, 0, 661, 81))
+        self.start_frame.setGeometry(QtCore.QRect(10, 0, 721, 211))
         self.start_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.start_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.start_frame.setObjectName("start_frame")
         self.label_2 = QtWidgets.QLabel(self.start_frame)
         self.label_2.setGeometry(QtCore.QRect(0, 10, 221, 31))
         self.label_2.setObjectName("label_2")
-        self.lineEdit = QtWidgets.QLineEdit(self.start_frame)
-        self.lineEdit.setGeometry(QtCore.QRect(260, 10, 71, 31))
-        self.lineEdit.setObjectName("lineEdit")
         self.pushButton = QtWidgets.QPushButton(self.start_frame)
-        self.pushButton.setGeometry(QtCore.QRect(350, 10, 181, 31))
+        self.pushButton.setGeometry(QtCore.QRect(350, 10, 171, 31))
         self.pushButton.setObjectName("pushButton")
         self.label_5 = QtWidgets.QLabel(self.start_frame)
         self.label_5.setGeometry(QtCore.QRect(0, 50, 211, 31))
@@ -44,11 +55,45 @@ class Ui_MainWindow(object):
         self.label_6.setText("")
         self.label_6.setObjectName("label_6")
         self.pushButton_4 = QtWidgets.QPushButton(self.start_frame)
-        self.pushButton_4.setGeometry(QtCore.QRect(350, 50, 291, 31))
+        self.pushButton_4.setGeometry(QtCore.QRect(350, 50, 361, 31))
         self.pushButton_4.setObjectName("pushButton_4")
+        self.label_10 = QtWidgets.QLabel(self.start_frame)
+        self.label_10.setGeometry(QtCore.QRect(230, 10, 121, 31))
+        self.label_10.setText("")
+        self.label_10.setObjectName("label_10")
+        self.pushButton_9 = QtWidgets.QPushButton(self.start_frame)
+        self.pushButton_9.setGeometry(QtCore.QRect(540, 10, 171, 31))
+        self.pushButton_9.setObjectName("pushButton_9")
+        self.lineEdit_7 = QtWidgets.QLineEdit(self.start_frame)
+        self.lineEdit_7.setGeometry(QtCore.QRect(100, 90, 51, 31))
+        self.lineEdit_7.setObjectName("lineEdit_7")
+        self.label_18 = QtWidgets.QLabel(self.start_frame)
+        self.label_18.setGeometry(QtCore.QRect(0, 90, 81, 31))
+        self.label_18.setObjectName("label_18")
+        self.pushButton_13 = QtWidgets.QPushButton(self.start_frame)
+        self.pushButton_13.setGeometry(QtCore.QRect(170, 90, 171, 31))
+        self.pushButton_13.setObjectName("pushButton_13")
+        self.pushButton_14 = QtWidgets.QPushButton(self.start_frame)
+        self.pushButton_14.setGeometry(QtCore.QRect(490, 90, 221, 51))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.pushButton_14.setFont(font)
+        self.pushButton_14.setObjectName("pushButton_14")
+        self.checkBox = QtWidgets.QCheckBox(self.start_frame)
+        self.checkBox.setGeometry(QtCore.QRect(370, 90, 111, 31))
+        self.checkBox.setObjectName("checkBox")
+        self.label_23 = QtWidgets.QLabel(self.start_frame)
+        self.label_23.setGeometry(QtCore.QRect(0, 160, 221, 31))
+        self.label_23.setObjectName("label_23")
+        self.lineEdit_8 = QtWidgets.QLineEdit(self.start_frame)
+        self.lineEdit_8.setGeometry(QtCore.QRect(220, 160, 51, 31))
+        self.lineEdit_8.setObjectName("lineEdit_8")
+        self.pushButton_16 = QtWidgets.QPushButton(self.start_frame)
+        self.pushButton_16.setGeometry(QtCore.QRect(540, 160, 181, 31))
+        self.pushButton_16.setObjectName("pushButton_16")
         self.add_center = QtWidgets.QFrame(self.centralwidget)
         self.add_center.setEnabled(True)
-        self.add_center.setGeometry(QtCore.QRect(10, 130, 641, 101))
+        self.add_center.setGeometry(QtCore.QRect(10, 210, 721, 151))
         self.add_center.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.add_center.setFrameShadow(QtWidgets.QFrame.Raised)
         self.add_center.setObjectName("add_center")
@@ -59,37 +104,55 @@ class Ui_MainWindow(object):
         self.label_3.setGeometry(QtCore.QRect(200, 40, 41, 21))
         self.label_3.setObjectName("label_3")
         self.lineEdit_2 = QtWidgets.QLineEdit(self.add_center)
-        self.lineEdit_2.setGeometry(QtCore.QRect(270, 40, 41, 21))
+        self.lineEdit_2.setGeometry(QtCore.QRect(270, 40, 91, 21))
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.label_4 = QtWidgets.QLabel(self.add_center)
-        self.label_4.setGeometry(QtCore.QRect(390, 40, 31, 21))
+        self.label_4.setGeometry(QtCore.QRect(370, 40, 31, 21))
         self.label_4.setObjectName("label_4")
         self.lineEdit_3 = QtWidgets.QLineEdit(self.add_center)
-        self.lineEdit_3.setGeometry(QtCore.QRect(450, 40, 41, 21))
+        self.lineEdit_3.setGeometry(QtCore.QRect(440, 40, 101, 21))
         self.lineEdit_3.setObjectName("lineEdit_3")
         self.pushButton_2 = QtWidgets.QPushButton(self.add_center)
         self.pushButton_2.setGeometry(QtCore.QRect(0, 70, 181, 31))
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_3 = QtWidgets.QPushButton(self.add_center)
-        self.pushButton_3.setGeometry(QtCore.QRect(440, 70, 91, 31))
+        self.pushButton_3.setGeometry(QtCore.QRect(600, 110, 121, 41))
         self.pushButton_3.setObjectName("pushButton_3")
         self.comboBox = QtWidgets.QComboBox(self.add_center)
-        self.comboBox.setGeometry(QtCore.QRect(0, 0, 291, 31))
+        self.comboBox.setGeometry(QtCore.QRect(80, 0, 291, 31))
         self.comboBox.setObjectName("comboBox")
+        self.lineEdit_4 = QtWidgets.QLineEdit(self.add_center)
+        self.lineEdit_4.setGeometry(QtCore.QRect(470, 0, 251, 31))
+        self.lineEdit_4.setObjectName("lineEdit_4")
+        self.label_8 = QtWidgets.QLabel(self.add_center)
+        self.label_8.setGeometry(QtCore.QRect(380, 0, 81, 31))
+        self.label_8.setObjectName("label_8")
+        self.pushButton_8 = QtWidgets.QPushButton(self.add_center)
+        self.pushButton_8.setGeometry(QtCore.QRect(0, 110, 111, 41))
+        self.pushButton_8.setObjectName("pushButton_8")
+        self.label_9 = QtWidgets.QLabel(self.add_center)
+        self.label_9.setGeometry(QtCore.QRect(0, 0, 81, 31))
+        self.label_9.setObjectName("label_9")
+        self.label_16 = QtWidgets.QLabel(self.add_center)
+        self.label_16.setGeometry(QtCore.QRect(570, 40, 31, 21))
+        self.label_16.setObjectName("label_16")
+        self.Score1 = QtWidgets.QComboBox(self.add_center)
+        self.Score1.setGeometry(QtCore.QRect(630, 40, 91, 31))
+        self.Score1.setObjectName("Score1")
         self.regeons_choseer = QtWidgets.QFrame(self.centralwidget)
         self.regeons_choseer.setEnabled(True)
-        self.regeons_choseer.setGeometry(QtCore.QRect(10, 270, 561, 221))
+        self.regeons_choseer.setGeometry(QtCore.QRect(10, 360, 561, 221))
         self.regeons_choseer.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.regeons_choseer.setFrameShadow(QtWidgets.QFrame.Raised)
         self.regeons_choseer.setObjectName("regeons_choseer")
         self.comboBox_2 = QtWidgets.QComboBox(self.regeons_choseer)
-        self.comboBox_2.setGeometry(QtCore.QRect(0, 10, 541, 31))
+        self.comboBox_2.setGeometry(QtCore.QRect(0, 10, 561, 31))
         self.comboBox_2.setObjectName("comboBox_2")
         self.pushButton_5 = QtWidgets.QPushButton(self.regeons_choseer)
-        self.pushButton_5.setGeometry(QtCore.QRect(450, 170, 91, 31))
+        self.pushButton_5.setGeometry(QtCore.QRect(450, 160, 111, 41))
         self.pushButton_5.setObjectName("pushButton_5")
         self.pushButton_6 = QtWidgets.QPushButton(self.regeons_choseer)
-        self.pushButton_6.setGeometry(QtCore.QRect(10, 100, 151, 31))
+        self.pushButton_6.setGeometry(QtCore.QRect(0, 100, 151, 31))
         self.pushButton_6.setObjectName("pushButton_6")
         self.Count_people_region = QtWidgets.QLineEdit(self.regeons_choseer)
         self.Count_people_region.setGeometry(QtCore.QRect(230, 60, 201, 21))
@@ -98,8 +161,94 @@ class Ui_MainWindow(object):
         self.label_7.setGeometry(QtCore.QRect(0, 60, 181, 21))
         self.label_7.setObjectName("label_7")
         self.pushButton_7 = QtWidgets.QPushButton(self.regeons_choseer)
-        self.pushButton_7.setGeometry(QtCore.QRect(10, 170, 91, 31))
+        self.pushButton_7.setGeometry(QtCore.QRect(0, 160, 111, 41))
         self.pushButton_7.setObjectName("pushButton_7")
+        self.change_center = QtWidgets.QFrame(self.centralwidget)
+        self.change_center.setEnabled(True)
+        self.change_center.setGeometry(QtCore.QRect(10, 530, 721, 211))
+        self.change_center.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.change_center.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.change_center.setObjectName("change_center")
+        self.label_11 = QtWidgets.QLabel(self.change_center)
+        self.label_11.setGeometry(QtCore.QRect(0, 100, 171, 21))
+        self.label_11.setObjectName("label_11")
+        self.label_12 = QtWidgets.QLabel(self.change_center)
+        self.label_12.setGeometry(QtCore.QRect(190, 100, 41, 21))
+        self.label_12.setObjectName("label_12")
+        self.lineEdit_5 = QtWidgets.QLineEdit(self.change_center)
+        self.lineEdit_5.setGeometry(QtCore.QRect(250, 100, 111, 21))
+        self.lineEdit_5.setObjectName("lineEdit_5")
+        self.label_13 = QtWidgets.QLabel(self.change_center)
+        self.label_13.setGeometry(QtCore.QRect(380, 100, 31, 21))
+        self.label_13.setObjectName("label_13")
+        self.lineEdit_6 = QtWidgets.QLineEdit(self.change_center)
+        self.lineEdit_6.setGeometry(QtCore.QRect(450, 100, 101, 21))
+        self.lineEdit_6.setObjectName("lineEdit_6")
+        self.pushButton_10 = QtWidgets.QPushButton(self.change_center)
+        self.pushButton_10.setGeometry(QtCore.QRect(0, 130, 181, 31))
+        self.pushButton_10.setObjectName("pushButton_10")
+        self.pushButton_11 = QtWidgets.QPushButton(self.change_center)
+        self.pushButton_11.setGeometry(QtCore.QRect(600, 170, 121, 41))
+        self.pushButton_11.setObjectName("pushButton_11")
+        self.comboBox_3 = QtWidgets.QComboBox(self.change_center)
+        self.comboBox_3.setGeometry(QtCore.QRect(80, 60, 291, 31))
+        self.comboBox_3.setObjectName("comboBox_3")
+        self.label_14 = QtWidgets.QLabel(self.change_center)
+        self.label_14.setGeometry(QtCore.QRect(380, 60, 81, 31))
+        self.label_14.setObjectName("label_14")
+        self.pushButton_12 = QtWidgets.QPushButton(self.change_center)
+        self.pushButton_12.setGeometry(QtCore.QRect(0, 170, 111, 41))
+        self.pushButton_12.setObjectName("pushButton_12")
+        self.label_15 = QtWidgets.QLabel(self.change_center)
+        self.label_15.setGeometry(QtCore.QRect(0, 60, 81, 31))
+        self.label_15.setObjectName("label_15")
+        self.comboBox_4 = QtWidgets.QComboBox(self.change_center)
+        self.comboBox_4.setGeometry(QtCore.QRect(470, 60, 251, 31))
+        self.comboBox_4.setObjectName("comboBox_4")
+        self.label_17 = QtWidgets.QLabel(self.change_center)
+        self.label_17.setGeometry(QtCore.QRect(580, 100, 31, 21))
+        self.label_17.setObjectName("label_17")
+        self.Score2 = QtWidgets.QComboBox(self.change_center)
+        self.Score2.setGeometry(QtCore.QRect(630, 100, 91, 31))
+        self.Score2.setObjectName("Score2")
+        self.file_changer = QtWidgets.QFrame(self.centralwidget)
+        self.file_changer.setGeometry(QtCore.QRect(10, 740, 721, 111))
+        self.file_changer.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.file_changer.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.file_changer.setObjectName("file_changer")
+        self.label_20 = QtWidgets.QLabel(self.file_changer)
+        self.label_20.setGeometry(QtCore.QRect(0, 40, 81, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label_20.setFont(font)
+        self.label_20.setObjectName("label_20")
+        self.comboBox_5 = QtWidgets.QComboBox(self.file_changer)
+        self.comboBox_5.setGeometry(QtCore.QRect(100, 0, 291, 31))
+        self.comboBox_5.setObjectName("comboBox_5")
+        self.label_21 = QtWidgets.QLabel(self.file_changer)
+        self.label_21.setGeometry(QtCore.QRect(0, 0, 81, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.label_21.setFont(font)
+        self.label_21.setObjectName("label_21")
+        self.label_22 = QtWidgets.QLabel(self.file_changer)
+        self.label_22.setGeometry(QtCore.QRect(0, 80, 81, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.label_22.setFont(font)
+        self.label_22.setObjectName("label_22")
+        self.comboBox_6 = QtWidgets.QComboBox(self.file_changer)
+        self.comboBox_6.setGeometry(QtCore.QRect(100, 40, 291, 31))
+        self.comboBox_6.setObjectName("comboBox_6")
+        self.comboBox_7 = QtWidgets.QComboBox(self.file_changer)
+        self.comboBox_7.setGeometry(QtCore.QRect(100, 80, 291, 31))
+        self.comboBox_7.setObjectName("comboBox_7")
+        self.pushButton_15 = QtWidgets.QPushButton(self.file_changer)
+        self.pushButton_15.setGeometry(QtCore.QRect(450, 10, 241, 91))
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        self.pushButton_15.setFont(font)
+        self.pushButton_15.setObjectName("pushButton_15")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 757, 18))
@@ -119,51 +268,131 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label_2.setText(_translate("MainWindow", "Центры активности"))
-        self.lineEdit.setText(_translate("MainWindow", "10"))
         self.pushButton.setText(_translate("MainWindow", "Добавить ЦА"))
         self.label_5.setText(_translate("MainWindow", "Населенность(общая)"))
         self.pushButton_4.setText(_translate("MainWindow", "Изменить для регионов"))
+        self.pushButton_9.setText(_translate("MainWindow", "Изменить ЦА"))
+        self.lineEdit_7.setText(_translate("MainWindow", "0"))
+        self.label_18.setText(_translate("MainWindow", "Кол-во пачтамтов"))
+        self.pushButton_13.setText(_translate("MainWindow", "Select input files"))
+        self.pushButton_14.setText(_translate("MainWindow", "Start"))
+        self.checkBox.setText(_translate("MainWindow", "Not Update"))
+        self.label_23.setText(_translate("MainWindow", "Кол-во значемых цифр"))
+        self.lineEdit_8.setText(_translate("MainWindow", "3"))
+        self.pushButton_16.setText(_translate("MainWindow", "Edit NFZ as .GeoJson"))
         self.label.setText(_translate("MainWindow", "Координаты"))
         self.label_3.setText(_translate("MainWindow", "Х:"))
         self.lineEdit_2.setText(_translate("MainWindow", "0"))
         self.label_4.setText(_translate("MainWindow", "Y:"))
         self.lineEdit_3.setText(_translate("MainWindow", "0"))
-        self.pushButton_2.setText(_translate("MainWindow", "Показать на карте"))
+        self.pushButton_2.setText(_translate("MainWindow", "Edit as .GeoJson"))
         self.pushButton_3.setText(_translate("MainWindow", "Apply"))
+        self.lineEdit_4.setText(_translate("MainWindow", "Name"))
+        self.label_8.setText(_translate("MainWindow", "Name"))
+        self.pushButton_8.setText(_translate("MainWindow", "Close"))
+        self.label_9.setText(_translate("MainWindow", "Type"))
+        self.label_16.setText(_translate("MainWindow", "Score"))
         self.pushButton_5.setText(_translate("MainWindow", "Apply"))
         self.pushButton_6.setText(_translate("MainWindow", "Edit as .GeoJson"))
         self.Count_people_region.setText(_translate("MainWindow", "0"))
         self.label_7.setText(_translate("MainWindow", "кол-во людей в регионе"))
         self.pushButton_7.setText(_translate("MainWindow", "Close"))
+        self.label_11.setText(_translate("MainWindow", "Координаты"))
+        self.label_12.setText(_translate("MainWindow", "Х:"))
+        self.lineEdit_5.setText(_translate("MainWindow", "0"))
+        self.label_13.setText(_translate("MainWindow", "Y:"))
+        self.lineEdit_6.setText(_translate("MainWindow", "0"))
+        self.pushButton_10.setText(_translate("MainWindow", "Edit as .GeoJson"))
+        self.pushButton_11.setText(_translate("MainWindow", "Change"))
+        self.label_14.setText(_translate("MainWindow", "Name"))
+        self.pushButton_12.setText(_translate("MainWindow", "Close"))
+        self.label_15.setText(_translate("MainWindow", "Type"))
+        self.label_17.setText(_translate("MainWindow", "Score"))
+        self.label_20.setText(_translate("MainWindow", "ЦА"))
+        self.label_21.setText(_translate("MainWindow", "регионы"))
+        self.label_22.setText(_translate("MainWindow", "NFZ"))
+        self.pushButton_15.setText(_translate("MainWindow", "APPLY"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         """Main Code"""
 #----------------------------------------------------------------
         """BECKENDSTART"""
-        global regeon, market       # name:[Point, population]      name:[Point, raiting]
-        regeon, market = BECKEND.Update()
+
+        global regeon, market       # name:[(x, y), population]      name:[(x, y), type ,raiting]
+        global file_market, file_regions, file_NFZ
+        regeon, market = BECKEND.Update(file_market, file_regions, file_NFZ)
 
 #----------------------------------------------------------------
-        self.label_6.setText(_translate("MainWindow", str(sum(list(int("".join(regeon[i][1].split("."))) for i in regeon.keys())))))
+        self.label_6.setText(str(sum(list(int(regeon[i][1]) for i in regeon.keys()))))
+        self.label_10.setText(str(len(list(market.keys()))))
+        self.comboBox_4.addItems(list(i for i in market.keys()))
+        self.Score1.addItems(list(str(i) for i in range(0, 11)))
+        self.Score2.addItems(list(str(i) for i in range(0, 11)))
+
+#-------------------------------------------------
+        self.lineEdit_8.setToolTip("on 4 programm work wery slow")
+        self.checkBox.setToolTip("if you alredy start your programm with the same input")
+        self.comboBox_5.addItems(BECKEND.work_files())
+        self.comboBox_6.addItems(BECKEND.work_files())
+        self.comboBox_7.addItems(BECKEND.work_files())
+        self.pushButton_10.clicked.connect(self.open_CA_geojason)
+        self.pushButton_6.clicked.connect(self.open_regions_geojason)
+        self.pushButton_2.clicked.connect(self.open_CA_geojason)
+        self.pushButton_16.clicked.connect(self.open_NFZ_geojason)
+        self.pushButton_13.clicked.connect(self.open_files_changer)
+        self.pushButton_15.clicked.connect(self.change_inputfile)
         self.comboBox.addItems(list(BECKEND.typekof.keys()))
+        self.comboBox_3.addItems(list(BECKEND.typekof.keys()))
         self.comboBox_2.addItems(list(regeon.keys()))
+        self.pushButton_8.clicked.connect(self.close_adder)
         self.pushButton_7.clicked.connect(self.close_chenger)
         self.comboBox_2.activated[str].connect(self.update_peoaple_per_region)
+        self.comboBox_4.activated[str].connect(self.update_market_info)
         self.pushButton.clicked.connect(self.show_adder)
+        self.pushButton_14.clicked.connect(self.Start)
         self.pushButton_3.clicked.connect(self.add_point)
         self.pushButton_4.clicked.connect(self.show_chenger)
         self.pushButton_5.clicked.connect(self.change_regeon_population)
-        self.pushButton_6.clicked.connect(self.show_all_geojson)
+        self.pushButton_9.clicked.connect(self.show_chenger_center)
+        self.pushButton_12.clicked.connect(self.close_changer_center)
+        self.pushButton_11.clicked.connect(self.change_market)
+        self.file_changer.hide()
         self.add_center.hide()
+        self.change_center.hide()
         self.regeons_choseer.hide()
 
 #-----------------------------------------------------------------
+    def open_files_changer(self):
+        global file_market, file_NFZ, file_regions
+        a, b, c = file_market, file_NFZ, file_regions
+        a, b, c = a.replace("./Data/", ""), b.replace("./Data/", ""), c.replace("./Data/", "")
+        print(a, b, c)
+        self.comboBox_5.setCurrentText(c)
+        self.comboBox_6.setCurrentText(a)
+        self.comboBox_7.setCurrentText(b)
+        self.start_frame.hide()
+        self.file_changer.show()
+
+    def update_market_info(self, text):
+        self.comboBox_3.setCurrentText(market[text][1])
+        self.Score2.setCurrentText(str(market[text][2]))
+        self.lineEdit_5.setText(str(market[text][0].x))
+        self.lineEdit_6.setText(str(market[text][0].y))
+
     def update_peoaple_per_region(self, text):
         global regeon
-        self.Count_people_region.setText("".join(regeon[text][1].split(".")))
+        self.Count_people_region.setText(regeon[text][1])
 
     def show_adder(self):
         self.start_frame.hide()
         self.add_center.show()
+
+    def show_chenger_center(self):
+        self.start_frame.hide()
+        self.change_center.show()
+
+    def close_changer_center(self):
+        self.start_frame.show()
+        self.change_center.hide()
 
     def show_chenger(self):
         self.start_frame.hide()
@@ -177,29 +406,80 @@ class Ui_MainWindow(object):
         self.start_frame.show()
         self.regeons_choseer.hide()
 #------------------------------------------------------------------
+    def change_market(self):
+        self.close_changer_center()
+        BECKEND.change_actceter(self.comboBox_4.currentText(), self.Score2.currentText(), self.lineEdit_5.text(), self.lineEdit_6.text(), self.comboBox_3.currentText())
+
+
     def add_point(self):
+        global file_market, file_regions, file_NFZ
         a, b = None, None
+        global market
         try:
             a = float(self.lineEdit_2.text())
             b = float(self.lineEdit_3.text())
+            if a is not None and b is not None:
+                self.close_adder()
+                BECKEND.add_center_activity(self.lineEdit_4.text(),self.Score1.currentText(), a, b, self.comboBox.currentText())
+                market = BECKEND.Update(file_market, file_regions, file_NFZ)[1]
+            else:
+                Errore_dialog("No values of coordinats")
         except:
-            print("кординаты должны быть float(например 0.002103)")
-        if a is not None and b is not None:
-            self.close_adder()
-            print(self.comboBox.currentText(), float(self.lineEdit_2.text()),float(self.lineEdit_3.text()))
+            Errore_dialog("кординаты должны быть float(например 0.002103)")
 
     def change_regeon_population(self):
         global regeon
+        global file_market, file_regions, file_NFZ
         BECKEND.Update_region_population(self.comboBox_2.currentText(), self.Count_people_region.text())
-        regeon = BECKEND.Update()[0]
+        regeon = BECKEND.Update(file_market, file_regions, file_NFZ)[0]
         self.close_chenger()
 
-    def show_all_geojson(self):
-        m = folium.Map(location=[23.5, 58.5])
-        folium.GeoJson("./Data/regions.geojson", name="geojson").add_to(m)
-        folium.GeoJson("./Data/market.geojson", name="geojson").add_to(m)
-        m.save("./Temp/map.html")
-        webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
+    def open_CA_geojason(self):
+        global file_market
+        BECKEND.Open_geojason(file_market)
+
+    def open_regions_geojason(self):
+        global file_regions
+        BECKEND.Open_geojason(file_regions)
+
+    def open_NFZ_geojason(self):
+        global file_NFZ
+        BECKEND.Open_geojason(file_NFZ)
+
+    def change_inputfile(self):
+        self.start_frame.show()
+        self.file_changer.hide()
+        global file_market, file_regions, file_NFZ
+        global regeon, market
+        file_regions = f"./Data/{self.comboBox_5.currentText()}"
+        file_market = f"./Data/{self.comboBox_6.currentText()}"
+        file_NFZ = f"./Data/{self.comboBox_7.currentText()}"
+        regeon, market = BECKEND.Update(file_market, file_regions, file_NFZ)
+
+
+    def Start(self):
+        try:
+            count = int(self.lineEdit_7.text())
+            delta = int(self.lineEdit_8.text())
+        except:
+            Errore_dialog("pochtampt count and digital mast be int")
+            return
+        if count == 0:
+            Errore_dialog("pochtampt count is 0. Maybe it's mistake")
+            return
+        BECKEND.see_result(count, self.checkBox.isTristate(), delta)
+        # self.progressBar.setVisible(True)
+        # self.pushButton_14.setVisible(False)
+        # self.progressBar.setRange(1, count)
+        #self.progressBar.setValue(0)
+
+    # def upd_progressBar(self, progress):
+    #     if self.progressBar.maximum() == progress:
+    #         self.progressBar.setVisible(False)
+    #         self.pushButton_14.setVisible(True)
+    #         return
+    #     self.progressBar.setValue(progress)
+
 
 if __name__ == "__main__":
     import sys

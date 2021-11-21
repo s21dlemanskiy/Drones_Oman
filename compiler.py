@@ -1,5 +1,5 @@
 import os
 
 
-
-os.system("pyuic5 -x ./source/untitled.ui -o ./source/output.py")
+a = input("num")
+os.system(f"pyuic5 -x ./source/untitled{a}.ui -o ./source/output.py")
