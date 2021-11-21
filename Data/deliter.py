@@ -1,0 +1,6 @@
+f = open(r".\newest_regions.geojson", "r")
+file = "".join("".join(f.readlines()).split("~"))
+f = open(r".\newest_regions.geojson", "w")
+f.write(file)
+f.close()
+input("end")
