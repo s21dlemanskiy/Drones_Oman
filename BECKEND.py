@@ -4,6 +4,7 @@ from numba import njit
 from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning
 import warnings
 from numba.typed import Dict, List
+import numpy as np
 # start = datetime.datetime.now()
 # print("\n\n\n", (datetime.datetime.now() - start).seconds, "\n\n\n")
 #SOME DIGITALS 111,1348 km in 1
@@ -131,14 +132,15 @@ def added_pochtamt(point, delta_point,R_market, R_regeon, regeon1, regeon2, actc
     for i in range(len(actcenter1)):
         if lenof(actcenter1[i], point) < R_market:
             actcenter2[i] = actcenter2[i] * (lenof(actcenter1[i], point) / R_market)
-            actg1.append(actcenter1[i])
+            actg1.append(i)
     points = []
     points2 = []
     for i in range(len(regeon1)):
+        if lenof(regeon1[i], point) < R_regeon:
+            regeon2[i] = regeon2[i] * ((lenof(regeon1[i], point) / R_regeon) ** 3)
+            regg1.append(i)
+    for i in range(len(regeon1)):
         if lenof(regeon1[i], point) < 2 * R_regeon:
-            if lenof(regeon1[i], point) < R_regeon:
-                regeon2[i] = regeon2[i] * (lenof(regeon1[i], point) / R_regeon)
-                regg1.append(regeon1[i])
             points.append(regeon1[i])
             points2.append(point_function2(regeon1[i], R_market, R_regeon, regeon1, regeon2, actcenter1, actcenter2))
     return regg1 ,regeon2, actg1,actcenter2, points, points2
@@ -155,17 +157,48 @@ def point_function(point):
             score += regeons[i] / ((R["regeon"] / 10 + lenof(i, point)) ** 2)
     return score
 
+@njit()
+def point_functions2(R_market1, R_regeon1, regeon111, regeon222, actcenter111, actcenter222):
+    count = 0
+    stepcount = [i for i in range(0, len(regeon111), len(regeon111) // 10)]
+    keyx = [0.4]
+    keyy = [0.4]
+    val = [0.4]
+    for point in regeon111:
+        score = 0
+        for i in range(len(actcenter111)):
+            if lenof(actcenter111[i], point) < R_market1:
+                score += actcenter222[i] / (R_market1/ 10 + lenof(actcenter111[i], point) ** 3)
+        for i in range(len(regeon111)):
+            if lenof(regeon111[i], point) < R_regeon1:
+                score += regeon222[i] / (R_regeon1/ 10 + lenof(regeon111[i], point) ** 2)
+        keyx += [point[0]]
+        keyy += [point[1]]
+        val += [score]
+        count += 1
+        if count in stepcount:
+            print(f"{int((100 * count) / max(stepcount))}% done")
+    return keyx[1:], keyy[1:], val[1:]
+
+
 def list_func_update(upd=None):
     global list_func
     global regeons, actcenter, R
     if not upd:
-        stepcount = [i for i in range(0, len(list(regeons.keys())), len(list(regeons.keys())) // 10)]
-        count = 0
+        reg1, reg2, act1, act2, fun1, fun2 = [], [], [], [], [], []
         for i in regeons.keys():
-            list_func.update({i: point_function(i)})
-            count += 1
-            if count in stepcount:
-                print(f"{int((100 * count) / max(stepcount))}% done")
+            reg1 += [i]
+            reg2 += [regeons[i]]
+        for i in actcenter.keys():
+            act1 += [i]
+            act2 += [actcenter[i]]
+        keyx, keyy, val = point_functions2(R["market"], R["regeon"], reg1, reg2, act1, act2)
+        print(val)
+        for i in range(len(keyx)):
+            list_func.update({(keyx[i], keyy[i]): val[i]})
+        for i in regeons.keys():
+            if i not in list_func.keys():
+                print("ERORE")
         f = open(r"./Temp/functions_list.txt", "w")
         for i in list_func.keys():
             f.write(f"{i[0]};{i[1]}:{list_func[i]}\n")
@@ -185,6 +218,7 @@ def list_func_update(upd=None):
 
 
 
+
 def make_pochtampt(count:int, updated=None) -> List[tuple]:
     global list_func, regeons, actcenter, R, delta_point
     points = []
@@ -200,10 +234,10 @@ def make_pochtampt(count:int, updated=None) -> List[tuple]:
         for i in actcenter.keys():
             act1 += [i]
             act2 += [actcenter[i]]
-        reg1, reg2, act1, act2, fun1, fun2 = added_pochtamt(point, delta_point, R["market"], R["regeon"], reg1, reg2, act1, act2)
-        for i in range(len(reg1)):
+        regg1, reg2, actc1, act2, fun1, fun2 = added_pochtamt(point, delta_point, R["market"], R["regeon"], reg1, reg2, act1, act2)
+        for i in regg1:
             regeons[reg1[i]] = reg2[i]
-        for i in range(len(act1)):
+        for i in actc1:
             actcenter[act1[i]] = act2[i]
         for i in range(len(fun1)):
             list_func[fun1[i]] = fun2[i]
@@ -451,7 +485,6 @@ def see_result(count:int, updated=None, delta_point_new=3):
     delta_point = delta_point_new
     a, b = [], []
     for i in regeons.keys():
-        print(i)
         a += [i[0]]
         b += [i[1]]
     print(f"[+]dispertion X>> {round(abs(min(a) - max(a))*111.1348, delta_point)}km")
@@ -470,7 +503,8 @@ def work_files():
 
 def test5():
     Update()
-    see_result(10, True, 3)
+    upd = input("take from file") in ['y', 'Y', 'yes', '']
+    see_result(100, upd, 3)
 
 
 def test4():
@@ -501,12 +535,15 @@ def test3():
     m.save("./Temp/map.html")
     webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
 
+def test6():
+    Open_geojason(r".\Data\market.geojson")
+
 if __name__ == "__main__":
     #test1()
     #test2()
     #test3()
     #test4()
-    # test5()
-    Open_geojason(r".\Data\market.geojson")
+    test5()
+    #test6()
 
 
