@@ -447,14 +447,15 @@ class Ui_MainWindow(object):
         BECKEND.Open_geojason(file_NFZ)
 
     def change_inputfile(self):
-        self.start_frame.show()
-        self.file_changer.hide()
         global file_market, file_regions, file_NFZ
         global regeon, market
         file_regions = f"./Data/{self.comboBox_5.currentText()}"
         file_market = f"./Data/{self.comboBox_6.currentText()}"
         file_NFZ = f"./Data/{self.comboBox_7.currentText()}"
+        print(file_market, file_regions, file_NFZ)
         regeon, market = BECKEND.Update(file_market, file_regions, file_NFZ)
+        self.start_frame.show()
+        self.file_changer.hide()
 
 
     def Start(self):

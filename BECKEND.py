@@ -373,7 +373,7 @@ def Update(file_market=None, file_regions=None, file_NFZ=None):
     for i in regeon["qualities"].keys():
         if "population" in regeon["qualities"][i].keys() and i in regeon["points"].keys():
             ponts = bad_figure_to_points(regeon["points"][i])
-            populatn = int("".join(regeon["qualities"][i]["population"].split("."))) / len(ponts)
+            populatn = int("".join("".join(regeon["qualities"][i]["population"].split(".")).split('"'))) / len(ponts)
             print(f"[+]{i}:людей на точку{populatn}, точек{len(ponts)}")
             regeons.update({j:populatn for j in ponts})
     print("[INFO]regeons are Up to date")
@@ -538,12 +538,16 @@ def test3():
 def test6():
     Open_geojason(r".\Data\market.geojson")
 
+def test7():
+    Update("./Data/market.geojson", "./Data/newest_regions.geojson",  "./Data/NFZ.geojson")
+
 if __name__ == "__main__":
     #test1()
     #test2()
     #test3()
     #test4()
-    test5()
+    #test5()
     #test6()
+    test7()
 
 
