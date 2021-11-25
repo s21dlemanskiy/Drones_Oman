@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2020.2.20)  6 NOV 2021 02:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2020.2.20)  25 NOV 2021 11:14
 entering extended mode
 **./document.tex
 (document.tex
@@ -355,20 +355,20 @@ File: t2acmr.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
 ))
 \openout1 = `document.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for T2A/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for T2A/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
 
 ("C:\Users\vniiz\AppData\Local\Programs\MiKTeX 2.9\tex/context/base/mkii\supp-p
 df.mkii"
@@ -441,143 +441,149 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 Package grfext Info: Graphics extension search list:
 (grfext)             [.png,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 456.
-) (document.toc)
+) [1
+
+{C:/Users/vniiz/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
+(document.toc)
 \tf@toc=\write3
 \openout3 = `document.toc'.
 
- [1
-
-{C:/Users/vniiz/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 24--25
+ [2]
+Underfull \hbox (badness 10000) in paragraph at lines 33--34
 
  []
 
-LaTeX Font Info:    Try loading font information for T2A+cmtt on input line 25.
+[3]
+Underfull \hbox (badness 10000) in paragraph at lines 47--48
+
+ []
+
+LaTeX Font Info:    Try loading font information for T2A+cmtt on input line 48.
 
 
 ("C:\Users\vniiz\AppData\Local\Programs\MiKTeX 2.9\tex/latex/cyrillic\t2acmtt.f
 d"
 File: t2acmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
-) [2] [3]
-<pictures/1.png, id=22, 224.84pt x 248.93pt>
+) [4] [5]
+<pictures/1.png, id=30, 224.84pt x 248.93pt>
 File: pictures/1.png Graphic file (type png)
 <use pictures/1.png>
-Package pdftex.def Info: pictures/1.png  used on input line 51.
+Package pdftex.def Info: pictures/1.png  used on input line 78.
 (pdftex.def)             Requested size: 157.38692pt x 174.2498pt.
-<pictures/2.png, id=23, 536.50438pt x 421.575pt>
+<pictures/2.png, id=31, 536.50438pt x 421.575pt>
 File: pictures/2.png Graphic file (type png)
 <use pictures/2.png>
-Package pdftex.def Info: pictures/2.png  used on input line 54.
+Package pdftex.def Info: pictures/2.png  used on input line 81.
 (pdftex.def)             Requested size: 482.84947pt x 379.41399pt.
 
-Overfull \hbox (92.84947pt too wide) in paragraph at lines 53--56
+Overfull \hbox (92.84947pt too wide) in paragraph at lines 80--83
 [] 
  []
 
-[4 <./pictures/1.png>] [5 <./pictures/2.png>]
-Overfull \hbox (60.66495pt too wide) in paragraph at lines 78--78
+[6 <./pictures/1.png>] [7 <./pictures/2.png>]
+Overfull \hbox (60.66495pt too wide) in paragraph at lines 105--105
 []        \T2A/cmtt/m/n/12 return math.sqrt((self.x - other.x)** 2 + (self.y - 
 other.y)** 2)[] 
  []
 
 
-Overfull \hbox (190.30829pt too wide) in paragraph at lines 78--78
+Overfull \hbox (190.30829pt too wide) in paragraph at lines 105--105
 []        \T2A/cmtt/m/n/12 equatin = f"x * {(y_2 - y_1) / (x_2 - x_1)} - {x_1 *
  (y_2 - y_1) / (x_2 - x_1) + y_1}"[] 
  []
 
-[6]
-Overfull \hbox (215.00226pt too wide) in paragraph at lines 92--92
+[8]
+Overfull \hbox (215.00226pt too wide) in paragraph at lines 119--119
 []        \T2A/cmtt/m/n/12 return (u.x - point1.x) * (point2.y - point1.y) > (u
 .y - point1.y) * (point2.x - point1.x)[] 
  []
 
 
-Overfull \hbox (42.14447pt too wide) in paragraph at lines 121--121
+Overfull \hbox (42.14447pt too wide) in paragraph at lines 148--148
 []           \T2A/cmtt/m/n/12 if orintation_right != point_right_line(point1, p
 oint2, u):[] 
  []
 
 
-Overfull \hbox (17.4505pt too wide) in paragraph at lines 121--121
+Overfull \hbox (17.4505pt too wide) in paragraph at lines 148--148
 []       \T2A/cmtt/m/n/12 if orintation_right != point_right_line(pl[-1], plt[0
 ], u):[] 
  []
 
-[7]
-Overfull \hbox (48.31796pt too wide) in paragraph at lines 121--121
+[9]
+Overfull \hbox (48.31796pt too wide) in paragraph at lines 148--148
 []       \T2A/cmtt/m/n/12 x, y = list(map(lambda a: a.x ,pl)),list(map(lambda a
 : a.y ,pl))[] 
  []
 
 
-Overfull \hbox (295.25766pt too wide) in paragraph at lines 121--121
+Overfull \hbox (295.25766pt too wide) in paragraph at lines 148--148
 []       \T2A/cmtt/m/n/12 x,y = ([i for i in range(min(x), max(x), delta_point)
 ], [i for i in range(min(y), max(y), delta_point)])[] 
  []
 
 
-Overfull \hbox (110.05289pt too wide) in paragraph at lines 121--121
+Overfull \hbox (110.05289pt too wide) in paragraph at lines 148--148
 []       \T2A/cmtt/m/n/12 all_points = list(map(lambda x:Point(x[0], x[1]), ite
 rtools.product(x,y)))[] 
  []
 
 
-Overfull \hbox (5.22435pt too wide) in paragraph at lines 123--123
+Overfull \hbox (5.22435pt too wide) in paragraph at lines 150--150
 | \T2A/cmr/m/n/12 —а-мое слож-ное опре-де-лить на-хо-дит-с€ внут-р€-н€€ часть ф
 и-гу-ры спра-
  []
 
 
-Overfull \hbox (190.30829pt too wide) in paragraph at lines 164--164
+Overfull \hbox (190.30829pt too wide) in paragraph at lines 191--191
 []                   \T2A/cmtt/m/n/12 if point_right_line(main_fig[i], main_fig
 [(i + 1) % temp_ln], main_fig[j]):[] 
  []
 
-[8]
-Overfull \hbox (233.52274pt too wide) in paragraph at lines 164--164
+[10]
+Overfull \hbox (233.52274pt too wide) in paragraph at lines 191--191
 []           \T2A/cmtt/m/n/12 points = [main_fig[i], main_fig[(i + 2)% len(main
 _fig)], main_fig[(i + 1)% len(main_fig)]][] 
  []
 
 
-Overfull \hbox (690.36118pt too wide) in paragraph at lines 164--164
+Overfull \hbox (690.36118pt too wide) in paragraph at lines 191--191
 []           \T2A/cmtt/m/n/12 if (point_right_line(points[0], points[1], points
 [2]) and (not orintation_right)) or ((not point_right_line(points[0], points[1]
 , points[2])) and orintation_right):[] 
  []
 
 
-Overfull \hbox (5.10352pt too wide) in paragraph at lines 164--164
+Overfull \hbox (5.10352pt too wide) in paragraph at lines 191--191
 []               \T2A/cmtt/m/n/12 main_fig.remove(main_fig[(i + 1)% len(main_fi
 g)])[] 
  []
 
 
-Overfull \hbox (147.09384pt too wide) in paragraph at lines 164--164
+Overfull \hbox (147.09384pt too wide) in paragraph at lines 191--191
 []           \T2A/cmtt/m/n/12 if count + 3 == len(main_fig):      #number 3 is 
 random num for skip mistake[] 
  []
 
-[9]
-Overfull \hbox (110.05289pt too wide) in paragraph at lines 189--189
+[11]
+Overfull \hbox (110.05289pt too wide) in paragraph at lines 216--216
 []                \T2A/cmtt/m/n/12 score += actcenter[i] / ((R["market"]/ 10 + 
 lenf(i, point)) ** 3)[] 
  []
 
 
-Overfull \hbox (97.7059pt too wide) in paragraph at lines 189--189
+Overfull \hbox (97.7059pt too wide) in paragraph at lines 216--216
 []                \T2A/cmtt/m/n/12 score += regeons[i] / ((R["regeon"]/ 10 + le
 nf(i, point)) ** 2)[] 
  []
 
-[10] [11] (document.aux) ) 
+[12] [13] (document.aux) ) 
 Here is how much of TeX's memory you used:
- 3274 strings out of 492942
- 43738 string characters out of 3126215
- 119406 words of memory out of 3000000
- 7118 multiletter control sequences out of 15000+200000
- 14146 words of font info for 36 fonts, out of 3000000 for 9000
+ 3279 strings out of 492942
+ 43798 string characters out of 3126215
+ 119579 words of memory out of 3000000
+ 7121 multiletter control sequences out of 15000+200000
+ 15824 words of font info for 38 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,8n,25p,1216b,247s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fon
@@ -597,10 +603,12 @@ b><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/cm-super
 /sfbx1728.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pub
 lic/cm-super/sfit1200.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fon
 ts/type1/public/cm-super/sfrm1200.pfb><C:/Users/vniiz/AppData/Local/Programs/Mi
-KTeX 2.9/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on document.pdf (11 pages, 264735 bytes).
+KTeX 2.9/fonts/type1/public/cm-super/sfrm2488.pfb><C:/Users/vniiz/AppData/Local
+/Programs/MiKTeX 2.9/fonts/type1/public/cm-super/sfti1200.pfb><C:/Users/vniiz/A
+ppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on document.pdf (13 pages, 303805 bytes).
 PDF statistics:
- 97 PDF objects out of 1000 (max. 8388607)
+ 112 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
