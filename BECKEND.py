@@ -4,7 +4,6 @@ from numba import njit
 from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning
 import warnings
 from numba.typed import Dict, List
-import numpy as np
 # start = datetime.datetime.now()
 # print("\n\n\n", (datetime.datetime.now() - start).seconds, "\n\n\n")
 #SOME DIGITALS 111,1348 km in 1
