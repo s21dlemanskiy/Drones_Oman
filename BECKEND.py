@@ -1,4 +1,5 @@
 import math, itertools, folium, webbrowser, os, datetime, pyperclip, time, pyautogui
+from selenium import webdriver
 from typing import List
 from numba import njit
 from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning
@@ -7,7 +8,7 @@ from numba.typed import Dict, List
 # start = datetime.datetime.now()
 # print("\n\n\n", (datetime.datetime.now() - start).seconds, "\n\n\n")
 #SOME DIGITALS 111,1348 km in 1
-
+driver = webdriver.Chrome(executable_path=r".\drives\chromedriver.exe")
 warnings.simplefilter('ignore', category=NumbaDeprecationWarning)
 warnings.simplefilter('ignore', category=NumbaPendingDeprecationWarning)
 delta_point = 3
@@ -468,19 +469,21 @@ def change_actceter(name, score, x, y, type,file="./Data/market.geojson"):
 
 
 def Open_geojason(file):
+    global driver
     f = open(file, 'r')
     data = "\n".join(f.readlines())
     data = data[data.find("{"):]
     pyperclip.copy(data)
     f.close()
-    webbrowser.open(r"https://geojson.io/#map=9/23.2790/58.6432")
+    print("______________")
+    driver.get(url=r"https://geojson.io/#map=9/23.2790/58.6432")
     time.sleep(4)
     pyautogui.press(["del"] * 51)
     #time.sleep(1)
     pyautogui.hotkey('ctrl', 'v')
 
 def see_result(count:int, updated=None, delta_point_new=3):
-    global regeons, list_func, delta_point
+    global regeons, list_func, delta_point, driver
     delta_point = delta_point_new
     a, b = [], []
     for i in regeons.keys():
@@ -493,7 +496,8 @@ def see_result(count:int, updated=None, delta_point_new=3):
     for i in points:
         folium.Marker((i[1],i[0])).add_to(m)
     m.save("./Temp/map.html")
-    webbrowser.open("file:///./Temp/map.html")
+    print("______________")
+    driver.get(url=rf"file:///{os.getcwd()}/Temp/map.html")
 
 
 def work_files():
@@ -524,7 +528,7 @@ def test2():
 
 def test3():
     global delta_point
-    global regeons
+    global regeons, driver
     delta_point = 2
     Update()
     m = folium.Map(location=[23.5, 58.5])
@@ -532,7 +536,7 @@ def test3():
         i = regeons[i]
         folium.Marker((i.y, i.x)).add_to(m)
     m.save("./Temp/map.html")
-    webbrowser.open("file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
+    driver.get(url="file:///C:/Users/vniiz/Desktop/KargoProject/Drones_Oman/Temp/map.html")
 
 def test6():
     Open_geojason(r".\Data\market.geojson")
