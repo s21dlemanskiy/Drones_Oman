@@ -13,7 +13,7 @@ warnings.simplefilter('ignore', category=NumbaDeprecationWarning)
 warnings.simplefilter('ignore', category=NumbaPendingDeprecationWarning)
 delta_point = 3
 other_delta_point = 10 ** delta_point
-cargo_per_peeple = 0
+cargo_per_peeple = 0.08
 typekof = {
     "Default":0,
     "market":20,
