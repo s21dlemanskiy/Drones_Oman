@@ -13,6 +13,7 @@ warnings.simplefilter('ignore', category=NumbaDeprecationWarning)
 warnings.simplefilter('ignore', category=NumbaPendingDeprecationWarning)
 delta_point = 3
 other_delta_point = 10 ** delta_point
+cargo_per_peeple = 0
 typekof = {
     "Default":0,
     "market":20,
@@ -314,6 +315,7 @@ def read_NFZ_geojson(file="./Data/NFZ.geojson"):
 
 
 def read_regeons_geojson(file="./Data/regions.geojson"):
+    global cargo_per_peeple
     a = open(file, "r")
     file = a.readline()
     a.close()
@@ -339,7 +341,7 @@ def read_regeons_geojson(file="./Data/regions.geojson"):
             if "population" in i:
                 populat = i[i.find("population") + 12:i[i.find("population") + 12:].find(',') + i.find("population") + 12]
                 if populat != '""':
-                    qualities[name].update({"population":populat})
+                    qualities[name].update({"population":float(populat) * cargo_per_peeple})
             if "area" in i:
                 qualities[name].update({"area": i[i.find("area") + 6:i[i.find("area") + 6:].find(',') + i.find("area") + 6]})
             boool = True
