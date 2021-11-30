@@ -15,10 +15,8 @@ delta_point = 3
 other_delta_point = 10 ** delta_point
 typekof = {
     "Default":0,
-    "SHOPPINGCENTER":12,
-    "Market":20,
-    "HyperMarket":8,
-    "Businesscenter":10
+    "market":20,
+    "BC":10
 }
 R = {
     "regeon":0.009,
