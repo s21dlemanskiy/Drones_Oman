@@ -13,11 +13,17 @@ warnings.simplefilter('ignore', category=NumbaDeprecationWarning)
 warnings.simplefilter('ignore', category=NumbaPendingDeprecationWarning)
 delta_point = 3
 other_delta_point = 10 ** delta_point
-cargo_per_peeple = 0.08
+cargo_per_peeple = {
+    "Default": 0.08
+}
 typekof = {
-    "Default":0,
-    "market":20,
-    "BC":10
+    "Default": 0,
+    "market": 20,
+    "BC": 10,
+    "SHOPPINGCENTER": 12,
+    "Market": 20,
+    "HyperMarket": 8,
+    "Businesscenter": 10
 }
 R = {
     "regeon":0.009,
@@ -315,7 +321,6 @@ def read_NFZ_geojson(file="./Data/NFZ.geojson"):
 
 
 def read_regeons_geojson(file="./Data/regions.geojson"):
-    global cargo_per_peeple
     a = open(file, "r")
     file = a.readline()
     a.close()
@@ -341,7 +346,7 @@ def read_regeons_geojson(file="./Data/regions.geojson"):
             if "population" in i:
                 populat = i[i.find("population") + 12:i[i.find("population") + 12:].find(',') + i.find("population") + 12]
                 if populat != '""':
-                    qualities[name].update({"population":float(populat) * cargo_per_peeple})
+                    qualities[name].update({"population":populat})
             if "area" in i:
                 qualities[name].update({"area": i[i.find("area") + 6:i[i.find("area") + 6:].find(',') + i.find("area") + 6]})
             boool = True
@@ -349,6 +354,7 @@ def read_regeons_geojson(file="./Data/regions.geojson"):
 
 
 def Update(file_market=None, file_regions=None, file_NFZ=None):
+    global cargo_per_peeple
     global regeons
     global actcenter
     global NFZ
@@ -373,7 +379,7 @@ def Update(file_market=None, file_regions=None, file_NFZ=None):
     for i in regeon["qualities"].keys():
         if "population" in regeon["qualities"][i].keys() and i in regeon["points"].keys():
             ponts = bad_figure_to_points(regeon["points"][i])
-            populatn = int("".join("".join(regeon["qualities"][i]["population"].split(".")).split('"'))) / len(ponts)
+            populatn = int("".join("".join(regeon["qualities"][i]["population"].split(".")).split('"'))) / len(ponts) * (lambda x: cargo_per_peeple[x] if x in cargo_per_peeple.keys() else cargo_per_peeple["Default"])(regeon["qualities"][i])
             print(f"[+]{i}:людей на точку{populatn}, точек{len(ponts)}")
             regeons.update({j:populatn for j in ponts})
     print("[INFO]regeons are Up to date")
@@ -498,6 +504,7 @@ def see_result(count:int, updated=None, delta_point_new=3):
     m.save("./Temp/map.html")
     print("______________")
     driver.get(url=rf"file:///{os.getcwd()}/Temp/map.html")
+    Update()
 
 
 def work_files():
