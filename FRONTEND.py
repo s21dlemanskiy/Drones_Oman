@@ -12,13 +12,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 import folium, webbrowser #, pandas as pd
 import BECKEND
-import time
+import time, os
 regeon = {}
 market = {}
 
-file_market = r"./Data/market.geojson"
-file_regions = r"./Data/regions.geojson"
-file_NFZ = r"./Data/NFZ.geojson"
+file_market = rf"{os.getcwd()}\Data\market.geojson"
+file_regions = rf"{os.getcwd()}\Data\regions.geojson"
+file_NFZ = rf"{os.getcwd()}\Data\NFZ.geojson"
 
 def Errore_dialog(TEXT="Unexpected Errore"):
     window = QMessageBox()
@@ -364,7 +364,7 @@ class Ui_MainWindow(object):
     def open_files_changer(self):
         global file_market, file_NFZ, file_regions
         a, b, c = file_market, file_NFZ, file_regions
-        a, b, c = a.replace("./Data/", ""), b.replace("./Data/", ""), c.replace("./Data/", "")
+        a, b, c = a.replace(rf"{os.getcwd()}\Data\ ", ""), b.replace(rf"{os.getcwd()}\Data\ ", ""), c.replace(rf"{os.getcwd()}\Data\ ", "")
         print(a, b, c)
         self.comboBox_5.setCurrentText(c)
         self.comboBox_6.setCurrentText(a)
@@ -449,9 +449,9 @@ class Ui_MainWindow(object):
     def change_inputfile(self):
         global file_market, file_regions, file_NFZ
         global regeon, market
-        file_regions = f"./Data/{self.comboBox_5.currentText()}"
-        file_market = f"./Data/{self.comboBox_6.currentText()}"
-        file_NFZ = f"./Data/{self.comboBox_7.currentText()}"
+        file_regions = fr"{os.getcwd()}/Data/{self.comboBox_5.currentText()}"
+        file_market = fr"{os.getcwd()}/Data/{self.comboBox_6.currentText()}"
+        file_NFZ = fr"{os.getcwd()}\Data\{self.comboBox_7.currentText()}"
         print(file_market, file_regions, file_NFZ)
         regeon, market = BECKEND.Update(file_market, file_regions, file_NFZ)
         self.start_frame.show()

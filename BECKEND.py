@@ -1,5 +1,4 @@
-import math, itertools, folium, webbrowser, os, datetime, pyperclip, time, pyautogui
-from selenium import webdriver
+import math, itertools, folium, webbrowser, os, datetime, pyperclip, time, pyautogui, webbrowser
 from typing import List
 from numba import njit
 from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning
@@ -8,7 +7,6 @@ from numba.typed import Dict, List
 # start = datetime.datetime.now()
 # print("\n\n\n", (datetime.datetime.now() - start).seconds, "\n\n\n")
 #SOME DIGITALS 111,1348 km in 1
-driver = webdriver.Chrome(executable_path=r".\drives\chromedriver.exe")
 warnings.simplefilter('ignore', category=NumbaDeprecationWarning)
 warnings.simplefilter('ignore', category=NumbaPendingDeprecationWarning)
 delta_point = 3
@@ -209,7 +207,7 @@ def list_func_update(upd=None):
             f.write(f"{i[0]};{i[1]}:{list_func[i]}\n")
         print("[+]functions are ready in file")
     else:
-        f = open(r"./Temp/functions_list.txt", "r")
+        f = open(rf"{os.getcwd()}\Temp\functions_list.txt", "r")
         tmp = {}
         for i in f.readlines():
             temp = list(i.split(":"))
@@ -250,9 +248,10 @@ def make_pochtampt(count:int, updated=None) -> List[tuple]:
         print(f"[+]{planted} pochtamt planted")
     return points
 
-def read_market_geojson(file="./Data/market.geojson"):
+def read_market_geojson(file=rf"{os.getcwd()}\Data\market.geojson"):
     global typekof
     global delta_point
+    print(file, os.getcwd())
     a = open(file, "r")
     file = a.readline()
     a.close()
@@ -296,7 +295,7 @@ def read_market_geojson(file="./Data/market.geojson"):
     return (tmp, (ponts, qualities))
 
 
-def read_NFZ_geojson(file="./Data/NFZ.geojson"):
+def read_NFZ_geojson(file=rf"{os.getcwd()}\Data\NFZ.geojson"):
     a = open(file, "r")
     file = a.readline()
     f = []
@@ -320,7 +319,7 @@ def read_NFZ_geojson(file="./Data/NFZ.geojson"):
     return point        #somenum : Points
 
 
-def read_regeons_geojson(file="./Data/regions.geojson"):
+def read_regeons_geojson(file=rf"{os.getcwd()}\Data\regions.geojson"):
     a = open(file, "r")
     file = a.readline()
     a.close()
@@ -379,9 +378,10 @@ def Update(file_market=None, file_regions=None, file_NFZ=None):
     for i in regeon["qualities"].keys():
         if "population" in regeon["qualities"][i].keys() and i in regeon["points"].keys():
             ponts = bad_figure_to_points(regeon["points"][i])
-            populatn = int("".join("".join(regeon["qualities"][i]["population"].split(".")).split('"'))) / len(ponts) * (lambda x: cargo_per_peeple[x] if x in cargo_per_peeple.keys() else cargo_per_peeple["Default"])(regeon["qualities"][i])
+            kof = (lambda x: cargo_per_peeple[x] if x in cargo_per_peeple.keys() else cargo_per_peeple["Default"])(i)
+            populatn = int("".join("".join(regeon["qualities"][i]["population"].split(".")).split('"'))) / len(ponts)
             print(f"[+]{i}:людей на точку{populatn}, точек{len(ponts)}")
-            regeons.update({j:populatn for j in ponts})
+            regeons.update({j:(populatn * kof) for j in ponts})
     print("[INFO]regeons are Up to date")
 
     #--------output-formating--------------
@@ -399,7 +399,7 @@ def Update(file_market=None, file_regions=None, file_NFZ=None):
 
 
 
-def Update_region_population(name, population, file="./Data/regions.geojson"):
+def Update_region_population(name, population, file=rf"{os.getcwd()}\Data\regions.geojson"):
     a = open(file, "r")
     faile = a.readline()
     f = []
@@ -428,7 +428,7 @@ def Update_region_population(name, population, file="./Data/regions.geojson"):
     a.write(faile)
     a.close()
 
-def add_center_activity(name, score, x, y, type,file="./Data/market.geojson"):
+def add_center_activity(name, score, x, y, type,file=rf"{os.getcwd()}\Data\market.geojson"):
     a = open(file, 'r')
     faile = a.readline()
     point = ',{"type": "Feature","properties": {"marker-color": "#7e7e7e","marker-size": "medium","marker-symbol": "","Type":'+f'"{type}",'+f'"Name": "{name}","MyScore":{score}'+'},"geometry":{"type":"Point","coordinates": '+ f'[{x},{y}]}}'
@@ -436,7 +436,7 @@ def add_center_activity(name, score, x, y, type,file="./Data/market.geojson"):
     a.write(faile[:-2]+point+"]}")
     a.close()
 
-def change_actceter(name, score, x, y, type,file="./Data/market.geojson"):
+def change_actceter(name, score, x, y, type,file=rf"{os.getcwd()}\Data\market.geojson"):
     a = open(file, 'r')
     faile = a.readline()
     f = []
@@ -475,21 +475,20 @@ def change_actceter(name, score, x, y, type,file="./Data/market.geojson"):
 
 
 def Open_geojason(file):
-    global driver
     f = open(file, 'r')
     data = "\n".join(f.readlines())
     data = data[data.find("{"):]
     pyperclip.copy(data)
     f.close()
     print("______________")
-    driver.get(url=r"https://geojson.io/#map=9/23.2790/58.6432")
+    webbrowser.open(r"https://geojson.io/#map=9/23.2790/58.6432")
     time.sleep(4)
     pyautogui.press(["del"] * 51)
     #time.sleep(1)
     pyautogui.hotkey('ctrl', 'v')
 
 def see_result(count:int, updated=None, delta_point_new=3):
-    global regeons, list_func, delta_point, driver
+    global regeons, list_func, delta_point
     delta_point = delta_point_new
     a, b = [], []
     for i in regeons.keys():
@@ -501,14 +500,14 @@ def see_result(count:int, updated=None, delta_point_new=3):
     m = folium.Map(location=[23.5, 58.5])
     for i in points:
         folium.Marker((i[1],i[0])).add_to(m)
-    m.save("./Temp/map.html")
+    m.save(rf"{os.getcwd()}\Temp\map.html")
     print("______________")
-    driver.get(url=rf"file:///{os.getcwd()}/Temp/map.html")
+    webbrowser.open(rf"file:///{os.getcwd()}\Temp\map.html")
     Update()
 
 
 def work_files():
-    return os.listdir("./Data")
+    return os.listdir(rf"{os.getcwd()}\Data")
 
 
 def test5():
