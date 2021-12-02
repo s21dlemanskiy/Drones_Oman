@@ -16,12 +16,12 @@ cargo_per_peeple = {
 }
 typekof = {
     "Default": 0,
-    "market": 20,
+    "market": 10,
     "BC": 10,
-    "SHOPPINGCENTER": 12,
-    "Market": 20,
-    "HyperMarket": 8,
-    "Businesscenter": 10
+    "SHOPPINGCENTER": 10,
+    "Market": 1,
+    "HyperMarket": 1,
+    "Businesscenter": 1
 }
 R = {
     "regeon":0.009,
@@ -196,7 +196,6 @@ def list_func_update(upd=None):
             act1 += [i]
             act2 += [actcenter[i]]
         keyx, keyy, val = point_functions2(R["market"], R["regeon"], reg1, reg2, act1, act2)
-        print(val)
         for i in range(len(keyx)):
             list_func.update({(keyx[i], keyy[i]): val[i]})
         for i in regeons.keys():
@@ -251,7 +250,6 @@ def make_pochtampt(count:int, updated=None) -> List[tuple]:
 def read_market_geojson(file=rf"{os.getcwd()}\Data\market.geojson"):
     global typekof
     global delta_point
-    print(file, os.getcwd())
     a = open(file, "r")
     file = a.readline()
     a.close()
@@ -480,7 +478,6 @@ def Open_geojason(file):
     data = data[data.find("{"):]
     pyperclip.copy(data)
     f.close()
-    print("______________")
     webbrowser.open(r"https://geojson.io/#map=9/23.2790/58.6432")
     time.sleep(4)
     pyautogui.press(["del"] * 51)
@@ -501,7 +498,6 @@ def see_result(count:int, updated=None, delta_point_new=3):
     for i in points:
         folium.Marker((i[1],i[0])).add_to(m)
     m.save(rf"{os.getcwd()}\Temp\map.html")
-    print("______________")
     webbrowser.open(rf"file:///{os.getcwd()}\Temp\map.html")
     Update()
 
