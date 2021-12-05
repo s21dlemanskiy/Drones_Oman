@@ -75,7 +75,8 @@
  	 Функция принисает 3 точки 2 из которых задают направленую прямую и 3-я это проверяемая точка. Все необходимые функции мы уже вывели.
  	 \begin{verbatim}
  	 	def point_right_line(point1, point2, u) -> bool:
- 	 	    return (u.x - point1.x) * (point2.y - point1.y) > (u.y - point1.y) * (point2.x - point1.x)
+ 	 	    return (u.x - point1.x) * (point2.y - point1.y
+ 	 	    ) > (u.y - point1.y) * (point2.x - point1.x)
  	 \end{verbatim}
  	 \hspace*{1cm}Проверяем лежит ли точка в выпуклой фигуре. 
  	 \begin{verbatim}
@@ -133,7 +134,7 @@
  	             break
  	     in_fig = point_in_normal_figure(main_fig, u)
  	     for i in added_fig:
- 	         in_fig = infig and not point_in_normal_figure(i, u)
+ 	         in_fig = in_fig and not point_in_normal_figure(i, u)
  	     return in_fig
  	\end{verbatim}
  	\hspace*{1cm}И наконец функция разбиенияя на точки.
@@ -158,6 +159,62 @@
  	        if point_in_bad_figure(main_fig, point):
  	            fig_list += [point]
  	    return fig_list
+ 	\end{verbatim}
+ 	\hspace*{1cm}Но есть еще один способ проверки принадлежности точки плоскости. Проведем через точку прямую, такую, что она будет пересекать грани фигуры(не вершины) тогда если пойти вдоль этой прямой от какого либо ее края, то каждое пересечение с гранью это вход или выход и тогда можно сказать, что если с каждой стороны от точки находится ничетное кол-во пересечений с гранями то мы получим что точка находится внутри фигуры. Теперь разберемся как получить прямую пересекающую только грани? Пусть у многоугольника к вершин тогда проведем к + 1 прямую и хотя бы одна не будет содержать вершин.\\
+ 	\includegraphics[scale=0.8]{3}\\
+ 	\hspace*{1cm}Итак начнем писать алгоритм класс точки возьмем из преведущего алгоритма. А метод проверки принадлежит ли точка прямой почти аналогичен функции проверки лежит ли точка справа от прямой, только знак неравенства нужно заметить равенством. Для класса Line нужно найти пересечение двух прямых. Для этого возьмем ур-е прямой$\begin{cases}y = k_1 x + b_1\\   y = k_2 x + b_2\end{cases} \implies \begin{cases}(k_2 - k_1) x = b_1 - b_2\\   y = k_2 x + b_2\end{cases}\implies \begin{cases}x =\frac{ b_1 - b_2}{k_2 - k_1}\\   y = k_2 \frac{ b_1 - b_2}{k_2 - k_1} + b_2\end{cases}$
+ 	\begin{verbatim}
+ 	class Line:
+ 	    def __init__(self, p1:Point, p2:Point):
+ 	        self.p1 = p1
+ 	        self.p2 = p2
+ 	    
+ 	    def equatian(self):
+ 	        return list(map(float, 
+ 	        self.p1.equatian(self.p2).replace("x*", "").split("-")))
+ 	    
+ 	    def crossing(self, other):
+ 	        k1, b1 = self.equatian()
+ 	        k2, b2 = other.equatian()
+ 	        x = (b1 - b2)/(k2 - k1)
+ 	        y = k2 * x + b2
+ 	        return Point(x, y)
+ 	    
+ 	    def on(self, u:Point):
+ 	        return ((u.x - self.p1.x) * (self.p2.y - self.p1.y) == 
+ 	        (u.y - self.p1.y) * (self.p2.x - self.p1.x))
+ 	    
+ 	    def in(self, u:Point):
+ 	        x1, x2 = min(self.p1.x, self.p2.x), max(
+ 	        self.p1.x, self.p2.x)
+ 	        y1, y2 = min(self.p1.y, self.p2.y), max(
+ 	        self.p1.y, self.p2.y)
+ 	        return x1 <= u.x <= x2 and y1<= u.y <= y2
+ 	\end{verbatim}
+ 	\hspace*{1cm}Ок, а теперь сама функция. Мы получаем фигуру для нее нам понадобится список отрезков которыми она образованна и потом будем проводить прямую пока не найдем прямую которая не будет содержать вершину.
+ 	\begin{verbatim}
+ 	def point_in_fig(main_fig:List[Point], u:Point):
+ 	    if u in main_fig:return True
+ 	    lines = [Line(main_fig[i], main_fig[(i + 1) % len(main_fig)])
+ 	             for i in range(len(main_fig))]
+ 	    teastpoint = Point(main_fig[0].x, main_fig[0].y)
+ 	    while True:
+ 	        teastpoint.x += 1
+ 	        testline = Line(u, teastpoint)
+ 	        if all(map(lambda x: not testline.on(x), main_fig)): 
+ 	            break
+ 	    crossings = []
+ 	    for line in lines:
+ 	        c = testline.crossing(line)
+ 	        if line.in(c):
+ 	            crossings +=[c]
+ 	    cross = {"r":0, "l":0}
+ 	    for c in crossings:
+ 	        if c.y > u.y or (c.y == u.y  and c.x > u.x):
+ 	            cross["l"] += 1
+ 	        else:
+ 	            cross["r"] += 1
+ 	    return cross["r"] % 2 == cross["l"] % 2 == 1
  	\end{verbatim}
  	\hspace*{1cm}Ок, а что на счет 3D? Думаю о направлении тут говорить нет смысла, так что прийдется использовать какой-то другой метод. Можно через каждую точку проводить прямую параллельную оси х и смотреть пересечения с фигурой если пересечения с каждой стороны нечетное кол-во то точка внутри иначе снаружи. Стоит учесть что это работает потому, что можно говорить о вхождении/выходе прямой из фигуры, но нужно сказать, что есть вид пересечение 2 граней в месте ребра и в таком месте может быть выход прямой из фигуры или его может и не быть. Эта проблема выпуклости, и решать ее будем так же, те разделем невыпуклую фигуру на выпуклые и обработаем включения/искючения.\\
  	\hspace*{1cm}Итак, начнем опять с точки.
@@ -187,7 +244,7 @@
     \hspace*{1cm}Теперь плоскость.
     \begin{verbatim}
     class plane:
-        def __init__(self, *lines):
+        def __init__(self, lines:List[Points]):
             
     \end{verbatim}
  \end{document}

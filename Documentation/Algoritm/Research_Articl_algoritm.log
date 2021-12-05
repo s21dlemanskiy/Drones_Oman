@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2020.2.20)  4 DEC 2021 02:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2020.2.20)  5 DEC 2021 02:11
 entering extended mode
 **./Research_Articl_algoritm.tex
 (Research_Articl_algoritm.tex
@@ -507,145 +507,196 @@ Overfull \hbox (326.21976pt too wide) in paragraph at lines 65--65
  []
 
 [4]
-Overfull \hbox (326.21976pt too wide) in paragraph at lines 79--79
-[]        \T2A/cmtt/m/n/14.4 return (u.x - point1.x) * (point2.y - point1.y) > 
-(u.y - point1.y) * (point2.x - point1.x)[] 
+Overfull \hbox (4.6517pt too wide) in paragraph at lines 80--80
+[]        \T2A/cmtt/m/n/14.4 return (u.x - point1.x) * (point2.y - point1.y[] 
  []
 
 
-Overfull \hbox (11.96007pt too wide) in paragraph at lines 95--95
+Overfull \hbox (11.96007pt too wide) in paragraph at lines 96--96
 []   \T2A/cmtt/m/n/14.4 def point_in_normal_figure(pl:List[Point], u:Point):[] 
 
  []
 
 
-Overfull \hbox (26.5768pt too wide) in paragraph at lines 95--95
+Overfull \hbox (26.5768pt too wide) in paragraph at lines 96--96
 []       \T2A/cmtt/m/n/14.4 if len(pl) < 3: print("errore!!!!! Beckend  line")[
 ] 
  []
 
 
-Overfull \hbox (70.42699pt too wide) in paragraph at lines 95--95
+Overfull \hbox (70.42699pt too wide) in paragraph at lines 96--96
 []       \T2A/cmtt/m/n/14.4 orintation_right = point_right_line(pl[0], pl[1], p
 l[2])[] 
  []
 
 
-Overfull \hbox (121.58554pt too wide) in paragraph at lines 95--95
+Overfull \hbox (121.58554pt too wide) in paragraph at lines 96--96
 []           \T2A/cmtt/m/n/14.4 if orintation_right != point_right_line(point1,
  point2, u):[] 
  []
 
 
-Overfull \hbox (92.35208pt too wide) in paragraph at lines 95--95
+Overfull \hbox (92.35208pt too wide) in paragraph at lines 96--96
 []       \T2A/cmtt/m/n/14.4 if orintation_right != point_right_line(pl[-1], plt
 [0], u):[] 
  []
 
 [5]
-Overfull \hbox (296.9863pt too wide) in paragraph at lines 138--138
+Overfull \hbox (296.9863pt too wide) in paragraph at lines 139--139
 []                   \T2A/cmtt/m/n/14.4 if point_right_line(main_fig[i], main_f
 ig[(i + 1) % temp_ln], main_fig[j]):[] 
  []
 
-
-Overfull \hbox (33.88516pt too wide) in paragraph at lines 138--138
+[6]
+Overfull \hbox (33.88516pt too wide) in paragraph at lines 139--139
 []   \T2A/cmtt/m/n/14.4 def point_in_bad_figure(main_fig:List[Point], u:Point):
 [] 
  []
 
-[6]
-Overfull \hbox (106.96881pt too wide) in paragraph at lines 138--138
+
+Overfull \hbox (106.96881pt too wide) in paragraph at lines 139--139
 []           \T2A/cmtt/m/n/14.4 points = [main_fig[i], main_fig[(i + 2)% len(ma
 in_fig)],([] 
  []
 
 
-Overfull \hbox (106.96881pt too wide) in paragraph at lines 138--138
+Overfull \hbox (106.96881pt too wide) in paragraph at lines 139--139
 []           \T2A/cmtt/m/n/14.4 if (point_right_line(points[0], points[1], poin
 ts[2])and([] 
  []
 
 
-Overfull \hbox (114.27718pt too wide) in paragraph at lines 138--138
+Overfull \hbox (114.27718pt too wide) in paragraph at lines 139--139
 []           \T2A/cmtt/m/n/14.4 (not point_right_line(points[0], points[1], poi
 nts[2]))and[] 
  []
 
 
-Overfull \hbox (77.73535pt too wide) in paragraph at lines 138--138
+Overfull \hbox (77.73535pt too wide) in paragraph at lines 139--139
 []               \T2A/cmtt/m/n/14.4 main_fig.remove(main_fig[(i + 1)% len(main_
 fig)])[] 
  []
 
 
-Overfull \hbox (63.11862pt too wide) in paragraph at lines 138--138
+Overfull \hbox (63.11862pt too wide) in paragraph at lines 139--139
 []           \T2A/cmtt/m/n/14.4 in_fig = infig and not point_in_normal_figure(i
 , u)[] 
  []
 
 
-Overfull \hbox (11.96007pt too wide) in paragraph at lines 161--161
+Overfull \hbox (11.96007pt too wide) in paragraph at lines 162--162
 []  \T2A/cmtt/m/n/14.4 def bad_fig_to_point(main_fig:List[Point], step:int):[] 
 
  []
 
 
-Overfull \hbox (55.81026pt too wide) in paragraph at lines 161--161
+Overfull \hbox (55.81026pt too wide) in paragraph at lines 162--162
 []      \T2A/cmtt/m/n/14.4 list(main_fig.keys())[0].x, list(main_fig.keys())[0]
 .y)[] 
  []
 
 [7]
-Overfull \hbox (121.58554pt too wide) in paragraph at lines 161--161
+Overfull \hbox (121.58554pt too wide) in paragraph at lines 162--162
 []      \T2A/cmtt/m/n/14.4 x_list = list(x * step for x in range(minx / step, m
 axx / step))[] 
  []
 
 
-Overfull \hbox (114.27718pt too wide) in paragraph at lines 161--161
+Overfull \hbox (114.27718pt too wide) in paragraph at lines 162--162
 []      \T2A/cmtt/m/n/14.4 y_list = list(y * step for y in range(miny/ step, ma
 xy / step))[] 
  []
 
+<pictures/3.png, id=36, 203.76125pt x 183.18437pt>
+File: pictures/3.png Graphic file (type png)
+<use pictures/3.png>
+Package pdftex.def Info: pictures/3.png  used on input line 164.
+(pdftex.def)             Requested size: 163.0092pt x 146.54768pt.
+
+Overfull \hbox (23.96033pt too wide) in paragraph at lines 163--166
+\T2A/cmr/m/n/14.4 двух пря-мых. Для это-го возь-мем ур-е прямой$[]  \OT1/cmr/m/
+n/14.4 =[]\OMS/cmsy/m/n/14.4 )
+ []
+
 [8]
-Overfull \hbox (41.19353pt too wide) in paragraph at lines 186--186
+Overfull \hbox (92.35208pt too wide) in paragraph at lines 193--193
+[]          \T2A/cmtt/m/n/14.4 self.p1.equatian(self.p2).replace("x*", "").spli
+t("-")))[] 
+ []
+
+[9 <./pictures/3.png>]
+Overfull \hbox (77.73535pt too wide) in paragraph at lines 193--193
+[]          \T2A/cmtt/m/n/14.4 return ((u.x - self.p1.x) * (self.p2.y - self.p1
+.y) ==[] 
+ []
+
+
+Overfull \hbox (4.6517pt too wide) in paragraph at lines 193--193
+[]          \T2A/cmtt/m/n/14.4 (u.y - self.p1.y) * (self.p2.x - self.p1.x))[] 
+ []
+
+
+Overfull \hbox (99.66045pt too wide) in paragraph at lines 218--218
+[]      \T2A/cmtt/m/n/14.4 lines = [Line(main_fig[i], main_fig[(i + 1) % len(ma
+in_fig)])[] 
+ []
+
+
+Overfull \hbox (4.6517pt too wide) in paragraph at lines 218--218
+[]      \T2A/cmtt/m/n/14.4 teastpoint = Point(main_fig[0].x, main_fig[0].y)[] 
+ []
+
+
+Overfull \hbox (63.11862pt too wide) in paragraph at lines 218--218
+[]          \T2A/cmtt/m/n/14.4 if all(map(lambda x: not testline.on(x), main_fi
+g)):[] 
+ []
+
+[10]
+Overfull \hbox (4.6517pt too wide) in paragraph at lines 218--218
+[]          \T2A/cmtt/m/n/14.4 if c.y > u.y or (c.y == u.y  and c.x > u.x):[] 
+ []
+
+[11]
+Overfull \hbox (41.19353pt too wide) in paragraph at lines 243--243
 []           \T2A/cmtt/m/n/14.4 (self.p1.x - self.p2.x) - (self.p.x - self.p2.x
 )[] 
  []
 
 
-Overfull \hbox (70.42699pt too wide) in paragraph at lines 186--186
+Overfull \hbox (70.42699pt too wide) in paragraph at lines 243--243
 []            \T2A/cmtt/m/n/14.4 (self.p2.y - self.p.y) *  (self.p1.z - self.p2
 .z) -[] 
  []
 
-[9] [10] (Research_Articl_algoritm.aux) ) 
+[12] (Research_Articl_algoritm.aux) ) 
 Here is how much of TeX's memory you used:
- 3249 strings out of 492942
- 43596 string characters out of 3126215
+ 3254 strings out of 492942
+ 43676 string characters out of 3126215
  118570 words of memory out of 3000000
- 7107 multiletter control sequences out of 15000+200000
+ 7111 multiletter control sequences out of 15000+200000
  8846 words of font info for 25 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,8n,25p,1246b,250s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Users/vniiz/AppData/Local/Programs
-/MiKTeX 2.9/fonts/enc/dvips/cm-super/cm-super-t2a.enc}<C:/Users/vniiz/AppData/L
-ocal/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/vn
-iiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb
-><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/
-cm/cmr10.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/publ
-ic/amsfonts/cm/cmr12.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/font
-s/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/vniiz/AppData/Local/Programs/Mi
-KTeX 2.9/fonts/type1/public/cm-super/sfbx1440.pfb><C:/Users/vniiz/AppData/Local
-/Programs/MiKTeX 2.9/fonts/type1/public/cm-super/sfrm1200.pfb><C:/Users/vniiz/A
-ppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/cm-super/sfrm1440.pfb><C:/U
-sers/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/cm-super/sfrm24
-88.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/cm-
-super/sftt1440.pfb>
-Output written on Research_Articl_algoritm.pdf (10 pages, 176069 bytes).
+{C:/Users/vniiz/AppData/Local/Programs/MiK
+TeX 2.9/fonts/enc/dvips/cm-super/cm-super-t2a.enc}<C:/Users/vniiz/AppData/Local
+/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/vniiz/
+AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:
+/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/c
+mmi12.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/
+amsfonts/cm/cmr10.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/t
+ype1/public/amsfonts/cm/cmr12.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX
+ 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/vniiz/AppData/Local/Prog
+rams/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/vniiz/AppDa
+ta/Local/Programs/MiKTeX 2.9/fonts/type1/public/cm-super/sfbx1440.pfb><C:/Users
+/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/cm-super/sfrm1200.p
+fb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/cm-supe
+r/sfrm1440.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pu
+blic/cm-super/sfrm2488.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fo
+nts/type1/public/cm-super/sftt1440.pfb>
+Output written on Research_Articl_algoritm.pdf (12 pages, 200804 bytes).
 PDF statistics:
- 78 PDF objects out of 1000 (max. 8388607)
+ 93 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
