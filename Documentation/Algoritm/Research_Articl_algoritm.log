@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2020.2.20)  5 DEC 2021 02:11
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2020.2.20)  5 DEC 2021 14:33
 entering extended mode
 **./Research_Articl_algoritm.tex
 (Research_Articl_algoritm.tex
@@ -495,185 +495,199 @@ LaTeX Font Info:    Try loading font information for T2A+cmtt on input line 45.
 d"
 File: t2acmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
 )
-Overfull \hbox (172.7441pt too wide) in paragraph at lines 65--65
+Overfull \hbox (172.7441pt too wide) in paragraph at lines 68--68
 []            \T2A/cmtt/m/n/14.4 return math.sqrt((self.x - other.x)** 2 + (sel
 f.y - other.y)** 2)[] 
  []
 
 
-Overfull \hbox (326.21976pt too wide) in paragraph at lines 65--65
+Overfull \hbox (326.21976pt too wide) in paragraph at lines 68--68
 []            \T2A/cmtt/m/n/14.4 equatin = f"x * {(y_2 - y_1) / (x_2 - x_1)} - 
 {x_1 * (y_2 - y_1) / (x_2 - x_1) + y_1}"[] 
  []
 
 [4]
-Overfull \hbox (4.6517pt too wide) in paragraph at lines 80--80
+Overfull \hbox (33.88516pt too wide) in paragraph at lines 68--68
+[]            \T2A/cmtt/m/n/14.4 return self.x == other.x and self.y == other.y
+[] 
+ []
+
+
+Overfull \hbox (4.6517pt too wide) in paragraph at lines 83--83
 []        \T2A/cmtt/m/n/14.4 return (u.x - point1.x) * (point2.y - point1.y[] 
  []
 
 
-Overfull \hbox (11.96007pt too wide) in paragraph at lines 96--96
+Overfull \hbox (11.96007pt too wide) in paragraph at lines 99--99
 []   \T2A/cmtt/m/n/14.4 def point_in_normal_figure(pl:List[Point], u:Point):[] 
 
  []
 
 
-Overfull \hbox (26.5768pt too wide) in paragraph at lines 96--96
+Overfull \hbox (26.5768pt too wide) in paragraph at lines 99--99
 []       \T2A/cmtt/m/n/14.4 if len(pl) < 3: print("errore!!!!! Beckend  line")[
 ] 
  []
 
 
-Overfull \hbox (70.42699pt too wide) in paragraph at lines 96--96
+Overfull \hbox (70.42699pt too wide) in paragraph at lines 99--99
 []       \T2A/cmtt/m/n/14.4 orintation_right = point_right_line(pl[0], pl[1], p
 l[2])[] 
  []
 
 
-Overfull \hbox (121.58554pt too wide) in paragraph at lines 96--96
+Overfull \hbox (121.58554pt too wide) in paragraph at lines 99--99
 []           \T2A/cmtt/m/n/14.4 if orintation_right != point_right_line(point1,
  point2, u):[] 
  []
 
-
-Overfull \hbox (92.35208pt too wide) in paragraph at lines 96--96
+[5]
+Overfull \hbox (92.35208pt too wide) in paragraph at lines 99--99
 []       \T2A/cmtt/m/n/14.4 if orintation_right != point_right_line(pl[-1], plt
 [0], u):[] 
  []
 
-[5]
-Overfull \hbox (296.9863pt too wide) in paragraph at lines 139--139
+
+Overfull \hbox (296.9863pt too wide) in paragraph at lines 144--144
 []                   \T2A/cmtt/m/n/14.4 if point_right_line(main_fig[i], main_f
 ig[(i + 1) % temp_ln], main_fig[j]):[] 
  []
 
 [6]
-Overfull \hbox (33.88516pt too wide) in paragraph at lines 139--139
-[]   \T2A/cmtt/m/n/14.4 def point_in_bad_figure(main_fig:List[Point], u:Point):
-[] 
+Overfull \hbox (552.77907pt too wide) in paragraph at lines 144--144
+[]           \T2A/cmtt/m/n/14.4 points = [main_fig[i % len(main_fig)], main_fig
+[(i + 2) %           len(main_fig)], main_fig[(i + 1) % len(main_fig)]][] 
  []
 
 
-Overfull \hbox (106.96881pt too wide) in paragraph at lines 139--139
-[]           \T2A/cmtt/m/n/14.4 points = [main_fig[i], main_fig[(i + 2)% len(ma
-in_fig)],([] 
- []
-
-
-Overfull \hbox (106.96881pt too wide) in paragraph at lines 139--139
+Overfull \hbox (318.91139pt too wide) in paragraph at lines 144--144
 []           \T2A/cmtt/m/n/14.4 if (point_right_line(points[0], points[1], poin
-ts[2])and([] 
+ts[2]) and (not orintation_right)) or ([] 
  []
 
 
-Overfull \hbox (114.27718pt too wide) in paragraph at lines 139--139
+Overfull \hbox (260.44447pt too wide) in paragraph at lines 144--144
 []           \T2A/cmtt/m/n/14.4 (not point_right_line(points[0], points[1], poi
-nts[2]))and[] 
+nts[2])) and orintation_right):[] 
  []
 
 
-Overfull \hbox (77.73535pt too wide) in paragraph at lines 139--139
-[]               \T2A/cmtt/m/n/14.4 main_fig.remove(main_fig[(i + 1)% len(main_
-fig)])[] 
+Overfull \hbox (85.04372pt too wide) in paragraph at lines 144--144
+[]               \T2A/cmtt/m/n/14.4 main_fig.remove(main_fig[(i + 1) % len(main
+_fig)])[] 
  []
 
 
-Overfull \hbox (63.11862pt too wide) in paragraph at lines 139--139
-[]           \T2A/cmtt/m/n/14.4 in_fig = infig and not point_in_normal_figure(i
-, u)[] 
+Overfull \hbox (223.90265pt too wide) in paragraph at lines 144--144
+[]   \T2A/cmtt/m/n/14.4 def point_in_bad_figure(main_fig: List[Point], added_fi
+g: List[Point], u: Point):[] 
  []
 
 
-Overfull \hbox (11.96007pt too wide) in paragraph at lines 162--162
-[]  \T2A/cmtt/m/n/14.4 def bad_fig_to_point(main_fig:List[Point], step:int):[] 
-
- []
-
-
-Overfull \hbox (55.81026pt too wide) in paragraph at lines 162--162
-[]      \T2A/cmtt/m/n/14.4 list(main_fig.keys())[0].x, list(main_fig.keys())[0]
-.y)[] 
+Overfull \hbox (85.04372pt too wide) in paragraph at lines 144--144
+[]           \T2A/cmtt/m/n/14.4 in_fig = in_fig and (not point_in_normal_figure
+(i, u))[] 
  []
 
 [7]
-Overfull \hbox (121.58554pt too wide) in paragraph at lines 162--162
-[]      \T2A/cmtt/m/n/14.4 x_list = list(x * step for x in range(minx / step, m
-axx / step))[] 
+Overfull \hbox (26.5768pt too wide) in paragraph at lines 168--168
+[]  \T2A/cmtt/m/n/14.4 def bad_fig_to_point(main_fig:List[Point], step:float):[
+] 
  []
 
 
-Overfull \hbox (114.27718pt too wide) in paragraph at lines 162--162
-[]      \T2A/cmtt/m/n/14.4 y_list = list(y * step for y in range(miny/ step, ma
-xy / step))[] 
+Overfull \hbox (194.66919pt too wide) in paragraph at lines 168--168
+[]      \T2A/cmtt/m/n/14.4 x_list = list(x * step for x in range(int(minx / ste
+p), int(maxx / step)))[] 
+ []
+
+
+Overfull \hbox (194.66919pt too wide) in paragraph at lines 168--168
+[]      \T2A/cmtt/m/n/14.4 y_list = list(y * step for y in range(int(miny / ste
+p), int(maxy / step)))[] 
+ []
+
+
+Overfull \hbox (55.81026pt too wide) in paragraph at lines 168--168
+[]          \T2A/cmtt/m/n/14.4 if point_in_bad_figure(main_fig, added_fig, poin
+t):[] 
  []
 
 <pictures/3.png, id=36, 203.76125pt x 183.18437pt>
 File: pictures/3.png Graphic file (type png)
 <use pictures/3.png>
-Package pdftex.def Info: pictures/3.png  used on input line 164.
+Package pdftex.def Info: pictures/3.png  used on input line 170.
 (pdftex.def)             Requested size: 163.0092pt x 146.54768pt.
 
-Overfull \hbox (23.96033pt too wide) in paragraph at lines 163--166
+Overfull \hbox (23.96033pt too wide) in paragraph at lines 169--172
 \T2A/cmr/m/n/14.4 двух пря-мых. Для это-го возь-мем ур-е прямой$[]  \OT1/cmr/m/
 n/14.4 =[]\OMS/cmsy/m/n/14.4 )
  []
 
-[8]
-Overfull \hbox (92.35208pt too wide) in paragraph at lines 193--193
+[8] [9 <./pictures/3.png>]
+Overfull \hbox (92.35208pt too wide) in paragraph at lines 211--211
 []          \T2A/cmtt/m/n/14.4 self.p1.equatian(self.p2).replace("x*", "").spli
 t("-")))[] 
  []
 
-[9 <./pictures/3.png>]
-Overfull \hbox (77.73535pt too wide) in paragraph at lines 193--193
+
+Overfull \hbox (33.88516pt too wide) in paragraph at lines 211--211
+[]              \T2A/cmtt/m/n/14.4 return Point(self.p1.x, self.p1.x * k2 + b2)
+[] 
+ []
+
+
+Overfull \hbox (48.50189pt too wide) in paragraph at lines 211--211
+[]              \T2A/cmtt/m/n/14.4 return Point(other.p1.x, other.p1.x * k1 + b
+1)[] 
+ []
+
+
+Overfull \hbox (77.73535pt too wide) in paragraph at lines 211--211
 []          \T2A/cmtt/m/n/14.4 return ((u.x - self.p1.x) * (self.p2.y - self.p1
 .y) ==[] 
  []
 
 
-Overfull \hbox (4.6517pt too wide) in paragraph at lines 193--193
+Overfull \hbox (4.6517pt too wide) in paragraph at lines 211--211
 []          \T2A/cmtt/m/n/14.4 (u.y - self.p1.y) * (self.p2.x - self.p1.x))[] 
  []
 
-
-Overfull \hbox (99.66045pt too wide) in paragraph at lines 218--218
+[10]
+Overfull \hbox (99.66045pt too wide) in paragraph at lines 241--241
 []      \T2A/cmtt/m/n/14.4 lines = [Line(main_fig[i], main_fig[(i + 1) % len(ma
 in_fig)])[] 
  []
 
 
-Overfull \hbox (4.6517pt too wide) in paragraph at lines 218--218
-[]      \T2A/cmtt/m/n/14.4 teastpoint = Point(main_fig[0].x, main_fig[0].y)[] 
- []
-
-
-Overfull \hbox (63.11862pt too wide) in paragraph at lines 218--218
+Overfull \hbox (63.11862pt too wide) in paragraph at lines 241--241
 []          \T2A/cmtt/m/n/14.4 if all(map(lambda x: not testline.on(x), main_fi
 g)):[] 
  []
 
-[10]
-Overfull \hbox (4.6517pt too wide) in paragraph at lines 218--218
-[]          \T2A/cmtt/m/n/14.4 if c.y > u.y or (c.y == u.y  and c.x > u.x):[] 
+
+Overfull \hbox (136.20227pt too wide) in paragraph at lines 241--241
+[]              \T2A/cmtt/m/n/14.4 if all(list(map(lambda x: x not in main_fig,
+ crossings))):[] 
  []
 
-[11]
-Overfull \hbox (41.19353pt too wide) in paragraph at lines 243--243
+[11] [12]
+Overfull \hbox (41.19353pt too wide) in paragraph at lines 266--266
 []           \T2A/cmtt/m/n/14.4 (self.p1.x - self.p2.x) - (self.p.x - self.p2.x
 )[] 
  []
 
 
-Overfull \hbox (70.42699pt too wide) in paragraph at lines 243--243
+Overfull \hbox (70.42699pt too wide) in paragraph at lines 266--266
 []            \T2A/cmtt/m/n/14.4 (self.p2.y - self.p.y) *  (self.p1.z - self.p2
 .z) -[] 
  []
 
-[12] (Research_Articl_algoritm.aux) ) 
+[13] (Research_Articl_algoritm.aux) ) 
 Here is how much of TeX's memory you used:
  3254 strings out of 492942
  43676 string characters out of 3126215
- 118570 words of memory out of 3000000
+ 119570 words of memory out of 3000000
  7111 multiletter control sequences out of 15000+200000
  8846 words of font info for 25 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -694,9 +708,9 @@ fb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/cm-supe
 r/sfrm1440.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pu
 blic/cm-super/sfrm2488.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fo
 nts/type1/public/cm-super/sftt1440.pfb>
-Output written on Research_Articl_algoritm.pdf (12 pages, 200804 bytes).
+Output written on Research_Articl_algoritm.pdf (13 pages, 201927 bytes).
 PDF statistics:
- 93 PDF objects out of 1000 (max. 8388607)
+ 97 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

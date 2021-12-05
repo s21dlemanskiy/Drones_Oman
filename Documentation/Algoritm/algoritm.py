@@ -1,6 +1,5 @@
-import math, itertools
+import math, itertools, drawzero, copy
 from typing import List
-
 
 class Point:
     def __init__(self, x: float, y: float):
@@ -17,6 +16,9 @@ class Point:
         if printer:
             print(f"y = {equatin}")
         return equatin
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
 
     def __hash__(self):
         return hash((self.x, self.y))
@@ -57,28 +59,34 @@ def orintation_righ(main_fig: List[Point]):
     return r > l
 
 
-def point_in_bad_figure(main_fig: List[Point], u: Point):
+def fig_decision(main_fig: List[Point]):
+    main_fig = copy.copy(main_fig)
     added_fig = []
     orintation_right = orintation_righ(main_fig)
     count = 0
     i = 0
     while True:
-        points = [main_fig[i], main_fig[(i + 2) % len(main_fig)], main_fig[(i + 1) % len(main_fig)]]
-        if (point_right_line(points[0], points[1], points[2]) and (not orintation_right)) or ((not point_right_line(points[0], points[1], points[2])) and orintation_right):
+        points = [main_fig[i % len(main_fig)], main_fig[(i + 2) % len(main_fig)], main_fig[(i + 1) % len(main_fig)]]
+        if (point_right_line(points[0], points[1], points[2]) and (not orintation_right)) or (
+                (not point_right_line(points[0], points[1], points[2])) and orintation_right):
             count += 1
         else:
             added_fig += [points]
             main_fig.remove(main_fig[(i + 1) % len(main_fig)])
             count = 0
         i += 1
-        if count + 3 == len(main_fig):
+        if count == len(main_fig) + 3:
             break
+    return (main_fig, added_fig)
+
+
+def point_in_bad_figure(main_fig: List[Point], added_fig: List[Point], u: Point):
     in_fig = point_in_normal_figure(main_fig, u)
     for i in added_fig:
-        in_fig = in_fig and not point_in_normal_figure(i, u)
+        in_fig = in_fig and (not point_in_normal_figure(i, u))
     return in_fig
 
-def bad_fig_to_point(main_fig:List[Point], step:int):
+def bad_fig_to_point(main_fig:List[Point], step:float):
     fig_list = []
     maxx, maxy = minx, miny =  (
     main_fig[0].x, main_fig[0].y)
@@ -93,9 +101,10 @@ def bad_fig_to_point(main_fig:List[Point], step:int):
             miny = i.y
     x_list = list(x * step for x in range(int(minx / step), int(maxx / step)))
     y_list = list(y * step for y in range(int(miny / step), int(maxy / step)))
+    main_fig, added_fig = fig_decision(main_fig)
     for x, y in itertools.product(x_list, y_list):
         point = Point(x, y)
-        if point_in_bad_figure(main_fig, point):
+        if point_in_bad_figure(main_fig, added_fig, point):
             fig_list += [point]
     return fig_list
 
@@ -121,6 +130,8 @@ class Line:
             return Point(other.p1.x, other.p1.x * k1 + b1)
         k1, b1 = self.equatian()
         k2, b2 = other.equatian()
+        if k1 == k2:
+            return None
         x = (b1 - b2) / (k2 - k1)
         y = k2 * x + b2
         return Point(x, y)
@@ -141,18 +152,23 @@ def point_in_fig(main_fig:List[Point], u:Point):
     if u in main_fig:return True
     lines = [Line(main_fig[i], main_fig[(i + 1) % len(main_fig)])
              for i in range(len(main_fig))]
-    teastpoint = Point(main_fig[0].x, main_fig[0].y)
+    teastpoint = Point(u.x, u.y + 1)
+    dx = 1
     while True:
-        teastpoint.x += 1
+        dx += 1
+        teastpoint.x += dx
+        teastpoint.y += 1
         testline = Line(u, teastpoint)
         if all(map(lambda x: not testline.on(x), main_fig)):
-            break
-    crossings = []
-    for line in lines:
-        c = testline.crossing(line)
-        if line.inl(c):
-            crossings +=[c]
-    cross = {"r":0, "l":0}
+            crossings = []
+            for line in lines:
+                c = testline.crossing(line)
+                if c is not None:
+                    if line.inl(c):
+                        crossings += [c]
+            if all(list(map(lambda x: x not in main_fig, crossings))):
+                break
+    cross = {"r": 0, "l": 0}
     for c in crossings:
         if c.y > u.y or (c.y == u.y and c.x > u.x):
             cross["l"] += 1
@@ -160,4 +176,23 @@ def point_in_fig(main_fig:List[Point], u:Point):
             cross["r"] += 1
     return cross["r"] % 2 == cross["l"] % 2 == 1
 
-print(point_in_fig([Point(1.2, 4), Point(2, 4), Point(2, 2), Point(1.2, 2)], Point(2.4 ,3)))
+
+def paint_f(main_fig:List[Point], add:int):
+    a = list(map(lambda x: (x.x * add, x.y * add), main_fig))
+    drawzero.polygon("red", a)
+
+
+def paint_p(points:List[Point], add:int):
+    a = list(map(lambda x: (x.x * add, x.y * add), points))
+    for i in a:
+        drawzero.circle('yellow', i, 2)
+
+def paint_l(points:List[Point], add:int):
+    a = list(map(lambda x: (x.x * add, x.y * add), points))
+    drawzero.line("blue", a)
+
+fig = [Point(0, 0), Point(3, 0), Point(3, 3), Point(2, 1), Point(1, 3)]
+paint_f(fig, 100)
+for i in bad_fig_to_point(fig, 0.1):
+    if not point_in_fig(fig, i):
+        paint_p([i], 100)
