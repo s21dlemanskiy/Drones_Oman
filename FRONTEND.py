@@ -364,7 +364,8 @@ class Ui_MainWindow(object):
     def open_files_changer(self):
         global file_market, file_NFZ, file_regions
         a, b, c = file_market, file_NFZ, file_regions
-        a, b, c = a.replace(rf"{os.getcwd()}\Data\ ", ""), b.replace(rf"{os.getcwd()}\Data\ ", ""), c.replace(rf"{os.getcwd()}\Data\ ", "")
+        d = "\\Data\\"
+        a, b, c = a.replace(os.getcwd() + d, ""), b.replace(os.getcwd()+d, ""), c.replace(os.getcwd()+d, "")
         print(a, b, c)
         self.comboBox_5.setCurrentText(c)
         self.comboBox_6.setCurrentText(a)
@@ -375,8 +376,8 @@ class Ui_MainWindow(object):
     def update_market_info(self, text):
         self.comboBox_3.setCurrentText(market[text][1])
         self.Score2.setCurrentText(str(market[text][2]))
-        self.lineEdit_5.setText(str(market[text][0].x))
-        self.lineEdit_6.setText(str(market[text][0].y))
+        self.lineEdit_5.setText(str(market[text][0][0]))
+        self.lineEdit_6.setText(str(market[text][0][1]))
 
     def update_peoaple_per_region(self, text):
         global regeon
@@ -454,6 +455,10 @@ class Ui_MainWindow(object):
         file_NFZ = fr"{os.getcwd()}\Data\{self.comboBox_7.currentText()}"
         print(file_market, file_regions, file_NFZ)
         regeon, market = BECKEND.Update(file_market, file_regions, file_NFZ)
+        self.comboBox_4.clear()
+        self.comboBox_4.addItems(list(i for i in market.keys()))
+        self.comboBox_2.clear()
+        self.comboBox_2.addItems(list(regeon.keys()))
         self.start_frame.show()
         self.file_changer.hide()
 

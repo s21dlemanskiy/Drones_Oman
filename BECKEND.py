@@ -1,4 +1,4 @@
-import math, itertools, folium, webbrowser, os, datetime, pyperclip, time, pyautogui, webbrowser
+import math, itertools, folium, webbrowser, os, datetime, pyperclip, time, pyautogui, webbrowser, copy
 from typing import List
 from numba import njit
 from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning
@@ -79,6 +79,7 @@ def orintation_righ(main_fig):
 
 
 def bad_figure_to_points(main_fig):
+    main_fig = copy.copy(main_fig)
     added_fig = []
     orintation_right = orintation_righ(main_fig)
     count = 0
@@ -89,10 +90,10 @@ def bad_figure_to_points(main_fig):
             count += 1
         else:
             added_fig += [points]
-            main_fig.remove(main_fig[(i + 1)% len(main_fig)])
+            main_fig.remove(main_fig[(i + 1) % len(main_fig)])
             count = 0
         i += 1
-        if count + 3 == len(main_fig):      #number 3 is random num for skip mistake
+        if count == len(main_fig) + 3:
             break
     main_poins = normal_figure_to_points(main_fig)
     added_points = []
