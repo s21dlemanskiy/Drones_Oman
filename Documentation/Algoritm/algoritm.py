@@ -177,6 +177,48 @@ def point_in_fig(main_fig:List[Point], u:Point):
     return cross["r"] % 2 == cross["l"] % 2 == 1
 
 
+class Point3:
+    def __init__(self, x:float , y:float, z:float):
+        self.x = x
+        self.y = y
+        self.z = z
+
+    def lenof(self, other):
+        return math.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2 + (self.z - other.z) ** 2)
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y and self.z == other.z
+
+    def __hash__(self):
+        return hash((self.x, self.y, self.z))
+
+    def __str__(self):
+        return f"({self.x}, {self.y}, {self.z})"
+
+    def __repr__(self):
+        return f"<{self.x}, {self.y}, {self.z}>"
+
+class Plane3:
+    def __init__(self, p1: Point3, p2: Point3, p3: Point3):
+        self.p1 = p1
+        self.p2 = p2
+        self.p3 = p3
+
+class Line3:
+    def __init__(self, p1: Point3, p2: Point3):
+        self.p1 = p1
+        self.p2 = p2
+
+    def include(self, p: Point3):
+        return (p.y - self.p2.y) * (self.p1.x - self.p2.x) == (p.x - self.p2.x) * (self.p1.y - self.p2.y) and (self.p2.y - p.y) * (self.p1.z - self.p2.z) == (self.p2.z - p.z) * (self.p1.y - self.p2.y) == 0
+
+    def crossing(self, p: Plane3):
+        pass
+
+
+
+
+
 def paint_f(main_fig:List[Point], add:int):
     a = list(map(lambda x: (x.x * add, x.y * add), main_fig))
     drawzero.polygon("red", a)
@@ -191,8 +233,13 @@ def paint_l(points:List[Point], add:int):
     a = list(map(lambda x: (x.x * add, x.y * add), points))
     drawzero.line("blue", a)
 
-fig = [Point(0, 0), Point(3, 0), Point(3, 3), Point(2, 1), Point(1, 3)]
-paint_f(fig, 100)
-for i in bad_fig_to_point(fig, 0.1):
-    if not point_in_fig(fig, i):
-        paint_p([i], 100)
+
+def test1():
+    fig = [Point(0, 0), Point(3, 0), Point(3, 3), Point(2, 1), Point(1, 3)]
+    paint_f(fig, 100)
+    for i in bad_fig_to_point(fig, 0.1):
+        if not point_in_fig(fig, i):
+            paint_p([i], 100)
+
+if __name__ == "__main__":
+    test1()
