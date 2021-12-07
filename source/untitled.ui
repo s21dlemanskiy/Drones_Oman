@@ -20,7 +20,7 @@
       <x>10</x>
       <y>0</y>
       <width>721</width>
-      <height>211</height>
+      <height>311</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -32,8 +32,8 @@
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>10</y>
+       <x>370</x>
+       <y>170</y>
        <width>221</width>
        <height>31</height>
       </rect>
@@ -45,11 +45,14 @@
     <widget class="QPushButton" name="pushButton">
      <property name="geometry">
       <rect>
-       <x>350</x>
-       <y>10</y>
+       <x>0</x>
+       <y>220</y>
        <width>171</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="inputMethodHints">
+      <set>Qt::ImhNone</set>
      </property>
      <property name="text">
       <string>Добавить ЦА</string>
@@ -59,7 +62,7 @@
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>50</y>
+       <y>170</y>
        <width>211</width>
        <height>31</height>
       </rect>
@@ -71,8 +74,8 @@
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
-       <x>230</x>
-       <y>50</y>
+       <x>580</x>
+       <y>170</y>
        <width>121</width>
        <height>31</height>
       </rect>
@@ -84,21 +87,21 @@
     <widget class="QPushButton" name="pushButton_4">
      <property name="geometry">
       <rect>
-       <x>350</x>
-       <y>50</y>
-       <width>361</width>
+       <x>0</x>
+       <y>270</y>
+       <width>351</width>
        <height>31</height>
       </rect>
      </property>
      <property name="text">
-      <string>Изменить для регионов</string>
+      <string>Изменить населенность регионов</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_10">
      <property name="geometry">
       <rect>
-       <x>230</x>
-       <y>10</y>
+       <x>210</x>
+       <y>170</y>
        <width>121</width>
        <height>31</height>
       </rect>
@@ -110,8 +113,8 @@
     <widget class="QPushButton" name="pushButton_9">
      <property name="geometry">
       <rect>
-       <x>540</x>
-       <y>10</y>
+       <x>180</x>
+       <y>220</y>
        <width>171</width>
        <height>31</height>
       </rect>
@@ -123,10 +126,10 @@
     <widget class="QLineEdit" name="lineEdit_7">
      <property name="geometry">
       <rect>
-       <x>100</x>
-       <y>90</y>
-       <width>51</width>
-       <height>31</height>
+       <x>280</x>
+       <y>0</y>
+       <width>71</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="text">
@@ -137,21 +140,26 @@
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>90</y>
-       <width>81</width>
-       <height>31</height>
+       <y>0</y>
+       <width>261</width>
+       <height>41</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
      <property name="text">
-      <string>Кол-во пачтамтов</string>
+      <string>Количество пачтамтов</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_13">
      <property name="geometry">
       <rect>
-       <x>170</x>
-       <y>90</y>
-       <width>171</width>
+       <x>0</x>
+       <y>60</y>
+       <width>231</width>
        <height>31</height>
       </rect>
      </property>
@@ -162,10 +170,10 @@
     <widget class="QPushButton" name="pushButton_14">
      <property name="geometry">
       <rect>
-       <x>490</x>
-       <y>90</y>
-       <width>221</width>
-       <height>51</height>
+       <x>400</x>
+       <y>0</y>
+       <width>321</width>
+       <height>81</height>
       </rect>
      </property>
      <property name="font">
@@ -180,8 +188,8 @@
     <widget class="QCheckBox" name="checkBox">
      <property name="geometry">
       <rect>
-       <x>370</x>
-       <y>90</y>
+       <x>250</x>
+       <y>60</y>
        <width>111</width>
        <height>31</height>
       </rect>
@@ -190,43 +198,56 @@
       <string>Not Update</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_23">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>160</y>
-       <width>221</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Кол-во значемых цифр</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit_8">
-     <property name="geometry">
-      <rect>
-       <x>220</x>
-       <y>160</y>
-       <width>51</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>3</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="pushButton_16">
      <property name="geometry">
       <rect>
        <x>540</x>
-       <y>160</y>
+       <y>110</y>
        <width>181</width>
        <height>31</height>
       </rect>
      </property>
      <property name="text">
       <string>Edit NFZ as .GeoJson</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="geometry">
+      <rect>
+       <x>290</x>
+       <y>110</y>
+       <width>181</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Edit CA as .GeoJson</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_6">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>110</y>
+       <width>191</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Edit regions as .GeoJson</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_17">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>220</y>
+       <width>321</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>See critical values</string>
      </property>
     </widget>
    </widget>
@@ -237,9 +258,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>210</y>
+      <y>320</y>
       <width>721</width>
-      <height>151</height>
+      <height>121</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -313,24 +334,11 @@
       <string>0</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_2">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>70</y>
-       <width>181</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Edit as .GeoJson</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="pushButton_3">
      <property name="geometry">
       <rect>
        <x>600</x>
-       <y>110</y>
+       <y>80</y>
        <width>121</width>
        <height>41</height>
       </rect>
@@ -379,7 +387,7 @@
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>110</y>
+       <y>70</y>
        <width>111</width>
        <height>41</height>
       </rect>
@@ -432,9 +440,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>360</y>
-      <width>561</width>
-      <height>221</height>
+      <y>430</y>
+      <width>721</width>
+      <height>141</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -448,7 +456,7 @@
       <rect>
        <x>0</x>
        <y>10</y>
-       <width>561</width>
+       <width>721</width>
        <height>31</height>
       </rect>
      </property>
@@ -456,8 +464,8 @@
     <widget class="QPushButton" name="pushButton_5">
      <property name="geometry">
       <rect>
-       <x>450</x>
-       <y>160</y>
+       <x>610</x>
+       <y>90</y>
        <width>111</width>
        <height>41</height>
       </rect>
@@ -466,23 +474,10 @@
       <string>Apply</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_6">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>100</y>
-       <width>151</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Edit as .GeoJson</string>
-     </property>
-    </widget>
     <widget class="QLineEdit" name="Count_people_region">
      <property name="geometry">
       <rect>
-       <x>230</x>
+       <x>520</x>
        <y>60</y>
        <width>201</width>
        <height>21</height>
@@ -497,19 +492,24 @@
       <rect>
        <x>0</x>
        <y>60</y>
-       <width>181</width>
+       <width>291</width>
        <height>21</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="text">
-      <string>кол-во людей в регионе</string>
+      <string>Количество людей в регионе</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_7">
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>160</y>
+       <y>90</y>
        <width>111</width>
        <height>41</height>
       </rect>
@@ -769,7 +769,7 @@
       </font>
      </property>
      <property name="text">
-      <string>регионы</string>
+      <string>РЕГИОНЫ</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_22">
