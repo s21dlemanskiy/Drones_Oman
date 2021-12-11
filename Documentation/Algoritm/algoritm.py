@@ -1,6 +1,9 @@
 import math, itertools, drawzero, copy
 from typing import List
 
+"""Main Solve____________________________"""
+
+
 class Point:
     def __init__(self, x: float, y: float):
         self.x = x
@@ -109,6 +112,8 @@ def bad_fig_to_point(main_fig:List[Point], step:float):
     return fig_list
 
 
+"""Line solve _________________________"""
+
 class Line:
     def __init__(self, p1: Point, p2: Point):
         self.p1 = p1
@@ -147,7 +152,6 @@ class Line:
             self.p1.y, self.p2.y)
         return x1 <= u.x <= x2 and y1 <= u.y <= y2
 
-
 def point_in_fig(main_fig:List[Point], u:Point):
     if u in main_fig:return True
     lines = [Line(main_fig[i], main_fig[(i + 1) % len(main_fig)])
@@ -166,7 +170,7 @@ def point_in_fig(main_fig:List[Point], u:Point):
                 if c is not None:
                     if line.inl(c):
                         crossings += [c]
-            if all(list(map(lambda x: x not in main_fig, crossings))):
+            if all(map(lambda x: x not in main_fig, crossings)):
                 break
     cross = {"r": 0, "l": 0}
     for c in crossings:
@@ -177,44 +181,161 @@ def point_in_fig(main_fig:List[Point], u:Point):
     return cross["r"] % 2 == cross["l"] % 2 == 1
 
 
+
+
+"""3D figure______________________________"""
+
+
 class Point3:
-    def __init__(self, x:float , y:float, z:float):
+    def __init__(self, x: float, y: float, z: float):
         self.x = x
         self.y = y
         self.z = z
 
-    def lenof(self, other):
-        return math.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2 + (self.z - other.z) ** 2)
-
+        
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y and self.z == other.z
 
-    def __hash__(self):
-        return hash((self.x, self.y, self.z))
-
-    def __str__(self):
-        return f"({self.x}, {self.y}, {self.z})"
-
-    def __repr__(self):
-        return f"<{self.x}, {self.y}, {self.z}>"
-
-class Plane3:
-    def __init__(self, p1: Point3, p2: Point3, p3: Point3):
-        self.p1 = p1
-        self.p2 = p2
-        self.p3 = p3
 
 class Line3:
     def __init__(self, p1: Point3, p2: Point3):
+        assert p1 != p2, "Попытка создания прямой по двум одинаковым точкам"
         self.p1 = p1
         self.p2 = p2
 
-    def include(self, p: Point3):
-        return (p.y - self.p2.y) * (self.p1.x - self.p2.x) == (p.x - self.p2.x) * (self.p1.y - self.p2.y) and (self.p2.y - p.y) * (self.p1.z - self.p2.z) == (self.p2.z - p.z) * (self.p1.y - self.p2.y) == 0
+    def on(self, p: Point3):
+        return ((p.y - self.p2.y) * (self.p1.x - self.p2.x) -
+                (p.x - self.p2.x) * (self.p1.y - self.p2.y)) == (
+                (self.p2.y - p.y) * (self.p1.z - self.p2.z) -
+                (self.p2.z - p.z) * (self.p1.y - self.p2.y)) == 0
 
-    def crossing(self, p: Plane3):
-        pass
+    def inl(self, p:Point3):
+        x1, x2 = min(self.p1.x, self.p2.x), max(
+            self.p1.x, self.p2.x)
+        y1, y2 = min(self.p1.y, self.p2.y), max(
+            self.p1.y, self.p2.y)
+        z1, z2 = min(self.p1.z, self.p2.z), max(
+            self.p1.z, self.p2.z)
+        return all((x1 <= p.x <=  x2, y1 <= p.y <= y2, z1 <= p.z <= z2))
 
+
+
+
+class Plane3:
+    def __init__(self, points: List[Point3]):
+        assert len(points) >= 3, "попытка создания плоскости менее чем по 3 точкам"
+        x1, y1, z1 = points[0].x, points[0].y, points[0].z
+        x2, y2, z2 = points[1].x, points[1].y, points[1].z
+        x3, y3, z3 = points[2].x, points[2].y, points[2].z
+        if (z3 * y2 + y3 * z2) * z3 + y1 * z3 * (x3 * z2 + x2 * z3) + z1 * (2 * y3 * x3 * z2 + x2 * y3 * z3 + z3 * y2 * x3) == 0 or (z3 * y2 + y3 * z2) == 0 or z3 == 0:
+
+            self.equastion = {"A":a, "B":b, "C":c, "D":0}
+        else:
+            a = ((z3 * y2 + y3 * z2)*z3 * x1 - (z3 * y2 - z2 * z3)*y1 * z3 - ((z3 * y2 + y3 * z2) - (y3 * y2 - z2 * y3)) * z1 *z3)/(
+                (z3 * y2 + y3 * z2) * z3 + y1 * z3 * (x3 * z2 + x2 * z3) + z1 * (2 * y3 * x3 * z2 + x2 * y3 * z3 + z3 * y2 * x3))
+            b = ((z3 * y2 - z2 * z3) - a * (x3 * z2 + x2 * z3))/(z3 * y2 + y3 * z2)
+            c = 1 - b * y3 / z3 - a * x3 / z3
+            self.equastion = {"A":a, "B":b, "C":c, "D":1}
+            print(f"{a}x + {b}y + {c}z = 1")
+        self.lines = []
+        self.points = points
+        for i in range(len(points)):
+            self.lines += [Line3(points[i], points[(i+1) % len(points)])]
+
+    def on(self, p:Point3):
+        return 0.99999 <= self.equastion["A"] * p.x + self.equastion["B"] * p.y + self.equastion["C"] * p.z <= 1.000001
+
+    def inp(self, p:Point3):
+        if self.on(p) == False: return False
+        if self.equastion["A"] == 0 and self.equastion["B"] == 0:
+            fig = []
+            point = Point(p.x, p.y)
+            for i in self.points:
+                fig += Point(i.x, i.y)
+            return point_in_fig(fig, point)
+        elif self.equastion["C"] == 0 and self.equastion["B"] == 0:
+            fig = []
+            point = Point(p.z, p.y)
+            for i in self.points:
+                fig += Point(i.z, i.y)
+            return point_in_fig(fig, point)
+        elif self.equastion["A"] == 0 and self.equastion["C"] == 0:
+            fig = []
+            point = Point(p.z, p.x)
+            for i in self.points:
+                fig += Point(i.z, i.x)
+            return point_in_fig(fig, point)
+        else:
+            fig = []
+            point = Point(p.x, p.y)
+            for i in self.points:
+                fig += Point(i.x, i.y)
+            return point_in_fig(fig, point)
+
+    def crossing(self, line:Line3):
+        x1, y1, z1, x2, y2, z2 = line.p1.x, line.p1.y, line.p1.z, line.p2.x, line.p2.y, line.p2.z
+        dx = x2 - x1
+        dy = y2 - y1
+        dz = z2 - z1
+        if self.equastion["A"] * dx + self.equastion["B"] * dy + self.equastion["C"] * dz == 0:
+            return None
+        if dx == 0:
+            if self.equastion["B"] * dy + self.equastion["C"] * dz == 0:
+                return None
+            x = x1
+            y = (dy - self.equastion["A"] * x1 * dy + self.equastion["C"] * dz * y1 - self.equastion["C"] * z1) / (
+                self.equastion["B"] * dy + self.equastion["C"] * dz)
+            z = (dz)*(y - y1) / dy + z1
+            return Point3(x, y, z)
+        x = (self.equastion["A"] * dx - self.equastion["B"] * (dx * y1 - dy * x1) - self.equastion["C"] * (z1 * dx - dz * x1))/(
+            self.equastion["A"] * dx + self.equastion["B"] * dy + self.equastion["C"] * dz)
+        y = dy * (x - x1) / dx + y1
+        z = dz * (x - x1) / dx + z1
+        return Point3(x, y, z)
+
+def point_in_fig_3d(main_fig:List[Plane3], p:Point3):
+    lines = []
+    for i in main_fig:
+        lines += i.lines
+        if i.inp(p):
+            return True
+    testpoint = Point3(p.x, p.y + 1.0, p.z + 2.0)
+    dy = 1.0
+    dz = 2.0
+    while True:
+        testpoint = Point3(testpoint.x + 1, testpoint.y + dy, testpoint.z + dz)
+        testline = Line3(p, testpoint)
+        dy += 1.0
+        dz *= 2.0
+        points = []
+        for i in main_fig:
+            for j in i.points:
+                points += [j]
+        crossings = []
+        for plane in main_fig:
+            c = plane.crossing(testline)
+            if c is not None and plane.inp(c):
+                crossings += [c]
+        cros_on_l = []
+        for line in lines:
+            for c in crossings:
+                cros_on_l += [not line.on(c)]
+        if all(cros_on_l):
+            break
+    cross = {"r": 0, "l": 0}
+    for c in crossings:
+        if c.y > p.y or (c.y == p.y and c.x != p.x and c.x > p.x) or (c.y == p.y and c.x == p.x and c.z > p.z):
+            cross["l"] += 1
+        else:
+            cross["r"] += 1
+    print(cross, crossings)
+    return cross["r"] % 2 == cross["l"] % 2 == 1
+
+
+
+
+
+"""Print functions__________________________________________"""
 
 
 
@@ -241,5 +362,30 @@ def test1():
         if not point_in_fig(fig, i):
             paint_p([i], 100)
 
-if __name__ == "__main__":
-    test1()
+
+def test2():
+    main_fig = []
+    o = int(input("кол-во граней >>"))
+    for i in range(o):
+        list_point = []
+        n = int(input(f"кол-во вершин в гране {i}>>"))
+        for j in range(n):
+            x, y, z = list(map(float, input(f"x y z вершины номер {j}>>").split()))
+            list_point += [Point3(x, y, z)]
+    x, y, z = list(map(float, input(f"x y z точки >>").split()))
+    p = Point3(x, y, z)
+    print(point_in_fig_3d(main_fig, p))
+
+def test3():
+    main_fig = [Plane3([Point3(0, 0, 0), Point3(0, 0, 1), Point3(0, 1, 1), Point3(0, 1, 0)])]
+    main_fig += [Plane3([Point3(0, 0, 0), Point3(1, 0, 0), Point3(1, 1, 0), Point3(0, 1, 0)])]
+    main_fig += [Plane3([Point3(0, 0, 0), Point3(1, 0, 0), Point3(1, 0, 1), Point3(0, 0, 1)])]
+    main_fig += [Plane3([Point3(1, 1, 1), Point3(1, 1, 0), Point3(1, 0, 0), Point3(1, 0, 1)])]
+    main_fig += [Plane3([Point3(1, 1, 1), Point3(0, 1, 1), Point3(0, 0, 1), Point3(1, 0, 1)])]
+    main_fig += [Plane3([Point3(1, 1, 1), Point3(0, 1, 1), Point3(0, 1, 0), Point3(1, 1, 0)])]
+    x, y, z = list(map(float, input(f"x y z точки >>").split()))
+    p = Point3(x, y, z)
+    print(point_in_fig_3d(main_fig, p))
+
+
+test3()

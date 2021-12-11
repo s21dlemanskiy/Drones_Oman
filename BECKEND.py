@@ -1,5 +1,6 @@
 import math, itertools, folium, webbrowser, os, datetime, pyperclip, time, pyautogui, webbrowser, copy
 from typing import List
+import matplotlib.pyplot as plt
 from numba import njit
 from numba.core.errors import NumbaDeprecationWarning, NumbaPendingDeprecationWarning
 import warnings
@@ -14,14 +15,15 @@ other_delta_point = 10 ** delta_point
 cargo_per_peeple = {
     "Default": 0.08
 }
+m = folium.Map(location=[23.5, 58.5])
 typekof = {
     "Default": 0,
-    "market": 10,
-    "BC": 10,
-    "SHOPPINGCENTER": 10,
-    "Market": 1,
-    "HyperMarket": 1,
-    "Businesscenter": 1
+    "market": 0,
+    "BC": 0,
+    "SHOPPINGCENTER": 0,
+    "Market": 0,
+    "HyperMarket": 0,
+    "Businesscenter": 0
 }
 R = {
     "regeon":0.009,
@@ -54,7 +56,7 @@ def normal_figure_to_points(pl:tuple) -> List[tuple]:
     global delta_point
     global other_delta_point
     x, y = list(map(lambda a: a[0] ,pl)),list(map(lambda a: a[1] ,pl))
-    x,y = ([i / (other_delta_point) for i in range(int(min(x) * (other_delta_point)), int(max(x) * (other_delta_point)))], [i / (other_delta_point) for i in range(int(min(y) * (10 ** delta_point)), int(max(y) * (10 ** delta_point)))])
+    x, y = ([i / (other_delta_point) for i in range(int(min(x) * (other_delta_point)), int(max(x) * (other_delta_point)))], [i / (other_delta_point) for i in range(int(min(y) * (10 ** delta_point)), int(max(y) * (10 ** delta_point)))])
     all_points = list(map(lambda x:(x[0], x[1]), itertools.product(x,y)))
     del x, y
     new_all_points = []
@@ -96,29 +98,22 @@ def bad_figure_to_points(main_fig):
         if count == len(main_fig) + 3:
             break
     main_poins = normal_figure_to_points(main_fig)
-    added_points = []
-    for i in added_fig:
-        added_points += normal_figure_to_points(i)
-    for i in main_poins:
-        if i in added_points:
-            main_poins.remove(i)
-    return main_poins
+    main_poins2 = []
+    # show_test(added_fig)
+    for i in main_poins:        #(23.636, 58.526)
+        boool = True
+        for fig in added_fig:
+            if point_in_normal_figure(fig, i):
+                boool = False
+        if boool:
+            main_poins2 += [i]
+    # see_grid(main_poins2)
+    return main_poins2
 
 @njit()
 def lenof(a, b):
-    return math.sqrt((a[0] - b[0])**2 + (a[1] - b[1])**2)
+    return ((a[0] - b[0])**2 + (a[1] - b[1])**2) ** 0.5
 
-
-@njit()
-def point_function2(point, R_market1, R_regeon1, regeon11, regeon22, actcenter11, actcenter22)->float:
-    score = 0
-    for i in range(len(actcenter11)):
-        if lenof(actcenter11[i], point) < R_market1:
-            score += actcenter22[i] / (R_market1/ 10 + lenof(actcenter11[i], point) ** 3)
-    for i in range(len(regeon11)):
-        if lenof(regeon11[i], point) < R_regeon1:
-            score += regeon22[i] / (R_regeon1/ 10 + lenof(regeon11[i], point) ** 2)
-    return score
 
 
 def bruteforce()->tuple:
@@ -126,8 +121,8 @@ def bruteforce()->tuple:
     maxscore = [0,0, 0]
     for i in list_func.keys():
         if list_func[i] > maxscore[2] and i not in NFZ:
-            maxscore = [i[0],i[1], list_func[i]]
-    return (maxscore[0], maxscore[1])
+            maxscore = [i[0], i[1], list_func[i]]
+    return (maxscore[0], maxscore[1], maxscore[2])
 
 @njit()
 def added_pochtamt(point, delta_point,R_market, R_regeon, regeon1, regeon2, actcenter1, actcenter2):
@@ -141,13 +136,18 @@ def added_pochtamt(point, delta_point,R_market, R_regeon, regeon1, regeon2, actc
     points2 = []
     for i in range(len(regeon1)):
         if lenof(regeon1[i], point) < R_regeon:
-            regeon2[i] = regeon2[i] * ((lenof(regeon1[i], point) / R_regeon) ** 3)
+            if lenof(regeon1[i], point) < R_regeon * 0.5:
+                regeon2[i] = 0
+            elif lenof(regeon1[i], point) > R_regeon * 0.75:
+                regeon2[i] = regeon2[i] * (0.75 ** 3)
+            else:
+                regeon2[i] = regeon2[i] * ((lenof(regeon1[i], point) / R_regeon) ** 3)
             regg1.append(i)
     for i in range(len(regeon1)):
         if lenof(regeon1[i], point) < 2 * R_regeon:
             points.append(regeon1[i])
             points2.append(point_function2(regeon1[i], R_market, R_regeon, regeon1, regeon2, actcenter1, actcenter2))
-    return regg1 ,regeon2, actg1,actcenter2, points, points2
+    return regg1, regeon2, actg1,actcenter2, points, points2
 
 def point_function(point):
     global regeons, actcenter
@@ -162,6 +162,17 @@ def point_function(point):
     return score
 
 @njit()
+def point_function2(point, R_market1, R_regeon1, regeon11, regeon22, actcenter11, actcenter22)->float:
+    score = 0
+    for i in range(len(actcenter11)):
+        if lenof(actcenter11[i], point) < R_market1:
+            score += actcenter22[i] / (R_market1 / 10 + lenof(actcenter11[i], point) ** 3)
+    for i in range(len(regeon11)):
+        if lenof(regeon11[i], point) < R_regeon1:
+            score += regeon22[i] / (R_regeon1 / 10 + lenof(regeon11[i], point) ** 2)
+    return score
+
+@njit()
 def point_functions2(R_market1, R_regeon1, regeon111, regeon222, actcenter111, actcenter222):
     count = 0
     stepcount = [i for i in range(0, len(regeon111), len(regeon111) // 10)]
@@ -172,10 +183,10 @@ def point_functions2(R_market1, R_regeon1, regeon111, regeon222, actcenter111, a
         score = 0
         for i in range(len(actcenter111)):
             if lenof(actcenter111[i], point) < R_market1:
-                score += actcenter222[i] / (R_market1/ 10 + lenof(actcenter111[i], point) ** 3)
+                score += actcenter222[i] / (R_market1 / 10 + lenof(actcenter111[i], point) ** 3)
         for i in range(len(regeon111)):
             if lenof(regeon111[i], point) < R_regeon1:
-                score += regeon222[i] / (R_regeon1/ 10 + lenof(regeon111[i], point) ** 2)
+                score += regeon222[i] / (R_regeon1 / 10 + lenof(regeon111[i], point) ** 2)
         keyx += [point[0]]
         keyy += [point[1]]
         val += [score]
@@ -183,6 +194,21 @@ def point_functions2(R_market1, R_regeon1, regeon111, regeon222, actcenter111, a
         if count in stepcount:
             print(f"{int((100 * count) / max(stepcount))}% done")
     return keyx[1:], keyy[1:], val[1:]
+
+def point_function3(point):
+    global regeons, actcenter
+    global R
+    score = 0
+    for i in actcenter.keys():
+        if lenof(i, point) < R["market"]:
+            score += actcenter[i] #/ ((R["market"] / 10 + lenof(i,point)) ** 3)
+            actcenter[i] = 0
+    for i in regeons.keys():
+        if lenof(i, point) < R["regeon"]:
+            score += regeons[i] #/ ((R["regeon"] / 10 + lenof(i, point)) ** 2)
+            regeons[i] = 0
+    return score
+
 
 
 def list_func_update(upd=None):
@@ -375,11 +401,11 @@ def Update(file_market=None, file_regions=None, file_NFZ=None):
     else:
         NFZ = read_NFZ_geojson()
     for i in regeon["qualities"].keys():
-        if "population" in regeon["qualities"][i].keys() and i in regeon["points"].keys():
+        if "population" in regeon["qualities"][i].keys() and i in regeon["points"].keys() and i != "Muscat":
             ponts = bad_figure_to_points(regeon["points"][i])
             kof = (lambda x: cargo_per_peeple[x] if x in cargo_per_peeple.keys() else cargo_per_peeple["Default"])(i)
             populatn = int("".join("".join(regeon["qualities"][i]["population"].split(".")).split('"'))) / len(ponts)
-            print(f"[+]{i}:людей на точку{populatn}, точек{len(ponts)}")
+            print(f"[+]{i}:посылок на точку{round(populatn * kof, 2)}, людей на точку{round(populatn, 2)}, точек{len(ponts)}")
             regeons.update({j:(populatn * kof) for j in ponts})
     print("[INFO]regeons are Up to date")
 
@@ -423,7 +449,7 @@ def Update_region_population(name, population, file=rf"{os.getcwd()}\Data\region
                 n = i.find("population") + 12
                 faile.replace(i, i[:n] + f'"{strpopulation}"' + i[i[n+1:].find('"') + 1 + n:])
                 old = i[n:i[n+1:].find('"') + 1 + n]
-    print(f'[+] changed population {name}   {old}  ====>>> {strpopulation}')
+    print(f'[+] changed population {name}  {old}  ====>>> {strpopulation}')
     a.write(faile)
     a.close()
 
@@ -485,9 +511,34 @@ def Open_geojason(file):
     #time.sleep(1)
     pyautogui.hotkey('ctrl', 'v')
 
+def find_critical_value(show=False):
+    days = []
+    yval = []
+    rval = []
+    with open(rf"{os.getcwd()}\Data\crit_v.csv") as file:
+        for _ in range(24):
+            d, y, r = list(map(int, file.readline().split(",")))
+            days += [d]
+            yval += [y]
+            rval += [r]
+    if show:
+        fig, ax = plt.subplots()
+        ax.plot(days, rval, color="red", label="реальные")
+        ax.plot(days, yval, color="yellow", label="опрос")
+        ax.set_title("types")
+        ax.set_xlabel("cargo")  # подпись оси
+        ax.set_ylabel("time")
+        ax.grid()  # сетка
+        ax.legend()  # показывать условные обозначения
+        plt.show()
+    return sum(rval), sum(yval)
+
+
 def see_result(count:int, updated=None, delta_point_new=3):
-    global regeons, list_func, delta_point
+    global regeons, list_func, delta_point, m
     delta_point = delta_point_new
+    n1, n2 = find_critical_value()
+    print(f"[+]critical value per day:{n1}, {n2}")
     a, b = [], []
     for i in regeons.keys():
         a += [i[0]]
@@ -495,9 +546,17 @@ def see_result(count:int, updated=None, delta_point_new=3):
     print(f"[+]dispertion X>> {round(abs(min(a) - max(a))*111.1348, delta_point)}km")
     print(f"[+]dispertion Y>> {round(abs(min(b)- max(b)) *111.1348, delta_point)}km")
     points = make_pochtampt(count, updated)
-    m = folium.Map(location=[23.5, 58.5])
+    Update()
+    o = 0
     for i in points:
-        folium.Marker((i[1],i[0])).add_to(m)
+        o += 1
+        cap = point_function3(i)
+        color = "green"
+        if cap > n2:
+            color = "lightred"
+            if cap > n1:
+                color = "red"
+        folium.Marker((i[1], i[0]), popup="Cargo:"+str(int(cap)) + "<br>MyScore:"+str(round(i[2], 2)) + "<br>Num:"+str(o), icon=folium.Icon(color=color, icon="info-sign")).add_to(m)
     m.save(rf"{os.getcwd()}\Temp\map.html")
     webbrowser.open(rf"file:///{os.getcwd()}\Temp\map.html")
     Update()
@@ -511,6 +570,28 @@ def test5():
     Update()
     upd = input("take from file") in ['y', 'Y', 'yes', '']
     see_result(100, upd, 3)
+
+
+def show_test(fig):
+    global m
+    fig2 =[]
+    for i in fig:
+        figh = []
+        for j in i:
+            figh += [(j[1], j[0])]
+        fig2 += [figh]
+    for i in fig2:
+            folium.Polygon(i).add_to(m)
+
+
+def see_grid(a: list):
+    global m
+    fig = set()
+    for i in a:
+        fig.add((round(i[1], 2), round(i[0], 2)))
+    for i in list(fig):
+        folium.Marker(i).add_to(m)
+
 
 
 def test4():

@@ -237,6 +237,7 @@
              	cross["l"] += 1
          	else:
              	cross["r"] += 1
+     
      	return cross["r"] % 2 == cross["l"] % 2 == 1
  	\end{verbatim}
  	\hspace*{1cm}Ок, а что на счет 3D? Думаю о направлении тут говорить нет смысла, так что прийдется использовать какой-то другой метод. Можно через каждую точку проводить прямую параллельную оси х и смотреть пересечения с фигурой если пересечения с каждой стороны нечетное кол-во то точка внутри иначе снаружи. Стоит учесть что это работает потому, что можно говорить о вхождении/выходе прямой из фигуры, но нужно сказать, что есть вид пересечение 2 граней в месте ребра и в таком месте может быть выход прямой из фигуры или его может и не быть. Эта проблема выпуклости, и решать ее будем так же, те разделем невыпуклую фигуру на выпуклые и обработаем включения/искючения.\\
@@ -248,7 +249,7 @@
  	        self.y = y
  	        self.z = z
  	\end{verbatim}
- 	\hspace*{1cm}Теперь класс отрезка. Определять мы будем по 2 точкам. Так же добавим функцию проверки лежит ли точка на прямой. Только есть проблема c типом float во всем програмировании, но ее можно решить просто добавив метод round тогда прямая конечно станет условно широкаой, но для нашей задачи ширинва $10^{-5}$ не так уж и страшно. Алгоритм аналогичен 2D проверка истиности $\cfrac{x - x_1}{x_2 - x_1}$
+ 	\hspace*{1cm}Теперь класс отрезка. Определять мы будем по 2 точкам. Так же добавим функцию проверки лежит ли точка на прямой. Алгоритм аналогичен 2D проверка истиности $\cfrac{x - x_1}{x_2 - x_1}$
  	\begin{verbatim}
  	class line:
  	    def __init__(self, p1:Point3, p2:Point3):
@@ -264,7 +265,54 @@
  	          * (self.p1.y - self.p2.y), 5) == 0
  	       
     \end{verbatim}
-    \hspace*{1cm}Теперь плоскость.
+    \hspace*{1cm}Теперь плоскость. Ур-е плоскости $Ax + By + Cz = 1$. Для определения плоскости достаточно трех точек. Решим ур-е:\\$\begin{cases}
+    Ax_1 + By_1 + Cz_1 = 1 \\ Ax_2 + By_2 + Cz_2 = 1 \\ Ax_3 + By_3 + Cz_3 = 1
+    \end{cases}$\\$\begin{cases}
+    A = 1 - B\frac{y_1}{x_1} - C\frac{z_1}{x_1} \\  B = 1 - A\frac{x_2}{y_2} - C\frac{z_2}{y_2}  \\ C = 1 - B\frac{y_3}{z_3} - A\frac{x_3}{z_3}
+    \end{cases}$\\$\begin{cases}
+    A = 1 - B\frac{y_1}{x_1} - C\frac{z_1}{x_1} \\  B = 1 - A\frac{x_2}{y_2} - \left(1 - B\frac{y_3}{z_3} - A\frac{x_3}{z_3}\right)\frac{z_2}{y_2}  \\ C = 1 - B\frac{y_3}{z_3} - A\frac{x_3}{z_3}
+    \end{cases}$\\ $\begin{cases}
+    A = 1 - B\frac{y_1}{x_1} - C\frac{z_1}{x_1} \\  B(1 + \frac{y_3}{z_3}\frac{z_2}{y_2}) = 1  - \frac{z_2}{y_2}  - A(\frac{x_3}{z_3}\frac{z_2}{y_2} + \frac{x_2}{y_2})  \\ C = 1 - B\frac{y_3}{z_3} - A\frac{x_3}{z_3}
+    \end{cases}$\\$\begin{cases}
+    A = 1 - B\frac{y_1}{x_1} - C\frac{z_1}{x_1} \\  B = \cfrac{1  - \frac{z_2}{y_2}  - A(\frac{x_3}{z_3}\frac{z_2}{y_2} + \frac{x_2}{y_2})}{(1 + \frac{y_3}{z_3}\frac{z_2}{y_2})}  \\ C = 1 - B\frac{y_3}{z_3} - A\frac{x_3}{z_3}
+    \end{cases}$\\$\begin{cases}
+    A = 1 - B\frac{y_1}{x_1} - C\frac{z_1}{x_1} \\  B =  \cfrac{1  - \frac{z_2}{y_2}  - A(\frac{x_3z_2 + x_2z_3}{z_3y_2} )}{(\frac{z_3y_2 + y_3z_2}{z_3y_2})}  \\ C = 1 - \left( \cfrac{1  - \frac{z_2}{y_2}  - A(\frac{x_3z_2 + x_2z_3}{z_3y_2} )}{(\frac{z_3y_2 + y_3z_2}{z_3y_2})}\right) \frac{y_3}{z_3} - A\frac{x_3}{z_3}
+    \end{cases}$\\$\begin{cases}
+    A = 1 - B\frac{y_1}{x_1} - C\frac{z_1}{x_1} \\  B =  \cfrac{z_3y_2  - z_2z_3  - A(x_3z_2 + x_2z_3 )}{(z_3y_2 + y_3z_2)}  \\ C = 1 -  \cfrac{y_3y_2  - z_2y_3  - A(\frac{y_3x_3z_2}{z_3} + x_2y_3 )}{(z_3y_2 + y_3z_2)} - A\frac{x_3}{z_3}
+    \end{cases}$\\$\begin{cases}
+    A = 1 - B\frac{y_1}{x_1} - C\frac{z_1}{x_1} \\  B =  \cfrac{z_3y_2  - z_2z_3}{(z_3y_2 + y_3z_2)} - A\cfrac{(x_3z_2 + x_2z_3 )}{(z_3y_2 + y_3z_2)}  \\ C = 1 -  \cfrac{y_3y_2  - z_2y_3}{(z_3y_2 + y_3z_2)} - A\left(\cfrac{(\frac{y_3x_3z_2}{z_3} + x_2y_3)}{(z_3y_2 + y_3z_2)} + \frac{x_3}{z_3}\right)
+    \end{cases}$\\$\begin{cases}
+    A = 1 - B\frac{y_1}{x_1} - C\frac{z_1}{x_1} \\  B =  \cfrac{z_3y_2  - z_2z_3}{(z_3y_2 + y_3z_2)} - A\cfrac{(x_3z_2 + x_2z_3 )}{(z_3y_2 + y_3z_2)}  \\ C = 1 -  \cfrac{y_3y_2  - z_2y_3}{(z_3y_2 + y_3z_2)} - A\left(\cfrac{2y_3x_3z_2 + x_2y_3z_3 + z_3y_2x_3 }{(z_3y_2 + y_3z_2)z_3}\right)
+    \end{cases}$\\$
+    A= \cfrac{1 - \left(\cfrac{z_3y_2  - z_2z_3}{(z_3y_2 + y_3z_2)} \right)\frac{y_1}{x_1}  - \left( 1 -  \cfrac{y_3y_2  - z_2y_3}{(z_3y_2 + y_3z_2)}\right)\frac{z_1}{x_1}}{\left(1 + \cfrac{(x_3z_2 + x_2z_3 )}{(z_3y_2 + y_3z_2)}\frac{y_1}{x_1} + \cfrac{2y_3x_3z_2 + x_2y_3z_3 + z_3y_2x_3 }{(z_3y_2 + y_3z_2)}\frac{z_1}{z_3x_1}\right) } $\\$
+    A= \cfrac{(z_3y_2 + y_3z_2)x_1z_3 - \left((z_3y_2  - z_2z_3) \right)z_3y_1  - \left( (z_3y_2 + y_3z_2) -  (y_3y_2  - z_2y_3)\right)z_3z_1}{\left((z_3y_2 + y_3z_2)z_3 + (x_3z_2 + x_2z_3 )z_3y_1 + (2y_3x_3z_2 + x_2y_3z_3^2 + y_2x_3z_3)z_1\right) } $\\$  B =  \cfrac{z_3y_2  - z_2z_3}{(z_3y_2 + y_3z_2)} - A\cfrac{(x_3z_2 + x_2z_3 )}{(z_3y_2 + y_3z_2)} $ \\$ C =  1 - B\frac{y_3}{z_3} - A\frac{x_3}{z_3}$\\
+    Та форма ур-я плоскости почти верна, но есть один граничный случай, когда она не работает, тогда на помощь приходит:\\$\begin{cases}
+    Ax_1 + By_1 + Cz_1 = 0 \\ Ax_2 + By_2 + Cz_2 = 0 \\ Ax_3 + By_3 + Cz_3 = 0
+    \end{cases}$\\$\begin{cases}
+    A = 0 - B\frac{y_1}{x_1} - C\frac{z_1}{x_1} \\  B = 0 - A\frac{x_2}{y_2} - C\frac{z_2}{y_2}  \\ C = 0 - B\frac{y_3}{z_3} - A\frac{x_3}{z_3}
+    \end{cases}$\\$\begin{cases}
+    A = 0 - B\frac{y_1}{x_1} - C\frac{z_1}{x_1} \\  B = 0 - A\frac{x_2}{y_2} - C\frac{z_2}{y_2}  \\ C = A\frac{x_2}{y_2}\frac{y_3}{z_3} + C\frac{z_2}{y_2}\frac{y_3}{z_3} - A\frac{x_3}{z_3}
+    \end{cases}$\\$\begin{cases}
+    A = 0 - B\frac{y_1}{x_1} - C\frac{z_1}{x_1} \\  B = 0 - A\frac{x_2}{y_2} - C\frac{z_2}{y_2}  \\ C =\cfrac{ A(\frac{x_2}{y_2}\frac{y_3}{z_3} - \frac{x_3}{z_3})}{1 - \frac{z_2}{y_2}\frac{y_3}{z_3}}
+    \end{cases}$\\$\begin{cases}
+    A = 0 - B\frac{y_1}{x_1} - C\frac{z_1}{x_1} \\  B = 0 - A\frac{x_2}{y_2} - \cfrac{ A(\frac{x_2}{y_2}y_3 - x_3)}{z_3y_2 - z_2y_3}z_2  \\ C =\cfrac{ A(\frac{x_2}{y_2}y_3 - x_3)}{z_3 - \frac{z_2}{y_2}y_3}
+    \end{cases}$\\$\begin{cases}
+    A = 0 - B\frac{y_1}{x_1} - C\frac{z_1}{x_1} \\  B = 0 - A\left(\frac{x_2}{y_2} - \cfrac{ (\frac{x_2}{y_2}y_3 - x_3)}{z_3y_2 - z_2y_3}z_2\right)  \\ C =A\left(\cfrac{ (\frac{x_2}{y_2}y_3 - x_3)}{z_3 - \frac{z_2}{y_2}y_3}\right)
+    \end{cases}$\\$\begin{cases}
+    A = 0 + A\left(\frac{x_2}{y_2} - \cfrac{ (\frac{x_2}{y_2}y_3 - x_3)}{z_3y_2 - z_2y_3}z_2\right)\frac{y_1}{x_1} - A\left(\cfrac{ (\frac{x_2}{y_2}y_3 - x_3)}{z_3 - \frac{z_2}{y_2}y_3}\right)\frac{z_1}{x_1} \\  B = 0 - A\left(\frac{x_2}{y_2} - \cfrac{ (\frac{x_2}{y_2}y_3 - x_3)}{z_3y_2 - z_2y_3}z_2\right)  \\ C =A\left(\cfrac{ (\frac{x_2}{y_2}y_3 - x_3)}{z_3 - \frac{z_2}{y_2}y_3}\right)
+    \end{cases}$
+    \\
+    Для того что-бы определить лежит точка на плоскости достаточно подставить координаты точки в ур-е плоскости. А вот что-бы определить лежит ли точка на гране прийдется писать ту же функцию которую мы уже писали но в 3D, но мы схитрим. Точка лежит внутри фигуры если\\ \hspace*{2cm} 1. она лежит в той же плоскости \\  \hspace*{2cm} 2. Если она лежитв проекции фигуры.\\ Тогда для удобства будем проецтровать грань на плоскость образованнную осями o.X, o.Y. Учтем что при проецировании плоскость не должна быть паралельна o.Z, и если такое случится будем проецирвать на o.Z, o.Y или на o.X, o.Z.\\
+    \hspace*{1cm} А теперь найдем пересечение прямой и плоскости. Для этого опять решим систему: \\ $ \begin{cases}Ax + By + Cz = 1 \\ \cfrac{x-x_1}{x_2 - x_1} = \cfrac{y-y_1}{y_2 - y_1} \\ \cfrac{z-z_1}{z_2 - z_1} = \cfrac{y-y_1}{y_2 - y_1}  \end{cases}$\\
+    $ \begin{cases}x = 1 - \cfrac{B}{A}y - \cfrac{C}{A}z  \\  y = \cfrac{(y_2 - y_1)(x-x_1)}{x_2 - x_1} + y_1 \\ z = \cfrac{(z_2 - z_1)(y-y_1)}{y_2 - y_1} + z_1  \end{cases}$\\
+    $ \begin{cases}x = 1 - \cfrac{B}{A}y - \cfrac{C}{A}z  \\  y = \cfrac{(y_2 - y_1)(x-x_1)}{x_2 - x_1} + y_1 \\ z = \cfrac{(y_2 - y_1)(x-x_1)}{x_2 - x_1}\cfrac{(z_2 - z_1)}{y_2 - y_1} + z_1  \end{cases}$\\
+     $ \begin{cases}x = 1 - \cfrac{B}{A}y - \cfrac{C}{A}z  \\  y = \cfrac{(y_2 - y_1)(x-x_1)}{x_2 - x_1} + y_1 \\ z = \cfrac{(z_2 - z_1)(x-x_1)}{x_2 - x_1} + z_1  \end{cases}$\\
+     $ \begin{cases}x = 1 - \cfrac{B}{A}\left(\cfrac{(y_2 - y_1)(x-x_1)}{x_2 - x_1} + y_1\right) - \cfrac{C}{A}\left(\cfrac{(z_2 - z_1)(x-x_1)}{x_2 - x_1} + z_1\right)  \\  y = \cfrac{(y_2 - y_1)(x-x_1)}{x_2 - x_1} + y_1 \\ z =  \cfrac{(z_2 - z_1)(x-x_1)}{x_2 - x_1} + z_1 \end{cases}$ \\
+     $ x  = \cfrac{A - B\left(y_1 - \cfrac{(y_2 - y_1)x_1}{x_2 - x_1}\right) - C\left(z_1-\cfrac{(z_2 - z_1)x_1}{x_2 - x_1} \right) }{A  + B\cfrac{(y_2 - y_1)}{x_2 - x_1} + C\cfrac{(z_2 - z_1)}{x_2 - x_1}} \\  y = \cfrac{(y_2 - y_1)(x-x_1)}{x_2 - x_1} + y_1 \\ z =  \cfrac{(z_2 - z_1)(x-x_1)}{x_2 - x_1} + z_1 $ \\
+     \hspace*{-1cm}$ x  = \cfrac{A(x_2 - x_1) - B\left(y_1(x_2 - x_1) - (y_2 - y_1)x_1\right) - C(z_1(x_2 - x_1) -(z_2 - z_1)x_1) }{A(x_2 - x_1)  + B(y_2 - y_1) + C(z_2 - z_1)} \\  y = \cfrac{(y_2 - y_1)(x-x_1)}{x_2 - x_1} + y_1 \\ z =  \cfrac{(z_2 - z_1)(x-x_1)}{x_2 - x_1} + z_1 $ \\
+     Если x1 = x2 получим \\$ \begin{cases} By = 1 - Ax_1 - Cz \\  z = \cfrac{(z_2 - z_1)(y-y_1)}{y_2 - y_1} + z_1  \end{cases}$\\$ \begin{cases} y = \cfrac{ 1 - Ax_1 + C\cfrac{(z_2 - z_1)y_1}{y_2 - y_1} - Cz_1}{B + C\cfrac{(z_2 - z_1)}{y_2 - y_1}} \\  z = \cfrac{(z_2 - z_1)(y-y_1)}{y_2 - y_1} + z_1  \end{cases}$ \\$ \begin{cases} y = \cfrac{ (y_2 - y_1) - Ax_1(y_2 - y_1) + C(z_2 - z_1)y_1 - Cz_1(y_2 - y_1)}{B(y_2 - y_1) + C(z_2 - z_1)} \\  z = \cfrac{(z_2 - z_1)(y-y_1)}{y_2 - y_1} + z_1  \end{cases}$
+    \\
+    Осталось это перенести в код:
     \begin{verbatim}
     class plane:
         def __init__(self, lines:List[Points]):
