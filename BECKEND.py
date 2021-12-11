@@ -15,6 +15,7 @@ other_delta_point = 10 ** delta_point
 cargo_per_peeple = {
     "Default": 0.08
 }
+m = folium.Map(location=[23.5, 58.5])
 typekof = {
     "Default": 0,
     "market": 0,
@@ -55,7 +56,7 @@ def normal_figure_to_points(pl:tuple) -> List[tuple]:
     global delta_point
     global other_delta_point
     x, y = list(map(lambda a: a[0] ,pl)),list(map(lambda a: a[1] ,pl))
-    x,y = ([i / (other_delta_point) for i in range(int(min(x) * (other_delta_point)), int(max(x) * (other_delta_point)))], [i / (other_delta_point) for i in range(int(min(y) * (10 ** delta_point)), int(max(y) * (10 ** delta_point)))])
+    x, y = ([i / (other_delta_point) for i in range(int(min(x) * (other_delta_point)), int(max(x) * (other_delta_point)))], [i / (other_delta_point) for i in range(int(min(y) * (10 ** delta_point)), int(max(y) * (10 ** delta_point)))])
     all_points = list(map(lambda x:(x[0], x[1]), itertools.product(x,y)))
     del x, y
     new_all_points = []
@@ -97,13 +98,17 @@ def bad_figure_to_points(main_fig):
         if count == len(main_fig) + 3:
             break
     main_poins = normal_figure_to_points(main_fig)
-    added_points = []
-    for i in added_fig:
-        added_points += normal_figure_to_points(i)
-    for i in main_poins:
-        if i in added_points:
-            main_poins.remove(i)
-    return main_poins
+    main_poins2 = []
+    # show_test(added_fig)
+    for i in main_poins:        #(23.636, 58.526)
+        boool = True
+        for fig in added_fig:
+            if point_in_normal_figure(fig, i):
+                boool = False
+        if boool:
+            main_poins2 += [i]
+    # see_grid(main_poins2)
+    return main_poins2
 
 @njit()
 def lenof(a, b):
@@ -396,7 +401,7 @@ def Update(file_market=None, file_regions=None, file_NFZ=None):
     else:
         NFZ = read_NFZ_geojson()
     for i in regeon["qualities"].keys():
-        if "population" in regeon["qualities"][i].keys() and i in regeon["points"].keys():
+        if "population" in regeon["qualities"][i].keys() and i in regeon["points"].keys() and i != "Muscat":
             ponts = bad_figure_to_points(regeon["points"][i])
             kof = (lambda x: cargo_per_peeple[x] if x in cargo_per_peeple.keys() else cargo_per_peeple["Default"])(i)
             populatn = int("".join("".join(regeon["qualities"][i]["population"].split(".")).split('"'))) / len(ponts)
@@ -530,7 +535,7 @@ def find_critical_value(show=False):
 
 
 def see_result(count:int, updated=None, delta_point_new=3):
-    global regeons, list_func, delta_point
+    global regeons, list_func, delta_point, m
     delta_point = delta_point_new
     n1, n2 = find_critical_value()
     print(f"[+]critical value per day:{n1}, {n2}")
@@ -542,7 +547,6 @@ def see_result(count:int, updated=None, delta_point_new=3):
     print(f"[+]dispertion Y>> {round(abs(min(b)- max(b)) *111.1348, delta_point)}km")
     points = make_pochtampt(count, updated)
     Update()
-    m = folium.Map(location=[23.5, 58.5])
     o = 0
     for i in points:
         o += 1
@@ -552,7 +556,7 @@ def see_result(count:int, updated=None, delta_point_new=3):
             color = "lightred"
             if cap > n1:
                 color = "red"
-        folium.Marker((i[1], i[0]), popup="Cargo:"+str(int(cap)) + "<br>MyScore:"+str(round(i[2], 2)) + "<br>Num:"+str(o), icon=folium.Icon(color=color, icon="info-sign")).add_to(m)
+        folium.Marker((i[1], i[0]), popup="coordinates"+str((i[1], i[0])) + "<br>Cargo:"+str(int(cap)) + "<br>MyScore:"+str(round(i[2], 2)) + "<br>Num:"+str(o), icon=folium.Icon(color=color, icon="info-sign")).add_to(m)
     m.save(rf"{os.getcwd()}\Temp\map.html")
     webbrowser.open(rf"file:///{os.getcwd()}\Temp\map.html")
     Update()
@@ -566,6 +570,28 @@ def test5():
     Update()
     upd = input("take from file") in ['y', 'Y', 'yes', '']
     see_result(100, upd, 3)
+
+
+def show_test(fig):
+    global m
+    fig2 =[]
+    for i in fig:
+        figh = []
+        for j in i:
+            figh += [(j[1], j[0])]
+        fig2 += [figh]
+    for i in fig2:
+            folium.Polygon(i).add_to(m)
+
+
+def see_grid(a: list):
+    global m
+    fig = set()
+    for i in a:
+        fig.add((round(i[1], 2), round(i[0], 2)))
+    for i in list(fig):
+        folium.Marker(i).add_to(m)
+
 
 
 def test4():
