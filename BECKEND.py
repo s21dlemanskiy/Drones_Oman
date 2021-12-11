@@ -80,8 +80,8 @@ def orintation_righ(main_fig):
     return r > l
 
 
-def bad_figure_to_points(main_fig):
-    main_fig = copy.copy(main_fig)
+def bad_figure_to_points(main_fig1):
+    main_fig = copy.copy(main_fig1)
     added_fig = []
     orintation_right = orintation_righ(main_fig)
     count = 0
@@ -99,7 +99,9 @@ def bad_figure_to_points(main_fig):
             break
     main_poins = normal_figure_to_points(main_fig)
     main_poins2 = []
-    # show_test(added_fig)
+    # show_test(added_fig, "#FFFF00")
+    # show_test([main_fig], "#008000")
+    # show_test([main_fig1], "#000000")
     for i in main_poins:        #(23.636, 58.526)
         boool = True
         for fig in added_fig:
@@ -572,7 +574,7 @@ def test5():
     see_result(100, upd, 3)
 
 
-def show_test(fig):
+def show_test(fig, color="#ADD8E6"): # YEllow #FFFF00   Black #000000 Green #008000
     global m
     fig2 =[]
     for i in fig:
@@ -581,7 +583,7 @@ def show_test(fig):
             figh += [(j[1], j[0])]
         fig2 += [figh]
     for i in fig2:
-            folium.Polygon(i).add_to(m)
+            folium.Polygon(i, color=color).add_to(m)
 
 
 def see_grid(a: list):
