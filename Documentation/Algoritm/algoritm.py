@@ -182,6 +182,7 @@ def point_in_fig(main_fig:List[Point], u:Point):
 
 
 
+
 """3D figure______________________________"""
 
 
@@ -191,6 +192,7 @@ class Point3:
         self.y = y
         self.z = z
 
+        
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y and self.z == other.z
 
@@ -359,6 +361,7 @@ def test1():
     for i in bad_fig_to_point(fig, 0.1):
         if not point_in_fig(fig, i):
             paint_p([i], 100)
+
 
 def test2():
     main_fig = []
