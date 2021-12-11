@@ -556,7 +556,7 @@ def see_result(count:int, updated=None, delta_point_new=3):
             color = "lightred"
             if cap > n1:
                 color = "red"
-        folium.Marker((i[1], i[0]), popup="coordinates"+str((i[1], i[0])) + "<br>Cargo:"+str(int(cap)) + "<br>MyScore:"+str(round(i[2], 2)) + "<br>Num:"+str(o), icon=folium.Icon(color=color, icon="info-sign")).add_to(m)
+        folium.Marker((i[1], i[0]), popup="Cargo:"+str(int(cap)) + "<br>MyScore:"+str(round(i[2], 2)) + "<br>Num:"+str(o), icon=folium.Icon(color=color, icon="info-sign")).add_to(m)
     m.save(rf"{os.getcwd()}\Temp\map.html")
     webbrowser.open(rf"file:///{os.getcwd()}\Temp\map.html")
     Update()
