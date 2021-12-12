@@ -525,11 +525,11 @@ def find_critical_value(show=False):
             rval += [r]
     if show:
         fig, ax = plt.subplots()
-        ax.plot(days, rval, color="red", label="реальные")
-        ax.plot(days, yval, color="yellow", label="опрос")
+        ax.plot(days, rval, color="red", label="максимально возможное")
+        ax.plot(days, yval, color="yellow", label="критически высокое")
         ax.set_title("types")
-        ax.set_xlabel("cargo")  # подпись оси
-        ax.set_ylabel("time")
+        ax.set_xlabel("time")  # подпись оси
+        ax.set_ylabel("cargo")
         ax.grid()  # сетка
         ax.legend()  # показывать условные обозначения
         plt.show()
