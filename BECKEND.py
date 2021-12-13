@@ -120,7 +120,7 @@ def lenof(a, b):
 
 def bruteforce()->tuple:
     global list_func, NFZ
-    maxscore = [0,0, 0]
+    maxscore = [0, 0, 0]
     for i in list_func.keys():
         if list_func[i] > maxscore[2] and i not in NFZ:
             maxscore = [i[0], i[1], list_func[i]]
@@ -536,7 +536,7 @@ def find_critical_value(show=False):
     return sum(rval), sum(yval)
 
 
-def see_result(count:int, updated=None, delta_point_new=3):
+def see_result(count: int, updated=None, delta_point_new=3):
     global regeons, list_func, delta_point, m
     delta_point = delta_point_new
     n1, n2 = find_critical_value()
