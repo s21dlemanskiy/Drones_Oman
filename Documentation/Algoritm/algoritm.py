@@ -192,9 +192,14 @@ class Point3:
         self.y = y
         self.z = z
 
-        
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y and self.z == other.z
+
+    def __str__(self):
+        return str((self.x, self.y))
+
+    def __repr__(self):
+        return str((self.x, self.y))
 
 
 class Line3:
@@ -227,16 +232,13 @@ class Plane3:
         x1, y1, z1 = points[0].x, points[0].y, points[0].z
         x2, y2, z2 = points[1].x, points[1].y, points[1].z
         x3, y3, z3 = points[2].x, points[2].y, points[2].z
-        if (z3 * y2 + y3 * z2) * z3 + y1 * z3 * (x3 * z2 + x2 * z3) + z1 * (2 * y3 * x3 * z2 + x2 * y3 * z3 + z3 * y2 * x3) == 0 or (z3 * y2 + y3 * z2) == 0 or z3 == 0:
-
-            self.equastion = {"A":a, "B":b, "C":c, "D":0}
-        else:
-            a = ((z3 * y2 + y3 * z2)*z3 * x1 - (z3 * y2 - z2 * z3)*y1 * z3 - ((z3 * y2 + y3 * z2) - (y3 * y2 - z2 * y3)) * z1 *z3)/(
-                (z3 * y2 + y3 * z2) * z3 + y1 * z3 * (x3 * z2 + x2 * z3) + z1 * (2 * y3 * x3 * z2 + x2 * y3 * z3 + z3 * y2 * x3))
-            b = ((z3 * y2 - z2 * z3) - a * (x3 * z2 + x2 * z3))/(z3 * y2 + y3 * z2)
-            c = 1 - b * y3 / z3 - a * x3 / z3
-            self.equastion = {"A":a, "B":b, "C":c, "D":1}
-            print(f"{a}x + {b}y + {c}z = 1")
+        assert (z3 * y2 + y3 * z2) * z3 + y1 * z3 * (x3 * z2 + x2 * z3) + z1 * (2 * y3 * x3 * z2 + x2 * y3 * z3 + z3 * y2 * x3) == 0 or (z3 * y2 + y3 * z2) == 0 or z3 == 0, "first call my_format()"
+        a = ((z3 * y2 + y3 * z2)*z3 * x1 - (z3 * y2 - z2 * z3)*y1 * z3 - ((z3 * y2 + y3 * z2) - (y3 * y2 - z2 * y3)) * z1 *z3)/(
+            (z3 * y2 + y3 * z2) * z3 + y1 * z3 * (x3 * z2 + x2 * z3) + z1 * (2 * y3 * x3 * z2 + x2 * y3 * z3 + z3 * y2 * x3))
+        b = ((z3 * y2 - z2 * z3) - a * (x3 * z2 + x2 * z3))/(z3 * y2 + y3 * z2)
+        c = 1 - b * y3 / z3 - a * x3 / z3
+        self.equastion = {"A":a, "B":b, "C":c, "D":1}
+        print(f"{a}x + {b}y + {c}z = 1")
         self.lines = []
         self.points = points
         for i in range(len(points)):
@@ -332,6 +334,33 @@ def point_in_fig_3d(main_fig:List[Plane3], p:Point3):
     return cross["r"] % 2 == cross["l"] % 2 == 1
 
 
+def my_format(main_fig, p):
+    dy = 1
+    dz = 1
+    while True:
+        boool = True
+        for points in main_fig:
+            assert len(points) >= 3, "попытка форматирования фигуры с плоскостью из менее чем 3 точками"
+            x1, y1, z1 = points[0].x, points[0].y, points[0].z
+            x2, y2, z2 = points[1].x, points[1].y, points[1].z
+            x3, y3, z3 = points[2].x, points[2].y, points[2].z
+            if (z3 * y2 + y3 * z2) * z3 + y1 * z3 * (x3 * z2 + x2 * z3) + z1 * (2 * y3 * x3 * z2 + x2 * y3 * z3 + z3 * y2 * x3) == 0 or (z3 * y2 + y3 * z2) == 0 or z3 == 0:
+                boool = False
+        if boool:
+            break
+        p.x += 1
+        dy += 1
+        p.y += dy
+        dz += 2
+        p.z += dz
+        for i in range(len(main_fig)):
+            for j in range(len(main_fig[i])):
+                main_fig[i][j].x += 1
+                main_fig[i][j].y += dy
+                main_fig[i][j].z += dz
+    print(p)
+    return main_fig, p
+
 
 
 
@@ -377,14 +406,20 @@ def test2():
     print(point_in_fig_3d(main_fig, p))
 
 def test3():
-    main_fig = [Plane3([Point3(0, 0, 0), Point3(0, 0, 1), Point3(0, 1, 1), Point3(0, 1, 0)])]
-    main_fig += [Plane3([Point3(0, 0, 0), Point3(1, 0, 0), Point3(1, 1, 0), Point3(0, 1, 0)])]
-    main_fig += [Plane3([Point3(0, 0, 0), Point3(1, 0, 0), Point3(1, 0, 1), Point3(0, 0, 1)])]
-    main_fig += [Plane3([Point3(1, 1, 1), Point3(1, 1, 0), Point3(1, 0, 0), Point3(1, 0, 1)])]
-    main_fig += [Plane3([Point3(1, 1, 1), Point3(0, 1, 1), Point3(0, 0, 1), Point3(1, 0, 1)])]
-    main_fig += [Plane3([Point3(1, 1, 1), Point3(0, 1, 1), Point3(0, 1, 0), Point3(1, 1, 0)])]
+    plane1 = [Point3(0, 0, 0), Point3(0, 0, 1), Point3(0, 1, 1), Point3(0, 1, 0)]
+    plane2 = [Point3(0, 0, 0), Point3(1, 0, 0), Point3(1, 1, 0), Point3(0, 1, 0)]
+    plane3 = [Point3(0, 0, 0), Point3(1, 0, 0), Point3(1, 0, 1), Point3(0, 0, 1)]
+    plane4 = [Point3(1, 1, 1), Point3(1, 1, 0), Point3(1, 0, 0), Point3(1, 0, 1)]
+    plane5 = [Point3(1, 1, 1), Point3(0, 1, 1), Point3(0, 0, 1), Point3(1, 0, 1)]
+    plane6 = [Point3(1, 1, 1), Point3(0, 1, 1), Point3(0, 1, 0), Point3(1, 1, 0)]
     x, y, z = list(map(float, input(f"x y z точки >>").split()))
     p = Point3(x, y, z)
+    mainfig1, p = my_format([plane1, plane2, plane3, plane4, plane5, plane6], p)
+    main_fig = []
+    for i in mainfig1:
+        print(i)
+        main_fig += [Plane3(i)]
+    print(p)
     print(point_in_fig_3d(main_fig, p))
 
 

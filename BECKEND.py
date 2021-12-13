@@ -99,9 +99,9 @@ def bad_figure_to_points(main_fig1):
             break
     main_poins = normal_figure_to_points(main_fig)
     main_poins2 = []
-    # show_test(added_fig, "#FFFF00")
-    # show_test([main_fig], "#008000")
-    # show_test([main_fig1], "#000000")
+    show_test(added_fig, "#FFFF00")
+    show_test([main_fig], "#008000")
+    show_test([main_fig1], "#000000")
     for i in main_poins:        #(23.636, 58.526)
         boool = True
         for fig in added_fig:
@@ -109,7 +109,7 @@ def bad_figure_to_points(main_fig1):
                 boool = False
         if boool:
             main_poins2 += [i]
-    # see_grid(main_poins2)
+    see_grid(main_poins2)
     return main_poins2
 
 @njit()
@@ -590,7 +590,8 @@ def see_grid(a: list):
     global m
     fig = set()
     for i in a:
-        fig.add((round(i[1], 2), round(i[0], 2)))
+        if (round(i[0], 2), round(i[1], 2)) in a:
+            fig.add((round(i[1], 2), round(i[0], 2)))
     for i in list(fig):
         folium.Marker(i).add_to(m)
 

@@ -14,6 +14,12 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="maximumSize">
+    <size>
+     <width>757</width>
+     <height>868</height>
+    </size>
+   </property>
    <widget class="QFrame" name="start_frame">
     <property name="geometry">
      <rect>
