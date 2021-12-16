@@ -1,4 +1,4 @@
-import math, itertools, folium, webbrowser, os, datetime, pyperclip, time, pyautogui, webbrowser, copy
+import math, itertools, folium, webbrowser, os, datetime, pyperclip, time, pyautogui, webbrowser, copy, csv
 from typing import List
 import matplotlib.pyplot as plt
 from numba import njit
@@ -99,9 +99,9 @@ def bad_figure_to_points(main_fig1):
             break
     main_poins = normal_figure_to_points(main_fig)
     main_poins2 = []
-    show_test(added_fig, "#FFFF00")
-    show_test([main_fig], "#008000")
-    show_test([main_fig1], "#000000")
+    # show_test(added_fig, "#FFFF00")
+    # show_test([main_fig], "#008000")
+    # show_test([main_fig1], "#000000")
     for i in main_poins:        #(23.636, 58.526)
         boool = True
         for fig in added_fig:
@@ -109,7 +109,7 @@ def bad_figure_to_points(main_fig1):
                 boool = False
         if boool:
             main_poins2 += [i]
-    see_grid(main_poins2)
+    # see_grid(main_poins2)
     return main_poins2
 
 @njit()
@@ -545,8 +545,8 @@ def see_result(count: int, updated=None, delta_point_new=3):
     for i in regeons.keys():
         a += [i[0]]
         b += [i[1]]
-    print(f"[+]dispertion X>> {round(abs(min(a) - max(a))*111.1348, delta_point)}km")
-    print(f"[+]dispertion Y>> {round(abs(min(b)- max(b)) *111.1348, delta_point)}km")
+    print(f"[+]dispertion X>> {round(abs(min(a) - max(a))*111.1348, delta_point)}km, {abs(min(a)- max(a))}grd")
+    print(f"[+]dispertion Y>> {round(abs(min(b)- max(b)) *111.1348, delta_point)}km, {abs(min(b)- max(b))}grd")
     points = make_pochtampt(count, updated)
     Update()
     o = 0
@@ -559,6 +559,34 @@ def see_result(count: int, updated=None, delta_point_new=3):
             if cap > n1:
                 color = "red"
         folium.Marker((i[1], i[0]), popup="Cargo:"+str(int(cap)) + "<br>MyScore:"+str(round(i[2], 2)) + "<br>Num:"+str(o), icon=folium.Icon(color=color, icon="info-sign")).add_to(m)
+    with open(rf"{os.getcwd()}\Data\result.csv", "w", newline='') as csvfile:
+        spamreader = csv.writer(csvfile, delimiter=',')
+        for i in points:
+            spamreader.writerow([i[0], i[1]])
+    print("[+] result in file /Data/result.csv")
+    m.save(rf"{os.getcwd()}\Temp\map.html")
+    webbrowser.open(rf"file:///{os.getcwd()}\Temp\map.html")
+    Update()
+
+def open_result(file=rf"{os.getcwd()}\Data\result.csv"):
+    Update()
+    n1, n2 = find_critical_value()
+    print(f"[+]critical value per day:{n1}, {n2}")
+    points = []
+    with open(file, newline='') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',')
+        for row in spamreader:
+            points += [(float(row[0]), float(row[1]))]
+    o = 0
+    for i in points:
+        o += 1
+        cap = point_function3(i)
+        color = "green"
+        if cap > n2:
+            color = "lightred"
+            if cap > n1:
+                color = "red"
+        folium.Marker((i[1], i[0]), popup="Cargo:"+str(int(cap)) + "<br>Num:"+str(o), icon=folium.Icon(color=color, icon="info-sign")).add_to(m)
     m.save(rf"{os.getcwd()}\Temp\map.html")
     webbrowser.open(rf"file:///{os.getcwd()}\Temp\map.html")
     Update()
@@ -631,6 +659,9 @@ def test6():
 def test7():
     Update("./Data/market.geojson", "./Data/newest_regions.geojson",  "./Data/NFZ.geojson")
 
+def test8():
+    open_result()
+
 if __name__ == "__main__":
     #test1()
     #test2()
@@ -638,6 +669,7 @@ if __name__ == "__main__":
     #test4()
     #test5()
     #test6()
-    test7()
+    #test7()
+    test8()
 
 
