@@ -197,18 +197,16 @@ def point_functions2(R_market1, R_regeon1, regeon111, regeon222, actcenter111, a
             print(f"{int((100 * count) / max(stepcount))}% done")
     return keyx[1:], keyy[1:], val[1:]
 
-def point_function3(point):
+def point_function3(point, poch_on_point_p, poch_on_point_a):
     global regeons, actcenter
     global R
     score = 0
     for i in actcenter.keys():
-        if lenof(i, point) < R["market"]:
-            score += actcenter[i] #/ ((R["market"] / 10 + lenof(i,point)) ** 3)
-            actcenter[i] = 0
+        if lenof(i, point) < R["market"] and poch_on_point_a[i] != 0:
+            score += actcenter[i] / poch_on_point_a[i] #/ ((R["market"] / 10 + lenof(i,point)) ** 3)
     for i in regeons.keys():
-        if lenof(i, point) < R["regeon"]:
-            score += regeons[i] #/ ((R["regeon"] / 10 + lenof(i, point)) ** 2)
-            regeons[i] = 0
+        if lenof(i, point) < R["regeon"] and poch_on_point_p[i] != 0:
+            score += regeons[i] / poch_on_point_p[i] #/ ((R["regeon"] / 10 + lenof(i, point)) ** 2)
     return score
 
 
@@ -536,6 +534,20 @@ def find_critical_value(show=False):
     return sum(rval), sum(yval)
 
 
+def poch_on_point(points):
+    global regeons, actcenter, R
+    poch_on_point_p = {i: 0 for i in regeons.keys()}
+    poch_on_point_a = {i: 0 for i in actcenter.keys()}
+    for point in points:
+        for i in poch_on_point_p.keys():
+            if lenof(i, point) < R["regeon"]:
+                poch_on_point_p[i] += 1
+    for point in points:
+        for i in poch_on_point_a.keys():
+            if lenof(i, point) < R["market"]:
+                poch_on_point_a[i] += 1
+    return poch_on_point_p, poch_on_point_a
+
 def see_result(count: int, updated=None, delta_point_new=3):
     global regeons, list_func, delta_point, m
     delta_point = delta_point_new
@@ -549,10 +561,11 @@ def see_result(count: int, updated=None, delta_point_new=3):
     print(f"[+]dispertion Y>> {round(abs(min(b)- max(b)) *111.1348, delta_point)}km, {abs(min(b)- max(b))}grd")
     points = make_pochtampt(count, updated)
     Update()
+    poch_on_point_p, poch_on_point_a = poch_on_point(points)
     o = 0
     for i in points:
         o += 1
-        cap = point_function3(i)
+        cap = point_function3(i, poch_on_point_p, poch_on_point_a)
         color = "green"
         if cap > n2:
             color = "lightred"
