@@ -533,6 +533,8 @@ def find_critical_value(show=False):
         plt.show()
     return sum(rval), sum(yval)
 
+def file_to_open():
+    return list(filter(lambda x: ".csv" in x, os.listdir(rf"{os.getcwd()}\Data")))
 
 def poch_on_point(points):
     global regeons, actcenter, R
@@ -590,10 +592,11 @@ def open_result(file=rf"{os.getcwd()}\Data\result.csv"):
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
             points += [(float(row[0]), float(row[1]))]
+    poch_on_point_p, poch_on_point_a = poch_on_point(points)
     o = 0
     for i in points:
         o += 1
-        cap = point_function3(i)
+        cap = point_function3(i, poch_on_point_p, poch_on_point_a)
         color = "green"
         if cap > n2:
             color = "lightred"
@@ -606,7 +609,7 @@ def open_result(file=rf"{os.getcwd()}\Data\result.csv"):
 
 
 def work_files():
-    return os.listdir(rf"{os.getcwd()}\Data")
+    return list(filter(lambda x: ".geojson" in x, os.listdir(rf"{os.getcwd()}\Data")))
 
 
 def test5():
