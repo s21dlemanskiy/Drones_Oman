@@ -157,7 +157,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Количество пачтамтов</string>
+      <string>Количество почтамтов</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_13">

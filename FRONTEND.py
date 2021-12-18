@@ -304,7 +304,7 @@ class Ui_MainWindow(object):
         self.pushButton_4.setText(_translate("MainWindow", "Изменить населенность регионов"))
         self.pushButton_9.setText(_translate("MainWindow", "Изменить ЦА"))
         self.lineEdit_7.setText(_translate("MainWindow", "0"))
-        self.label_18.setText(_translate("MainWindow", "Количество пачтамтов"))
+        self.label_18.setText(_translate("MainWindow", "Количество почтамтов"))
         self.pushButton_13.setText(_translate("MainWindow", "Select input files"))
         self.pushButton_14.setText(_translate("MainWindow", "Start"))
         self.checkBox.setText(_translate("MainWindow", "Not Update"))
@@ -437,6 +437,7 @@ class Ui_MainWindow(object):
     def show_chenger(self):
         self.start_frame.hide()
         self.regeons_choseer.show()
+        self.Count_people_region.setText(regeon[self.comboBox_2.currentText()][1])
 
     def close_adder(self):
         self.start_frame.show()
@@ -519,15 +520,16 @@ class Ui_MainWindow(object):
 
 
     def Start(self):
+        print(f"________________________{self.lineEdit_7.text()}")
         try:
-            count = int(self.lineEdit_7.text())
+            int(self.lineEdit_7.text())
         except:
             Errore_dialog("pochtampt count  mast be int")
             return
-        if count == 0:
+        if int(self.lineEdit_7.text()) == 0:
             Errore_dialog("pochtampt count is 0. Maybe it's mistake")
             return
-        BECKEND.see_result(count, self.checkBox.isTristate())
+        BECKEND.see_result(int(self.lineEdit_7.text()), self.checkBox.isTristate())
         # self.progressBar.setVisible(True)
         # self.pushButton_14.setVisible(False)
         # self.progressBar.setRange(1, count)

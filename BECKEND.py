@@ -552,6 +552,7 @@ def poch_on_point(points):
 
 def see_result(count: int, updated=None, delta_point_new=3):
     global regeons, list_func, delta_point, m
+    m = folium.Map(location=[23.5, 58.5])
     delta_point = delta_point_new
     n1, n2 = find_critical_value()
     print(f"[+]critical value per day:{n1}, {n2}")
@@ -584,6 +585,8 @@ def see_result(count: int, updated=None, delta_point_new=3):
     Update()
 
 def open_result(file=rf"{os.getcwd()}\Data\result.csv"):
+    global m
+    m = folium.Map(location=[23.5, 58.5])
     Update()
     n1, n2 = find_critical_value()
     print(f"[+]critical value per day:{n1}, {n2}")
