@@ -17,12 +17,12 @@ cargo_per_peeple = {
 }
 m = folium.Map(location=[23.5, 58.5])
 typekof = {
-    "Default": 0,
-    "market": 0,
-    "BC": 0,
-    "SHOPPINGCENTER": 0,
-    "Market": 0,
-    "HyperMarket": 0,
+    "Default": 0.08
+    "market": 0.006
+    "BC": 0.0054
+    "SHOPPINGCENTER": 0
+    "Market": 0
+    "HyperMarket": 0
     "Businesscenter": 0
 }
 R = {
