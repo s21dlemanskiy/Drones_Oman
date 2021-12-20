@@ -17,17 +17,18 @@ cargo_per_peeple = {
 }
 m = folium.Map(location=[23.5, 58.5])
 typekof = {
-    "Default": 0.08
-    "market": 0.006
-    "BC": 0.0054
-    "SHOPPINGCENTER": 0
-    "Market": 0
-    "HyperMarket": 0
-    "Businesscenter": 0
+    "Default": 0.0,      # 0.08,
+    "market": 0.4,
+    "BC": 0.5,
+    "SHOPPINGCENTER": 0.5,
+    "Market": 0.5,
+    "HyperMarket": 0.5,
+    "Businesscenter": 0.4,
 }
 R = {
-    "regeon":0.009,
-    "market":0.005
+    "regeon": 0.009,
+    "market": 0.005,
+    "actcenter_builder": 0.015
 }
 regeons = {}            #{Point:population}
 actcenter = {}          #{Point:Score}
@@ -132,24 +133,29 @@ def added_pochtamt(point, delta_point,R_market, R_regeon, regeon1, regeon2, actc
     actg1 = []
     for i in range(len(actcenter1)):
         if lenof(actcenter1[i], point) < R_market:
-            actcenter2[i] = actcenter2[i] * (lenof(actcenter1[i], point) / R_market)
+            if lenof(regeon1[i], point) < R_regeon * 0.25:
+                actcenter2[i] = 0
+            elif lenof(regeon1[i], point) > R_regeon * 0.75:
+                actcenter2[i] = actcenter2[i] * (0.75 ** 3)
+            else:
+                actcenter2[i] = actcenter2[i] * (lenof(actcenter1[i], point) / R_market)
             actg1.append(i)
     points = []
     points2 = []
     for i in range(len(regeon1)):
         if lenof(regeon1[i], point) < R_regeon:
-            if lenof(regeon1[i], point) < R_regeon * 0.5:
+            if lenof(regeon1[i], point) < R_regeon * 0.25:
                 regeon2[i] = 0
             elif lenof(regeon1[i], point) > R_regeon * 0.75:
                 regeon2[i] = regeon2[i] * (0.75 ** 3)
             else:
-                regeon2[i] = regeon2[i] * ((lenof(regeon1[i], point) / R_regeon) ** 3)
+                regeon2[i] = regeon2[i] * (lenof(regeon1[i], point) / R_regeon)
             regg1.append(i)
     for i in range(len(regeon1)):
         if lenof(regeon1[i], point) < 2 * R_regeon:
             points.append(regeon1[i])
             points2.append(point_function2(regeon1[i], R_market, R_regeon, regeon1, regeon2, actcenter1, actcenter2))
-    return regg1, regeon2, actg1,actcenter2, points, points2
+    return regg1, regeon2, actg1, actcenter2, points, points2
 
 def point_function(point):
     global regeons, actcenter
@@ -157,10 +163,10 @@ def point_function(point):
     score = 0
     for i in actcenter.keys():
         if lenof(i, point) < R["market"]:
-            score += actcenter[i] / ((R["market"] / 10 + lenof(i,point)) ** 3)
+            score += actcenter[i] / (R["market"] / 10 + lenof(i, point)) #** 3)
     for i in regeons.keys():
         if lenof(i, point) < R["regeon"]:
-            score += regeons[i] / ((R["regeon"] / 10 + lenof(i, point)) ** 2)
+            score += regeons[i] / (R["regeon"] / 10 + lenof(i, point)) #** 2)
     return score
 
 @njit()
@@ -168,10 +174,10 @@ def point_function2(point, R_market1, R_regeon1, regeon11, regeon22, actcenter11
     score = 0
     for i in range(len(actcenter11)):
         if lenof(actcenter11[i], point) < R_market1:
-            score += actcenter22[i] / (R_market1 / 10 + lenof(actcenter11[i], point) ** 3)
+            score += actcenter22[i] / (R_market1 / 10 + lenof(actcenter11[i], point)) #** 3
     for i in range(len(regeon11)):
         if lenof(regeon11[i], point) < R_regeon1:
-            score += regeon22[i] / (R_regeon1 / 10 + lenof(regeon11[i], point) ** 2)
+            score += regeon22[i] / (R_regeon1 / 10 + lenof(regeon11[i], point)) #** 2
     return score
 
 @njit()
@@ -185,10 +191,10 @@ def point_functions2(R_market1, R_regeon1, regeon111, regeon222, actcenter111, a
         score = 0
         for i in range(len(actcenter111)):
             if lenof(actcenter111[i], point) < R_market1:
-                score += actcenter222[i] / (R_market1 / 10 + lenof(actcenter111[i], point) ** 3)
+                score += actcenter222[i] / (R_market1 / 10 + lenof(actcenter111[i], point)) # ** 3
         for i in range(len(regeon111)):
             if lenof(regeon111[i], point) < R_regeon1:
-                score += regeon222[i] / (R_regeon1 / 10 + lenof(regeon111[i], point) ** 2)
+                score += regeon222[i] / (R_regeon1 / 10 + lenof(regeon111[i], point))# ** 2
         keyx += [point[0]]
         keyy += [point[1]]
         val += [score]
@@ -218,10 +224,10 @@ def list_func_update(upd=None):
         reg1, reg2, act1, act2, fun1, fun2 = [], [], [], [], [], []
         for i in regeons.keys():
             reg1 += [i]
-            reg2 += [regeons[i]]
+            reg2 += [float(regeons[i])]
         for i in actcenter.keys():
             act1 += [i]
-            act2 += [actcenter[i]]
+            act2 += [float(actcenter[i])]
         keyx, keyy, val = point_functions2(R["market"], R["regeon"], reg1, reg2, act1, act2)
         for i in range(len(keyx)):
             list_func.update({(keyx[i], keyy[i]): val[i]})
@@ -259,10 +265,10 @@ def make_pochtampt(count:int, updated=None) -> List[tuple]:
         reg1, reg2, act1, act2, fun1, fun2 = [], [], [], [], [], []
         for i in regeons.keys():
             reg1 += [i]
-            reg2 += [regeons[i]]
+            reg2 += [float(regeons[i])]
         for i in actcenter.keys():
             act1 += [i]
-            act2 += [actcenter[i]]
+            act2 += [float(actcenter[i])]
         regg1, reg2, actc1, act2, fun1, fun2 = added_pochtamt(point, delta_point, R["market"], R["regeon"], reg1, reg2, act1, act2)
         for i in regg1:
             regeons[reg1[i]] = reg2[i]
@@ -314,7 +320,7 @@ def read_market_geojson(file=rf"{os.getcwd()}\Data\market.geojson"):
             ponts.update({name:(round(tmp[0], delta_point), round(tmp[1], delta_point))})
     tmp = {}
     for i in ponts.keys():
-        tmp.update({ponts[i]:typekof[qualities[i][0]] * qualities[i][1]})
+        tmp.update({ponts[i]:typekof[qualities[i][0]] * qualities[i][1] / 10})
     types = str(types).replace(' ', '').replace('{', '').replace('}', '').replace("'", '')
     print(f"[+]Count points with any types>> {types}")
     return (tmp, (ponts, qualities))
@@ -550,6 +556,21 @@ def poch_on_point(points):
                 poch_on_point_a[i] += 1
     return poch_on_point_p, poch_on_point_a
 
+def Upd_actcenter():
+    global actcenter, regeons, R
+    oldactcenter = copy.copy(actcenter)
+    for i in actcenter.keys():
+        actcenter[i] = 0
+        for j in regeons.keys():
+            if lenof(i, j) < R["actcenter_builder"] * 1 / 5:
+                assert 4 / 6 * oldactcenter[i] < 1, "trying to build pochtampt with koficent more than 1"
+                actcenter[i] += 5 / 6 * oldactcenter[i] * regeons[j]
+                regeons[j] -= 5 / 6 * oldactcenter[i] * regeons[j]
+            elif lenof(i, j) < R["actcenter_builder"] * 4 / 5:
+                assert (((R["actcenter_builder"] * 6/5) / (lenof(i, j) + R["actcenter_builder"] / 5)) * oldactcenter[i])/ 6 < 1, "trying to build pochtampt with koficent more than 1"
+                actcenter[i] += (R["actcenter_builder"] / (lenof(i, j) + R["actcenter_builder"] / 5)) * regeons[j] * oldactcenter[i] / 6
+                regeons[j] -= (R["actcenter_builder"] / (lenof(i, j) + R["actcenter_builder"] / 5)) * regeons[j] * oldactcenter[i] / 6
+
 def see_result(count: int, updated=None, delta_point_new=3):
     global regeons, list_func, delta_point, m
     m = folium.Map(location=[23.5, 58.5])
@@ -562,10 +583,13 @@ def see_result(count: int, updated=None, delta_point_new=3):
         b += [i[1]]
     print(f"[+]dispertion X>> {round(abs(min(a) - max(a))*111.1348, delta_point)}km, {abs(min(a)- max(a))}grd")
     print(f"[+]dispertion Y>> {round(abs(min(b)- max(b)) *111.1348, delta_point)}km, {abs(min(b)- max(b))}grd")
+    Upd_actcenter()
     points = make_pochtampt(count, updated)
     Update()
+    Upd_actcenter()
     poch_on_point_p, poch_on_point_a = poch_on_point(points)
     o = 0
+    see_actcenter()
     for i in points:
         o += 1
         cap = point_function3(i, poch_on_point_p, poch_on_point_a)
@@ -597,6 +621,7 @@ def open_result(file=rf"{os.getcwd()}\Data\result.csv"):
             points += [(float(row[0]), float(row[1]))]
     poch_on_point_p, poch_on_point_a = poch_on_point(points)
     o = 0
+    Upd_actcenter()
     for i in points:
         o += 1
         cap = point_function3(i, poch_on_point_p, poch_on_point_a)
@@ -642,6 +667,11 @@ def see_grid(a: list):
     for i in list(fig):
         folium.Marker(i).add_to(m)
 
+
+def see_actcenter():
+    global actcenter, m
+    for i in actcenter.keys():
+        folium.Marker((i[1], i[0]), color="#031DC4").add_to(m)
 
 
 def test4():
