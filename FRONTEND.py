@@ -13,12 +13,22 @@ from PyQt5.QtWidgets import QMessageBox
 import folium, webbrowser #, pandas as pd
 import BECKEND
 import time, os
+import dbm
 regeon = {}
 market = {}
 
 file_market = rf"{os.getcwd()}\Data\market.geojson"
 file_regions = rf"{os.getcwd()}\Data\regions.geojson"
 file_NFZ = rf"{os.getcwd()}\Data\NFZ.geojson"
+
+def Errore_dialog(TEXT="Unexpected Errore"):
+    window = QMessageBox()
+    window.setWindowTitle("ERRORE")
+    window.setText(TEXT)
+    window.setIcon(QMessageBox.Warning)
+    window.setStandardButtons(QMessageBox.Ok)
+
+    window.exec_()
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -487,7 +497,23 @@ class Ui_MainWindow(object):
 
         global regeon, market       # name:[(x, y), population]      name:[(x, y), type ,raiting]
         global file_market, file_regions, file_NFZ
-        regeon, market = BECKEND.Update(file_market, file_regions, file_NFZ)
+        try:
+            base = dbm.open(rf"{os.getcwd()}\Data\DataBase")
+            BECKEND.typekof = eval(base["typekof"])
+            BECKEND.R = eval(base["R"])
+            BECKEND.cargo_per_peeple = eval(base["cargo_per_peeple"])
+            base.close()
+        except:
+            base = dbm.open(rf"{os.getcwd()}\Data\DataBase", "c")
+            base["typekof"] = str(BECKEND.typekof)
+            base["R"] = str(BECKEND.R)
+            base["cargo_per_peeple"] = str(BECKEND.cargo_per_peeple)
+            base.close()
+        try:
+            regeon, market = BECKEND.Update(file_market, file_regions, file_NFZ)
+        except:
+            self.restore()
+            regeon, market = BECKEND.Update(file_market, file_regions, file_NFZ)
 
 #----------------------------------------------------------------
         self.label_6.setText(str(sum(list(int(regeon[i][1]) for i in regeon.keys()))))
@@ -608,6 +634,9 @@ class Ui_MainWindow(object):
             new_r = float(self.lineEdit_9.text()) / 111
             BECKEND.R["region"] = round(new_r, 5)
             print(f"R:{BECKEND.R}\ncargo_per_peeple:{BECKEND.cargo_per_peeple}\n types:{BECKEND.typekof}")
+            base = dbm.open(rf"{os.getcwd()}\Data\DataBase", "c")
+            base["R"] = str(BECKEND.R)
+            base.close()
         except:
             Errore_dialog("кофициент радиуса региона должен быть float")
 
@@ -616,6 +645,9 @@ class Ui_MainWindow(object):
             new_r = float(self.lineEdit_10.text()) / 111
             BECKEND.R["market"] = round(new_r, 5)
             print(f"R:{BECKEND.R}\ncargo_per_peeple:{BECKEND.cargo_per_peeple}\n types:{BECKEND.typekof}")
+            base = dbm.open(rf"{os.getcwd()}\Data\DataBase", "c")
+            base["R"] = str(BECKEND.R)
+            base.close()
         except:
             Errore_dialog("кофициент центра активности должен быть float")
 
@@ -624,6 +656,9 @@ class Ui_MainWindow(object):
             new_r = float(self.lineEdit_11.text()) / 111
             BECKEND.R["actcenter_builder"] = round(new_r, 5)
             print(f"R:{BECKEND.R}\ncargo_per_peeple:{BECKEND.cargo_per_peeple}\n types:{BECKEND.typekof}")
+            base = dbm.open(rf"{os.getcwd()}\Data\DataBase", "c")
+            base["R"] = str(BECKEND.R)
+            base.close()
         except:
             Errore_dialog("кофициент создания центра активности должен быть float")
 
@@ -632,6 +667,9 @@ class Ui_MainWindow(object):
             new_r = float(self.lineEdit_12.text())
             BECKEND.cargo_per_peeple["Default"] = round(new_r, 5)
             print(f"R:{BECKEND.R}\ncargo_per_peeple:{BECKEND.cargo_per_peeple}\n types:{BECKEND.typekof}")
+            base = dbm.open(rf"{os.getcwd()}\Data\DataBase", "c")
+            base["cargo_per_peeple"] = str(BECKEND.cargo_per_peeple)
+            base.close()
         except:
             Errore_dialog("кофициент отправок посылок с чловека за день должен быть float")
 
@@ -646,6 +684,9 @@ class Ui_MainWindow(object):
             if new_type not in BECKEND.typekof.keys():
                 BECKEND.typekof.update({new_type: new_k})
                 print(f"R:{BECKEND.R}\ncargo_per_peeple:{BECKEND.cargo_per_peeple}\n types:{BECKEND.typekof}")
+                base = dbm.open(rf"{os.getcwd()}\Data\DataBase", "c")
+                base["typekof"] = str(BECKEND.typekof)
+                base.close()
             else:
                 Errore_dialog("такой тип уже есть")
         else:
@@ -659,6 +700,11 @@ class Ui_MainWindow(object):
         BECKEND.R = {"regeon": 0.009, "market": 0.005, "actcenter_builder": 0.015}
         BECKEND.cargo_per_peeple = {"Default": 0.08}
         BECKEND.typekof = {"Default": 0.0, "market": 0.4, "BC": 0.5, "SHOPPINGCENTER": 0.5, "Market": 0.5, "HyperMarket": 0.5, "Businesscenter": 0.4}
+        base = dbm.open(rf"{os.getcwd()}\Data\DataBase", "c")
+        base["typekof"] = str(BECKEND.typekof)
+        base["R"] = str(BECKEND.R)
+        base["cargo_per_peeple"] = str(BECKEND.cargo_per_peeple)
+        base.close()
         self.close_r_editor()
 
     def add_point(self):
