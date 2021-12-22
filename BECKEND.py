@@ -23,7 +23,7 @@ typekof = {
     "SHOPPINGCENTER": 0.5,
     "Market": 0.5,
     "HyperMarket": 0.5,
-    "Businesscenter": 0.4,
+    "Businesscenter": 0.4
 }
 R = {
     "regeon": 0.009,

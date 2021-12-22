@@ -20,25 +20,15 @@ file_market = rf"{os.getcwd()}\Data\market.geojson"
 file_regions = rf"{os.getcwd()}\Data\regions.geojson"
 file_NFZ = rf"{os.getcwd()}\Data\NFZ.geojson"
 
-def Errore_dialog(TEXT="Unexpected Errore"):
-    window = QMessageBox()
-    window.setWindowTitle("ERRORE")
-    window.setText(TEXT)
-    window.setIcon(QMessageBox.Warning)
-    window.setStandardButtons(QMessageBox.Ok)
-
-    window.exec_()
-
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(757, 912)
+        MainWindow.resize(757, 913)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setMaximumSize(QtCore.QSize(757, 868))
         self.centralwidget.setObjectName("centralwidget")
         self.start_frame = QtWidgets.QFrame(self.centralwidget)
-        self.start_frame.setGeometry(QtCore.QRect(10, 10, 721, 311))
+        self.start_frame.setGeometry(QtCore.QRect(10, 10, 721, 341))
         self.start_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.start_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.start_frame.setObjectName("start_frame")
@@ -102,6 +92,9 @@ class Ui_MainWindow(object):
         self.pushButton_20 = QtWidgets.QPushButton(self.start_frame)
         self.pushButton_20.setGeometry(QtCore.QRect(380, 270, 321, 31))
         self.pushButton_20.setObjectName("pushButton_20")
+        self.pushButton_18 = QtWidgets.QPushButton(self.start_frame)
+        self.pushButton_18.setGeometry(QtCore.QRect(0, 310, 701, 31))
+        self.pushButton_18.setObjectName("pushButton_18")
         self.regeons_choseer = QtWidgets.QFrame(self.centralwidget)
         self.regeons_choseer.setEnabled(True)
         self.regeons_choseer.setGeometry(QtCore.QRect(10, 0, 721, 141))
@@ -280,6 +273,131 @@ class Ui_MainWindow(object):
         self.pushButton_21 = QtWidgets.QPushButton(self.file_to_open_choser)
         self.pushButton_21.setGeometry(QtCore.QRect(0, 70, 131, 41))
         self.pushButton_21.setObjectName("pushButton_21")
+        self.R_Editor = QtWidgets.QFrame(self.centralwidget)
+        self.R_Editor.setGeometry(QtCore.QRect(10, 0, 711, 541))
+        self.R_Editor.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.R_Editor.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.R_Editor.setObjectName("R_Editor")
+        self.label_19 = QtWidgets.QLabel(self.R_Editor)
+        self.label_19.setGeometry(QtCore.QRect(0, 0, 71, 31))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.label_19.setFont(font)
+        self.label_19.setObjectName("label_19")
+        self.label_23 = QtWidgets.QLabel(self.R_Editor)
+        self.label_23.setGeometry(QtCore.QRect(0, 300, 461, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.label_23.setFont(font)
+        self.label_23.setObjectName("label_23")
+        self.label_24 = QtWidgets.QLabel(self.R_Editor)
+        self.label_24.setGeometry(QtCore.QRect(0, 400, 481, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.label_24.setFont(font)
+        self.label_24.setObjectName("label_24")
+        self.label_25 = QtWidgets.QLabel(self.R_Editor)
+        self.label_25.setGeometry(QtCore.QRect(0, 30, 451, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.label_25.setFont(font)
+        self.label_25.setObjectName("label_25")
+        self.label_26 = QtWidgets.QLabel(self.R_Editor)
+        self.label_26.setGeometry(QtCore.QRect(0, 120, 441, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.label_26.setFont(font)
+        self.label_26.setObjectName("label_26")
+        self.label_28 = QtWidgets.QLabel(self.R_Editor)
+        self.label_28.setGeometry(QtCore.QRect(0, 210, 451, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.label_28.setFont(font)
+        self.label_28.setObjectName("label_28")
+        self.pushButton_22 = QtWidgets.QPushButton(self.R_Editor)
+        self.pushButton_22.setGeometry(QtCore.QRect(600, 460, 101, 51))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.pushButton_22.setFont(font)
+        self.pushButton_22.setObjectName("pushButton_22")
+        self.lineEdit = QtWidgets.QLineEdit(self.R_Editor)
+        self.lineEdit.setGeometry(QtCore.QRect(202, 460, 141, 31))
+        self.lineEdit.setObjectName("lineEdit")
+        self.label_29 = QtWidgets.QLabel(self.R_Editor)
+        self.label_29.setGeometry(QtCore.QRect(0, 460, 181, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.label_29.setFont(font)
+        self.label_29.setObjectName("label_29")
+        self.lineEdit_8 = QtWidgets.QLineEdit(self.R_Editor)
+        self.lineEdit_8.setGeometry(QtCore.QRect(500, 460, 91, 31))
+        self.lineEdit_8.setObjectName("lineEdit_8")
+        self.label_30 = QtWidgets.QLabel(self.R_Editor)
+        self.label_30.setGeometry(QtCore.QRect(350, 460, 141, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.label_30.setFont(font)
+        self.label_30.setObjectName("label_30")
+        self.pushButton_23 = QtWidgets.QPushButton(self.R_Editor)
+        self.pushButton_23.setGeometry(QtCore.QRect(0, 510, 101, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.pushButton_23.setFont(font)
+        self.pushButton_23.setObjectName("pushButton_23")
+        self.pushButton_24 = QtWidgets.QPushButton(self.R_Editor)
+        self.pushButton_24.setGeometry(QtCore.QRect(160, 70, 121, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.pushButton_24.setFont(font)
+        self.pushButton_24.setObjectName("pushButton_24")
+        self.lineEdit_9 = QtWidgets.QLineEdit(self.R_Editor)
+        self.lineEdit_9.setGeometry(QtCore.QRect(0, 70, 151, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.lineEdit_9.setFont(font)
+        self.lineEdit_9.setObjectName("lineEdit_9")
+        self.lineEdit_10 = QtWidgets.QLineEdit(self.R_Editor)
+        self.lineEdit_10.setGeometry(QtCore.QRect(0, 160, 151, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.lineEdit_10.setFont(font)
+        self.lineEdit_10.setObjectName("lineEdit_10")
+        self.pushButton_25 = QtWidgets.QPushButton(self.R_Editor)
+        self.pushButton_25.setGeometry(QtCore.QRect(160, 160, 121, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.pushButton_25.setFont(font)
+        self.pushButton_25.setObjectName("pushButton_25")
+        self.lineEdit_11 = QtWidgets.QLineEdit(self.R_Editor)
+        self.lineEdit_11.setGeometry(QtCore.QRect(0, 260, 151, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.lineEdit_11.setFont(font)
+        self.lineEdit_11.setObjectName("lineEdit_11")
+        self.pushButton_26 = QtWidgets.QPushButton(self.R_Editor)
+        self.pushButton_26.setGeometry(QtCore.QRect(160, 260, 121, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.pushButton_26.setFont(font)
+        self.pushButton_26.setObjectName("pushButton_26")
+        self.lineEdit_12 = QtWidgets.QLineEdit(self.R_Editor)
+        self.lineEdit_12.setGeometry(QtCore.QRect(0, 350, 151, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.lineEdit_12.setFont(font)
+        self.lineEdit_12.setObjectName("lineEdit_12")
+        self.pushButton_27 = QtWidgets.QPushButton(self.R_Editor)
+        self.pushButton_27.setGeometry(QtCore.QRect(160, 350, 121, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.pushButton_27.setFont(font)
+        self.pushButton_27.setObjectName("pushButton_27")
+        self.pushButton_28 = QtWidgets.QPushButton(self.R_Editor)
+        self.pushButton_28.setGeometry(QtCore.QRect(240, 510, 181, 31))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.pushButton_28.setFont(font)
+        self.pushButton_28.setObjectName("pushButton_28")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 757, 18))
@@ -313,6 +431,7 @@ class Ui_MainWindow(object):
         self.pushButton_6.setText(_translate("MainWindow", "Edit regions as .GeoJson"))
         self.pushButton_17.setText(_translate("MainWindow", "See critical values"))
         self.pushButton_20.setText(_translate("MainWindow", "Open ready result"))
+        self.pushButton_18.setText(_translate("MainWindow", "coefficients"))
         self.pushButton_5.setText(_translate("MainWindow", "Apply"))
         self.Count_people_region.setText(_translate("MainWindow", "0"))
         self.label_7.setText(_translate("MainWindow", "Количество людей в регионе"))
@@ -346,6 +465,21 @@ class Ui_MainWindow(object):
         self.label_27.setText(_translate("MainWindow", "DATA"))
         self.pushButton_19.setText(_translate("MainWindow", "APPLY"))
         self.pushButton_21.setText(_translate("MainWindow", "Close"))
+        self.label_19.setText(_translate("MainWindow", "R"))
+        self.label_23.setText(_translate("MainWindow", "груз за день от одного человека(0.08 Moskow)"))
+        self.label_24.setText(_translate("MainWindow", "типы центров активности(только английский)"))
+        self.label_25.setText(_translate("MainWindow", "радиус в котором вокруг почтамта обрабатывается Населенность"))
+        self.label_26.setText(_translate("MainWindow", "радиус в котором вокруг почтамта обрабатывается Центры Активности"))
+        self.label_28.setText(_translate("MainWindow", "радиус в котором Центры Активности собирают часть Населенности на себя"))
+        self.pushButton_22.setText(_translate("MainWindow", "Add"))
+        self.label_29.setText(_translate("MainWindow", "Name"))
+        self.label_30.setText(_translate("MainWindow", "coficient"))
+        self.pushButton_23.setText(_translate("MainWindow", "Close"))
+        self.pushButton_24.setText(_translate("MainWindow", "Change"))
+        self.pushButton_25.setText(_translate("MainWindow", "Change"))
+        self.pushButton_26.setText(_translate("MainWindow", "Change"))
+        self.pushButton_27.setText(_translate("MainWindow", "Change"))
+        self.pushButton_28.setText(_translate("MainWindow", "restore all to default"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         """Main Code"""
 #----------------------------------------------------------------
@@ -393,11 +527,20 @@ class Ui_MainWindow(object):
         self.pushButton_19.clicked.connect(self.show_upload_result)
         self.pushButton_20.clicked.connect(self.open_choser_file_to_open)
         self.pushButton_21.clicked.connect(self.close_choser_file_to_open)
+        self.pushButton_18.clicked.connect(self.open_r_editor)
+        self.pushButton_23.clicked.connect(self.close_r_editor)
+        self.pushButton_28.clicked.connect(self.restore)
+        self.pushButton_24.clicked.connect(self.change_reg_kof)
+        self.pushButton_25.clicked.connect(self.change_market_kof)
+        self.pushButton_26.clicked.connect(self.change_market_build_kof)
+        self.pushButton_27.clicked.connect(self.change_cargo_per_peple)
+        self.pushButton_22.clicked.connect(self.change_market_types)
         self.file_changer.hide()
         self.add_center.hide()
         self.change_center.hide()
         self.regeons_choseer.hide()
         self.file_to_open_choser.hide()
+        self.R_Editor.hide()
 
 #-----------------------------------------------------------------
     def open_files_changer(self):
@@ -411,6 +554,19 @@ class Ui_MainWindow(object):
         self.comboBox_7.setCurrentText(b)
         self.start_frame.hide()
         self.file_changer.show()
+
+    def open_r_editor(self):
+        self.lineEdit_9.setText(str(round(BECKEND.R["regeon"] * 111, 5)))
+        self.lineEdit_10.setText(str(round(BECKEND.R["market"] * 111, 5)))
+        self.lineEdit_11.setText(str(round(BECKEND.R["actcenter_builder"] * 111, 5)))
+        self.lineEdit_12.setText(str(round(BECKEND.cargo_per_peeple["Default"], 5)))
+        self.R_Editor.show()
+        self.start_frame.hide()
+
+    def close_r_editor(self):
+        self.R_Editor.hide()
+        self.start_frame.show()
+        print(f"R:{BECKEND.R}\ncargo_per_peeple:{BECKEND.cargo_per_peeple}\n types:{BECKEND.typekof}")
 
     def update_market_info(self, text):
         self.comboBox_3.setCurrentText(market[text][1])
@@ -447,10 +603,63 @@ class Ui_MainWindow(object):
         self.start_frame.show()
         self.regeons_choseer.hide()
 #------------------------------------------------------------------
+    def change_reg_kof(self):
+        try:
+            new_r = float(self.lineEdit_9.text()) / 111
+            BECKEND.R["region"] = round(new_r, 5)
+            print(f"R:{BECKEND.R}\ncargo_per_peeple:{BECKEND.cargo_per_peeple}\n types:{BECKEND.typekof}")
+        except:
+            Errore_dialog("кофициент радиуса региона должен быть float")
+
+    def change_market_kof(self):
+        try:
+            new_r = float(self.lineEdit_10.text()) / 111
+            BECKEND.R["market"] = round(new_r, 5)
+            print(f"R:{BECKEND.R}\ncargo_per_peeple:{BECKEND.cargo_per_peeple}\n types:{BECKEND.typekof}")
+        except:
+            Errore_dialog("кофициент центра активности должен быть float")
+
+    def change_market_build_kof(self):
+        try:
+            new_r = float(self.lineEdit_11.text()) / 111
+            BECKEND.R["actcenter_builder"] = round(new_r, 5)
+            print(f"R:{BECKEND.R}\ncargo_per_peeple:{BECKEND.cargo_per_peeple}\n types:{BECKEND.typekof}")
+        except:
+            Errore_dialog("кофициент создания центра активности должен быть float")
+
+    def change_cargo_per_peple(self):
+        try:
+            new_r = float(self.lineEdit_12.text())
+            BECKEND.cargo_per_peeple["Default"] = round(new_r, 5)
+            print(f"R:{BECKEND.R}\ncargo_per_peeple:{BECKEND.cargo_per_peeple}\n types:{BECKEND.typekof}")
+        except:
+            Errore_dialog("кофициент отправок посылок с чловека за день должен быть float")
+
+    def change_market_types(self):
+        try:
+            new_type = str(self.lineEdit.text())
+            new_k = float(self.lineEdit_8.text())
+        except:
+            Errore_dialog("странный тип или кофицент типа")
+            return
+        if 0 <= new_k <= 1:
+            if new_type not in BECKEND.typekof.keys():
+                BECKEND.typekof.update({new_type: new_k})
+                print(f"R:{BECKEND.R}\ncargo_per_peeple:{BECKEND.cargo_per_peeple}\n types:{BECKEND.typekof}")
+            else:
+                Errore_dialog("такой тип уже есть")
+        else:
+            Errore_dialog("кофицент должен быть от 0 до 1")
+
     def change_market(self):
         self.close_changer_center()
         BECKEND.change_actceter(self.comboBox_4.currentText(), self.Score2.currentText(), self.lineEdit_5.text(), self.lineEdit_6.text(), self.comboBox_3.currentText())
 
+    def restore(self):
+        BECKEND.R = {"regeon": 0.009, "market": 0.005, "actcenter_builder": 0.015}
+        BECKEND.cargo_per_peeple = {"Default": 0.08}
+        BECKEND.typekof = {"Default": 0.0, "market": 0.4, "BC": 0.5, "SHOPPINGCENTER": 0.5, "Market": 0.5, "HyperMarket": 0.5, "Businesscenter": 0.4}
+        self.close_r_editor()
 
     def add_point(self):
         global file_market, file_regions, file_NFZ
