@@ -1,3 +1,6 @@
-'typekof', (0, 140)
+'typekof', (0, 123)
 'R', (512, 62)
 'cargo_per_peeple', (1024, 17)
+'file_market', (1536, 67)
+'file_regions', (2048, 68)
+'file_NFZ', (2560, 64)

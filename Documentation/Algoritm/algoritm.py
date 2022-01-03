@@ -229,71 +229,55 @@ class Line3:
 class Plane3:
     def __init__(self, points: List[Point3]):
         assert len(points) >= 3, "попытка создания плоскости менее чем по 3 точкам"
-        print(points)
         x1, y1, z1 = points[0].x, points[0].y, points[0].z
         x2, y2, z2 = points[1].x, points[1].y, points[1].z
         x3, y3, z3 = points[2].x, points[2].y, points[2].z
-        # assert (z3 * y2 + y3 * z2) * z3 + y1 * z3 * (x3 * z2 + x2 * z3) + z1 * (2 * y3 * x3 * z2 + x2 * y3 * z3 + z3 * y2 * x3) == 0 or (z3 * y2 + y3 * z2) == 0 or z3 == 0, "first call my_format()"
-        a = ((z3 * y2 + y3 * z2)*z3 * x1 - (z3 * y2 - z2 * z3)*y1 * z3 - ((z3 * y2 + y3 * z2) - (y3 * y2 - z2 * y3)) * z1 *z3)/(
-            (z3 * y2 + y3 * z2) * z3 + y1 * z3 * (x3 * z2 + x2 * z3) + z1 * (2 * y3 * x3 * z2 + x2 * y3 * z3 + z3 * y2 * x3))
-        b = ((z3 * y2 - z2 * z3) - a * (x3 * z2 + x2 * z3))/(z3 * y2 + y3 * z2)
-        c = 1 - b * y3 / z3 - a * x3 / z3
-        self.equastion = {"A":a, "B":b, "C":c, "D":1}
-        print(f"{a}x + {b}y + {c}z = 1")
+        a = y1 * z2 - z1 * y2
+        b = x2 * z1 - x1 * z2
+        c = x1 * y2 - x2 * y1
+        d = -(a * x1 + b * y1 + c * z1)
+        self.equastion = {"A":a, "B":b, "C":c, "D":d}
+        print(f"{a}x + {b}y + {c}z + {d}= 0")
         self.lines = []
         self.points = points
         for i in range(len(points)):
             self.lines += [Line3(points[i], points[(i+1) % len(points)])]
 
     def on(self, p:Point3):
-        return 0.99999 <= self.equastion["A"] * p.x + self.equastion["B"] * p.y + self.equastion["C"] * p.z <= 1.000001
+        return self.equastion["A"] * p.x + self.equastion["B"] * p.y + self.equastion["C"] * p.z + self.equastion["D"] == 0
 
     def inp(self, p:Point3):
-        if self.on(p) == False: return False
-        if self.equastion["A"] == 0 and self.equastion["B"] == 0:
-            fig = []
-            point = Point(p.x, p.y)
-            for i in self.points:
-                fig += Point(i.x, i.y)
-            return point_in_fig(fig, point)
-        elif self.equastion["C"] == 0 and self.equastion["B"] == 0:
-            fig = []
-            point = Point(p.z, p.y)
-            for i in self.points:
-                fig += Point(i.z, i.y)
-            return point_in_fig(fig, point)
-        elif self.equastion["A"] == 0 and self.equastion["C"] == 0:
-            fig = []
-            point = Point(p.z, p.x)
-            for i in self.points:
-                fig += Point(i.z, i.x)
-            return point_in_fig(fig, point)
+        if not self.on(p):
+            return False
+        if self.equastion["C"] == 0:
+            if self.equastion["B"] == 0:
+                fig = []
+                point = Point(p.z, p.y)
+                for i in self.points:
+                    fig += [Point(i.z, i.y)]
+                return point_in_fig(fig, point)
+            else:
+                fig = []
+                point = Point(p.z, p.x)
+                for i in self.points:
+                    fig += [Point(i.z, i.x)]
+                return point_in_fig(fig, point)
         else:
             fig = []
             point = Point(p.x, p.y)
             for i in self.points:
-                fig += Point(i.x, i.y)
+                fig += [Point(i.x, i.y)]
             return point_in_fig(fig, point)
 
     def crossing(self, line:Line3):
         x1, y1, z1, x2, y2, z2 = line.p1.x, line.p1.y, line.p1.z, line.p2.x, line.p2.y, line.p2.z
-        dx = x2 - x1
-        dy = y2 - y1
-        dz = z2 - z1
-        if self.equastion["A"] * dx + self.equastion["B"] * dy + self.equastion["C"] * dz == 0:
+        try:
+            lambda_ = -(self.equastion["A"] * x1 + self.equastion["B"] * y1 + self.equastion["C"] * z1 + self.equastion["D"]) / (self.equastion["A"] * (x2 - x1) + self.equastion["B"] * (y2 - y1) + self.equastion["C"] * (z2 - z1))
+        except:
             return None
-        if dx == 0:
-            if self.equastion["B"] * dy + self.equastion["C"] * dz == 0:
-                return None
-            x = x1
-            y = (dy - self.equastion["A"] * x1 * dy + self.equastion["C"] * dz * y1 - self.equastion["C"] * z1) / (
-                self.equastion["B"] * dy + self.equastion["C"] * dz)
-            z = (dz)*(y - y1) / dy + z1
-            return Point3(x, y, z)
-        x = (self.equastion["A"] * dx - self.equastion["B"] * (dx * y1 - dy * x1) - self.equastion["C"] * (z1 * dx - dz * x1))/(
-            self.equastion["A"] * dx + self.equastion["B"] * dy + self.equastion["C"] * dz)
-        y = dy * (x - x1) / dx + y1
-        z = dz * (x - x1) / dx + z1
+        x = lambda_ * (x2 - x1) + x1
+        y = lambda_ * (y2 - y1) + y1
+        z = lambda_ * (z2 - z1) + z1
         return Point3(x, y, z)
 
 def point_in_fig_3d(main_fig:List[Plane3], p:Point3):
@@ -333,37 +317,6 @@ def point_in_fig_3d(main_fig:List[Plane3], p:Point3):
             cross["r"] += 1
     print(cross, crossings)
     return cross["r"] % 2 == cross["l"] % 2 == 1
-
-
-def my_format(main_fig, p):
-    dy = 1
-    dz = 1
-    while True:
-        boool = True
-        for points in main_fig:
-            assert len(points) >= 3, "попытка форматирования фигуры с плоскостью из менее чем 3 точками"
-            x1, y1, z1 = points[0].x, points[0].y, points[0].z
-            x2, y2, z2 = points[1].x, points[1].y, points[1].z
-            x3, y3, z3 = points[2].x, points[2].y, points[2].z
-            if (z3 * y2 + y3 * z2) * z3 + y1 * z3 * (x3 * z2 + x2 * z3) + z1 * (2 * y3 * x3 * z2 + x2 * y3 * z3 + z3 * y2 * x3) == 0 or (z3 * y2 + y3 * z2) == 0 or z3 == 0:
-                boool = False
-        if boool:
-            break
-        p.x += 1
-        dy += 1
-        p.y += dy
-        dz += 2
-        p.z += dz
-        for i in range(len(main_fig)):
-            for j in range(len(main_fig[i])):
-                main_fig[i][j].x += 1
-                main_fig[i][j].y += dy
-                main_fig[i][j].z += dz
-        # print(p, main_fig, end="\n\n")
-    return main_fig, p
-
-
-
 
 """Print functions__________________________________________"""
 
@@ -407,20 +360,15 @@ def test2():
     print(point_in_fig_3d(main_fig, p))
 
 def test3():
-    plane1 = [Point3(0, 0, 0), Point3(0, 0, 1), Point3(0, 1, 1), Point3(0, 1, 0)]
-    plane2 = [Point3(0, 0, 0), Point3(1, 0, 0), Point3(1, 1, 0), Point3(0, 1, 0)]
-    plane3 = [Point3(0, 0, 0), Point3(1, 0, 0), Point3(1, 0, 1), Point3(0, 0, 1)]
-    plane4 = [Point3(1, 1, 1), Point3(1, 1, 0), Point3(1, 0, 0), Point3(1, 0, 1)]
-    plane5 = [Point3(1, 1, 1), Point3(0, 1, 1), Point3(0, 0, 1), Point3(1, 0, 1)]
-    plane6 = [Point3(1, 1, 1), Point3(0, 1, 1), Point3(0, 1, 0), Point3(1, 1, 0)]
+    plane1 = Plane3([Point3(0, 0, 0), Point3(0, 0, 1), Point3(0, 1, 1), Point3(0, 1, 0)])
+    plane2 = Plane3([Point3(0, 0, 0), Point3(1, 0, 0), Point3(1, 1, 0), Point3(0, 1, 0)])
+    plane3 = Plane3([Point3(0, 0, 0), Point3(1, 0, 0), Point3(1, 0, 1), Point3(0, 0, 1)])
+    plane4 = Plane3([Point3(1, 1, 1), Point3(1, 1, 0), Point3(1, 0, 0), Point3(1, 0, 1)])
+    plane5 = Plane3([Point3(1, 1, 1), Point3(0, 1, 1), Point3(0, 0, 1), Point3(1, 0, 1)])
+    plane6 = Plane3([Point3(1, 1, 1), Point3(0, 1, 1), Point3(0, 1, 0), Point3(1, 1, 0)])
     x, y, z = list(map(float, input(f"x y z точки >>").split()))
     p = Point3(x, y, z)
-    mainfig1, p = my_format([plane1, plane2, plane3, plane4, plane5, plane6], p)
-    main_fig = []
-    for i in mainfig1:
-        # print(i)
-        main_fig += [Plane3(i)]
-    # print(p)
+    main_fig = [plane1, plane2, plane3, plane4, plane5, plane6]
     print(point_in_fig_3d(main_fig, p))
 
 

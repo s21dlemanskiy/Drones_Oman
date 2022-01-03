@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2020.2.20)  10 DEC 2021 00:22
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2020.2.20)  2 JAN 2022 15:47
 entering extended mode
 **./Research_Articl_algoritm.tex
 (Research_Articl_algoritm.tex
@@ -619,91 +619,106 @@ File: pictures/3.png Graphic file (type png)
 Package pdftex.def Info: pictures/3.png  used on input line 170.
 (pdftex.def)             Requested size: 163.0092pt x 146.54768pt.
 
-Overfull \hbox (23.96033pt too wide) in paragraph at lines 169--172
-\T2A/cmr/m/n/14.4 двух пря-мых. Для это-го возь-мем ур-е прямой$[]  \OT1/cmr/m/
-n/14.4 =[]\OMS/cmsy/m/n/14.4 )
+Underfull \hbox (badness 10000) in paragraph at lines 169--173
+
  []
 
-[8] [9 <./pictures/3.png>]
-Overfull \hbox (92.35208pt too wide) in paragraph at lines 211--211
+
+Overfull \hbox (62.93541pt too wide) in paragraph at lines 169--173
+[]  \OT1/cmr/m/n/14.4 =[]\OMS/cmsy/m/n/14.4 )  []  \OT1/cmr/m/n/14.4 =[]\OMS/cm
+sy/m/n/14.4 )  []$ 
+ []
+
+[8]
+Overfull \hbox (92.35208pt too wide) in paragraph at lines 212--212
 []          \T2A/cmtt/m/n/14.4 self.p1.equatian(self.p2).replace("x*", "").spli
 t("-")))[] 
  []
 
-
-Overfull \hbox (33.88516pt too wide) in paragraph at lines 211--211
+[9 <./pictures/3.png>]
+Overfull \hbox (33.88516pt too wide) in paragraph at lines 212--212
 []              \T2A/cmtt/m/n/14.4 return Point(self.p1.x, self.p1.x * k2 + b2)
 [] 
  []
 
 
-Overfull \hbox (48.50189pt too wide) in paragraph at lines 211--211
+Overfull \hbox (48.50189pt too wide) in paragraph at lines 212--212
 []              \T2A/cmtt/m/n/14.4 return Point(other.p1.x, other.p1.x * k1 + b
 1)[] 
  []
 
 
-Overfull \hbox (77.73535pt too wide) in paragraph at lines 211--211
+Overfull \hbox (77.73535pt too wide) in paragraph at lines 212--212
 []          \T2A/cmtt/m/n/14.4 return ((u.x - self.p1.x) * (self.p2.y - self.p1
 .y) ==[] 
  []
 
 
-Overfull \hbox (4.6517pt too wide) in paragraph at lines 211--211
+Overfull \hbox (4.6517pt too wide) in paragraph at lines 212--212
 []          \T2A/cmtt/m/n/14.4 (u.y - self.p1.y) * (self.p2.x - self.p1.x))[] 
  []
 
 [10]
-Overfull \hbox (99.66045pt too wide) in paragraph at lines 242--242
+Overfull \hbox (99.66045pt too wide) in paragraph at lines 243--243
 []      \T2A/cmtt/m/n/14.4 lines = [Line(main_fig[i], main_fig[(i + 1) % len(ma
 in_fig)])[] 
  []
 
 
-Overfull \hbox (63.11862pt too wide) in paragraph at lines 242--242
+Overfull \hbox (63.11862pt too wide) in paragraph at lines 243--243
 []          \T2A/cmtt/m/n/14.4 if all(map(lambda x: not testline.on(x), main_fi
 g)):[] 
  []
 
 
-Overfull \hbox (136.20227pt too wide) in paragraph at lines 242--242
+Overfull \hbox (136.20227pt too wide) in paragraph at lines 243--243
 []              \T2A/cmtt/m/n/14.4 if all(list(map(lambda x: x not in main_fig,
  crossings))):[] 
  []
 
 [11] [12]
-Overfull \hbox (41.19353pt too wide) in paragraph at lines 267--267
+Overfull \hbox (41.19353pt too wide) in paragraph at lines 268--268
 []           \T2A/cmtt/m/n/14.4 (self.p1.x - self.p2.x) - (self.p.x - self.p2.x
 )[] 
  []
 
 
-Overfull \hbox (70.42699pt too wide) in paragraph at lines 267--267
+Overfull \hbox (70.42699pt too wide) in paragraph at lines 268--268
 []            \T2A/cmtt/m/n/14.4 (self.p2.y - self.p.y) *  (self.p1.z - self.p2
 .z) -[] 
  []
 
 
-Overfull \hbox (103.5541pt too wide) in paragraph at lines 268--316
+Overfull \hbox (103.5541pt too wide) in paragraph at lines 269--317
 \OML/cmm/m/it/14.4 A \OT1/cmr/m/n/14.4 = []$ 
  []
 
 
-Overfull \hbox (50.01889pt too wide) in paragraph at lines 268--316
+Overfull \hbox (50.01889pt too wide) in paragraph at lines 269--317
 []$ 
  []
 
 
-Overfull \hbox (61.79523pt too wide) in paragraph at lines 268--316
+Overfull \hbox (61.79523pt too wide) in paragraph at lines 269--317
 | $\OML/cmm/m/it/14.4 x \OT1/cmr/m/n/14.4 = [][] 
  []
 
 
-Overfull \hbox (1.19766pt too wide) in paragraph at lines 268--316
+Overfull \hbox (1.19766pt too wide) in paragraph at lines 269--317
 []$ 
  []
 
-[13] [14] [15] [16] [17] [18] [19] (Research_Articl_algoritm.aux) ) 
+[13] [14] [15] [16] [17] [18]
+Overfull \hbox (70.585pt too wide) in paragraph at lines 323--334
+[]| $[] \OT1/cmr/m/n/14.4 = [] = []$ 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 323--334
+
+ []
+
+[19] [20] (Research_Articl_algoritm.aux) ) 
 Here is how much of TeX's memory you used:
  3254 strings out of 492942
  43676 string characters out of 3126215
@@ -711,26 +726,26 @@ Here is how much of TeX's memory you used:
  7111 multiletter control sequences out of 15000+200000
  8846 words of font info for 25 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,11n,25p,1246b,250s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Users/vn
-iiz/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/cm-super/cm-super-t2a.enc
-}<C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/
-cm/cmex10.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pub
-lic/amsfonts/cm/cmmi10.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fo
-nts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/vniiz/AppData/Local/Programs/
-MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/vniiz/AppData/Loc
-al/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/vniiz
-/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/
-Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
-sy10.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/c
-m-super/sfbx1440.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/ty
-pe1/public/cm-super/sfrm1200.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 
-2.9/fonts/type1/public/cm-super/sfrm1440.pfb><C:/Users/vniiz/AppData/Local/Prog
-rams/MiKTeX 2.9/fonts/type1/public/cm-super/sfrm2488.pfb><C:/Users/vniiz/AppDat
-a/Local/Programs/MiKTeX 2.9/fonts/type1/public/cm-super/sftt1440.pfb>
-Output written on Research_Articl_algoritm.pdf (19 pages, 218575 bytes).
+ 41i,14n,25p,1246b,250s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Users/vniiz/AppData/Local/Program
+s/MiKTeX 2.9/fonts/enc/dvips/cm-super/cm-super-t2a.enc}<C:/Users/vniiz/AppData/
+Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/v
+niiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pf
+b><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts
+/cm/cmmi12.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/pu
+blic/amsfonts/cm/cmr10.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/vniiz/AppData/Local/Programs/M
+iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/vniiz/AppData/Local
+/Programs/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/vniiz/
+AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/cm-super/sfbx1440.pfb><C:/
+Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/cm-super/sfrm1
+200.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/cm
+-super/sfrm1440.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2.9/fonts/typ
+e1/public/cm-super/sfrm2488.pfb><C:/Users/vniiz/AppData/Local/Programs/MiKTeX 2
+.9/fonts/type1/public/cm-super/sftt1440.pfb>
+Output written on Research_Articl_algoritm.pdf (20 pages, 221114 bytes).
 PDF statistics:
- 116 PDF objects out of 1000 (max. 8388607)
+ 119 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
