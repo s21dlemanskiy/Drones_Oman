@@ -320,14 +320,14 @@
             
     \end{verbatim}
     
-    \hspace*{-2cm}$ \overrightarrow{C} = \left(\begin{bmatrix}
+    \hspace*{-4cm}$\overrightarrow{N} = (A, B, C) = \left(\begin{bmatrix}
     y1 z1\\ y2 z2
     \end{bmatrix},-\begin{bmatrix}
     x1 z1\\ x2 z2
     \end{bmatrix},\begin{bmatrix}
     x1 y1\\ x2 y2
     \end{bmatrix}\right)= \left(y1z2 - z1y2, x2z1 - x1z2, x1y2 - x2y1\right)$\\
-    $ \cfrac{x - x_1}{x_2 - x_1} = \cfrac{y - y_1}{y_2 - y_1} = \cfrac{z - z_1}{z_2 - z_1} = \lambda \implies \begin{cases}
+    $ \lambda = \cfrac{x - x_1}{x_2 - x_1} = \cfrac{y - y_1}{y_2 - y_1} = \cfrac{z - z_1}{z_2 - z_1} \implies \begin{cases}
     x = \lambda (x_2 - x_1) + x_1\\
     y = \lambda (y_2 - y_1) + y_1\\
     z = \lambda (z_2 - z_1) + z_1
@@ -343,5 +343,17 @@
 	y = \lambda (y_2 - y_1) + y_1\\
 	z = \lambda (z_2 - z_1) + z_1\\
 	\lambda = \cfrac{-Ax_1 - By_1 - Cz_1 - D}{A(x_2 - x_1) + B(y_2 - y_1) + C(z_2 - z_1)}
-	\end{cases}$
+	\end{cases}$\\
+	$ \begin{cases}
+	x= (x_2 - x_1) \lambda + x_1\\
+	y = (y_2 - y_1 ) \lambda + y_1\\
+	ax + by + c = 0
+	\end{cases} \implies \begin{cases}
+	x= (x_2 - x_1) \lambda + x_1\\
+	y = (y_2 - y_1 ) \lambda + y_1\\
+	\lambda = \cfrac{-( ax_1 + by_1 + c)}{a(x_2 - x_1)  + b(y_2 - y_1 )}
+	\end{cases}$\\
+	$a((x_2 - x_1) \lambda + x_1) + b((y_2 - y_1 ) \lambda + y_1) + c = 0$\\
+	$(a(x_2 - x_1)  + b(y_2 - y_1 )) \lambda = -( ax_1 + by_1 + c)$\\
+	$\lambda = \cfrac{-( ax_1 + by_1 + c)}{a(x_2 - x_1)  + b(y_2 - y_1 )}$
  \end{document}
